@@ -12,37 +12,53 @@ import NewJobImage from 'assets/NewJobImage';
 import Button from 'components/common/Button';
 import HeaderRight from 'components/HeaderRight';
 import { NavigationProp } from '@react-navigation/native';
+
 import currentUserDataAtom from 'atoms/currentUserDataAtom'
 type Props = {
     jobDetails: JobDetails;
     onPress?: () => void
 }
 
-const JobView = ({ jobDetails, onPress }: Props) => {
+const JobView = ({ jobDetails, onPress, cu }: Props) => {
     const tailwind = useTailwind();
-    const { imageUrl, title, bikeModel, type, description,jobStatus } = jobDetails;
+    const { imageUrl, title, bikeModel, type, description, } = jobDetails;
     const db = getFirestore()
     const [currentUserData] = useAtom(currentUserDataAtom)
-    const [jobs] = useAtom(jobsAtom)
+
     const [loading, setLoading] = useState(false)
     const [data, onChangeData] = useState(null)
 
 
     const getJobs = async () => {
-        const a =  jobs.filter((item, index)=>{
-            return item.jobDetails.id === jobDetails.id
+        setLoading(true)
+         getDocs(collection(db, "jobs")).then((res) => {
+            const jobsList = res.docs.map((item) => {
+                const data = item.data()
+                return data
+            })
+            const obj = jobsList[0].data.filter((item: { uidP: any; }, index: any)=>{
+                return  item.uidP === currentUserData.uid
+            })
+            // console.log(obj, "obj[0]obj[0]obj[0]obj[0]");
+          
+            onChangeData(obj[0])
+            setLoading(false)
         })
-        const b = a[0].data.filter((item, index)=>{
-            return  item.uidP === currentUserData.uid
-        })
-        console.log(b, "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
-        onChangeData(b[0])
+   
+        // const a =  jobs.filter((item, index)=>{
+        //     return item.jobDetails.id === jobDetails.id
+        // })
+        // const b = a[0].data.filter((item, index)=>{
+        //     return  item.uidP === currentUserData.uid
+        // })
+        // // console.log(b, "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+        // onChangeData(b[0])
     }
 
     useEffect(() => {
         setLoading(true)
         getJobs().then(()=>{
-            setLoading(false)
+          
         })
         // console.log(currentUserData.uid, 'user id');
     }, [])
@@ -51,7 +67,7 @@ const JobView = ({ jobDetails, onPress }: Props) => {
         return <Loader />
     }
 
-    console.log(data?.jobResponseType, "new")
+    console.log(currentUserData.userType, "userType")
     return (
             <ScrollView>            
         <View>
@@ -84,18 +100,22 @@ const JobView = ({ jobDetails, onPress }: Props) => {
                     <Text left lg>{description}</Text>
                 </View>
             </SafeAreaView>
-            <View style={{...tailwind('px-6 py-2')}}>
-                {
-                    data?.jobResponseType == 'applied' ? 
-                    <View  style={{
-                        width: 100, heigth: 100, backgroundColor:'#00C851', borderRadius: 12, padding: 4, justifyContent:'center', alignSelf:'center'
-                    }}>
-                    <Text  xl style={{fontWeight: 'bold', color: 'white', textAlign:'center'}}>Applied</Text>
-                    </View>:
-                    <Button onPress={onPress} style={tailwind('rounded')} titleStyle={{ fontWeight: '700' }} lg title='Message' />
-                }
-               
-            </View>
+            {
+                currentUserData.userType == 'provider' ?
+                <View style={{...tailwind('px-6 py-2')}}>
+                    {
+                        data?.jobResponseType == 'applied' ? 
+                        <View  style={{
+                            width: 100, heigth: 100, backgroundColor:'#00C851', borderRadius: 12, padding: 4, justifyContent:'center', alignSelf:'center'
+                        }}>
+                        <Text  xl style={{fontWeight: 'bold', color: 'white', textAlign:'center'}}>Applied</Text>
+                        </View>:
+                        <Button onPress={onPress} style={tailwind('rounded')} titleStyle={{ fontWeight: '700' }} lg title='Message' />
+                    }
+                
+                </View>: null
+            }
+           
         </View>
              </ScrollView>
     );

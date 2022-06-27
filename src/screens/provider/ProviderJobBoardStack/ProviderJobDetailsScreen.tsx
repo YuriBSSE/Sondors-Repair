@@ -35,7 +35,7 @@ const ProviderJobDetailsScreen = ({ route, navigation }: Props) => {
     const [isModal, setModal] = useState(false)
     const [loading, setLoading] = useState(false)
     const [coverLetter, setCoverLetter] = useState({})
-    const [isChannel, setIsChannel] = useState<any>(false)
+    const [isChannel, setIsChannel] = useState(false)
 
 
     const auth = getAuth();
@@ -70,7 +70,11 @@ const ProviderJobDetailsScreen = ({ route, navigation }: Props) => {
             const isChannel =  docSnap.data()?.data.map((item: any) => {
                 if (item.uidP === currentUser?.uid) return true
             }).join()
-            setIsChannel(isChannel)
+           
+            if(typeof isChannel === 'boolean'){
+                setIsChannel(isChannel)
+            }
+       
         } 
     }
 
@@ -98,15 +102,20 @@ const ProviderJobDetailsScreen = ({ route, navigation }: Props) => {
             })
     }
 
-
+    console.log(isChannel, 'Channel Check')
     return (
         <SafeAreaView style={tailwind('flex bg-white items-center justify-center h-full')}>
             <View style={tailwind('w-full flex h-full justify-between')}>
                 <JobView
                     onPress={async () => {
-                        if (isChannel) return navigation.navigate("JobChat", { externalId: currentUser?.uid + '' + jobDetails.streamChatId! })
-                        setModal(true)
+                       
+                        if (isChannel){
+                            navigation.navigate("JobChat", { externalId: currentUser?.uid + '' + jobDetails.streamChatId! })
+                        } else{
+                            setModal(true)
+                        }
                     }}
+
                     jobDetails={jobDetails}
                 />
             </View>

@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import { SafeAreaView, View } from 'react-native';
+import { Alert, SafeAreaView, View } from 'react-native';
 import { useTailwind } from 'tailwind-rn';
 import { NavigationProp, RouteProp } from '@react-navigation/native';
 
 import JobView from 'components/JobView';
 import HeaderLeft from 'components/HeaderLeft';
 import HeaderRight from 'components/HeaderRight';
+
 
 type Props = {
     route: RouteProp<ProviderJobsStackParamList, 'ProviderJobDetailsScreen'>;
@@ -14,6 +15,7 @@ type Props = {
 
 const ProviderJobDetailsScreen = ({ route, navigation }: Props) => {
     const tailwind = useTailwind();
+
     const { headerRightTitle, headerLeftTitle, headerRightOnPress, jobDetails } = route.params;
 
     useEffect(() => {
@@ -26,7 +28,7 @@ const ProviderJobDetailsScreen = ({ route, navigation }: Props) => {
     return (
         <SafeAreaView style={tailwind('flex bg-white items-center justify-center w-full h-full')}>
             <View style={tailwind('w-full flex h-full justify-between')}>
-                <JobView jobDetails={jobDetails} />
+                <JobView jobDetails={jobDetails} onPress={()=> Alert.alert("SAD")} />
             </View>
         </SafeAreaView>
     );

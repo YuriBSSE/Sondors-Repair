@@ -6,6 +6,7 @@ import { NavigationProp, RouteProp } from '@react-navigation/native';
 import JobView from 'components/JobView';
 import HeaderRight from 'components/HeaderRight';
 
+
 type Props = {
     route: RouteProp<JobsStackParamList, 'CustomerJobDetailsScreen'>;
     navigation: NavigationProp<JobsStackParamList, 'CustomerJobDetailsScreen'>;
