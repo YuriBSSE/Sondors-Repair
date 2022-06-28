@@ -81,8 +81,10 @@ const JobChat = ({ route, navigation }: Props) => {
     const [channel, setChannel] = useState<ChannelType | false>();
 
     useEffect(() => {
+      
         const getChannels = async () => {
             const channels = await streamClient.queryChannels({ id: route.params.externalId  }, [], { watch: false });
+        
             setChannel(channels.shift() || false);
         };
         getChannels().catch(console.log)
