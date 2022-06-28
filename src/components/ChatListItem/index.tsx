@@ -43,7 +43,7 @@ const ChatListItem = ({
     let id = data.job.substring(1);
     // const washingtonRef = doc(db, "jobs", id);
 
-    const frankDocRef = doc(db, "job", id);
+    const frankDocRef = doc(db, "jobs", id);
     // await setDoc(frankDocRef, {
     //   name: "Frank",
     //   favorites: [
@@ -58,12 +58,15 @@ const ChatListItem = ({
     // await updateDoc(frankDocRef, {
     //     data: arrayUnion({ id: 1, food: "Pizza" })
     // });
-    await updateDoc(frankDocRef, {
-        data: arrayRemove("applied")
-    });
+    const cityRef = doc(db, "jobs", data.job);
+    await setDoc(cityRef, { data: {...data.userApplied, jobResponseType: 'accepted'}}, { merge: true });
+
+    // await updateDoc(frankDocRef, {
+    //     data: arrayRemove("applied")
+    // });
     
     await updateDoc(doc(db, "jobs", id), {
-        'jobDetails.jobStatus': 2
+        'jobDetails.jobStatus': 1
     })
     // await updateDoc(washingtonRef, {
     //     data: arrayUnion('jobResponseType', 'accepted')
