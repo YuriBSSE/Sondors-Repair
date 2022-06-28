@@ -20,6 +20,7 @@ type Props = {
 }
 
 const JobView = ({ jobDetails, onPress }: Props) => {
+    console.log(jobDetails, "jobDetailsjobDetailsjobDetailsjobDetails")
     const tailwind = useTailwind();
     const { imageUrl, title, bikeModel, type, description, } = jobDetails;
     const db = getFirestore()
@@ -39,16 +40,17 @@ const JobView = ({ jobDetails, onPress }: Props) => {
             const newObj = jobsList.filter((item)=>{
                 return item.id === jobDetails.id
             })
-
-            const checkArray = newObj[0].data.filter((it: any, i: any)=>{
+            let checkArray = []
+            if(newObj.length > 0 ){checkArray = newObj[0]?.data.filter((it: any, i: any)=>{
                 return it.uidP === currentUserData.uid
-            })
-            console.log(checkArray,"OOOOOOOOOOOOOOOOOOOOOOOOO");
+            })}
             if(checkArray.length > 0){
                 onChangeData(checkArray) 
             }
            
             setLoading(false)
+        }).catch((e)=>{
+            console.log(e,"eeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
         })
     }
 
@@ -63,8 +65,7 @@ const JobView = ({ jobDetails, onPress }: Props) => {
     if(loading){
         return <Loader />
     }
-console.log(jobDetails, "==========");
-
+console.log(data, "datadatadatadatadata")
     return (
             <ScrollView>            
         <View>
