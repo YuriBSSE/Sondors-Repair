@@ -40,7 +40,7 @@ const ChatListItem = ({
   const onJobAccept = async () => {
     // HQEhKAAdC1iDhPzwWSJP
     // HQEhKAAdC1iDhPzwWSJP
-    let id = data.job.substring(1);
+    let id = data.job.trim();
     // const washingtonRef = doc(db, "jobs", id);
 
     const frankDocRef = doc(db, "jobs", id);
@@ -58,8 +58,8 @@ const ChatListItem = ({
     // await updateDoc(frankDocRef, {
     //     data: arrayUnion({ id: 1, food: "Pizza" })
     // });
-    const cityRef = doc(db, "jobs", data.job);
-    await setDoc(cityRef, { data: {...data.userApplied, jobResponseType: 'accepted'}}, { merge: true });
+    const cityRef = doc(db, "jobs", id);
+    await setDoc(cityRef, { data: [{...data.userApplied, jobResponseType: 'accepted'}]}, { merge: true });
 
     // await updateDoc(frankDocRef, {
     //     data: arrayRemove("applied")
