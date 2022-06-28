@@ -39,20 +39,9 @@ const JobView = ({ jobDetails, onPress, cu }: Props) => {
             const obj = jobsList[0].data.filter((item: { uidP: any; }, index: any)=>{
                 return  item.uidP === currentUserData.uid
             })
-            // console.log(obj, "obj[0]obj[0]obj[0]obj[0]");
-          
             onChangeData(obj[0])
             setLoading(false)
         })
-   
-        // const a =  jobs.filter((item, index)=>{
-        //     return item.jobDetails.id === jobDetails.id
-        // })
-        // const b = a[0].data.filter((item, index)=>{
-        //     return  item.uidP === currentUserData.uid
-        // })
-        // // console.log(b, "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
-        // onChangeData(b[0])
     }
 
     useEffect(() => {
@@ -60,7 +49,6 @@ const JobView = ({ jobDetails, onPress, cu }: Props) => {
         getJobs().then(()=>{
           
         })
-        // console.log(currentUserData.uid, 'user id');
     }, [])
 
     if(loading){
