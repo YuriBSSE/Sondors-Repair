@@ -27,7 +27,7 @@ type Props = {
 
 const ProviderJobDetailsScreen = ({ route, navigation }: Props) => {
 
-    // console.log(route.params.data, "routerouterouterouterouterouterouteroute")
+    console.log(route.params.data, "routerouterouterouterouterouterouteroute")
     const {getProviderJobs} = useApi()
     const tailwind = useTailwind();
     const [jobs, setJobs] = useAtom(jobsAtom)
@@ -70,7 +70,7 @@ const ProviderJobDetailsScreen = ({ route, navigation }: Props) => {
             const isChannel =  docSnap.data()?.data.map((item: any) => {
                 if (item.uidP === currentUser?.uid) return true
             }).join()
-           
+    
             if(typeof isChannel === 'boolean'){
                 setIsChannel(isChannel)
             }
@@ -108,7 +108,7 @@ const ProviderJobDetailsScreen = ({ route, navigation }: Props) => {
             <View style={tailwind('w-full flex h-full justify-between')}>
                 <JobView
                     onPress={async () => {
-                       
+                       console.log(isChannel, "isChannel")
                         if (isChannel){
                             navigation.navigate("JobChat", { externalId: currentUser?.uid + '' + jobDetails.streamChatId! })
                         } else{

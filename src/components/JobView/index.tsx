@@ -1,4 +1,4 @@
-import { View, ScrollView, SafeAreaView,Image,Alert } from 'react-native';
+import { View, ScrollView, SafeAreaView,Image,Alert,TouchableOpacity } from 'react-native';
 import { useTailwind } from 'tailwind-rn';
 import {useEffect, useState} from 'react'
 import { useAtom } from 'jotai';
@@ -19,14 +19,14 @@ type Props = {
     onPress?: () => void
 }
 
-const JobView = ({ jobDetails, onPress, cu }: Props) => {
+const JobView = ({ jobDetails, onPress }: Props) => {
     const tailwind = useTailwind();
     const { imageUrl, title, bikeModel, type, description, } = jobDetails;
     const db = getFirestore()
     const [currentUserData] = useAtom(currentUserDataAtom)
 
     const [loading, setLoading] = useState(false)
-    const [data, onChangeData] = useState(null)
+    const [data, onChangeData] = useState([])
 
 
     const getJobs = async () => {
@@ -36,10 +36,27 @@ const JobView = ({ jobDetails, onPress, cu }: Props) => {
                 const data = item.data()
                 return data
             })
-            const obj = jobsList[0].data.filter((item: { uidP: any; }, index: any)=>{
-                return  item.uidP === currentUserData.uid
+            // console.log(jobsList, '==============');
+            const newObj = jobsList.filter((item)=>{
+                // console.log(item.id,"OOOOOOOOOOOOOOOOOOOOOO");
+                return item.id === jobDetails.id
+                // return item.data.filter((it: { uidP: any; },i: any)=>{
+                //    return  it.uidP === currentUserData.uid
+                // })
             })
-            onChangeData(obj[0])
+
+            const checkArray = newObj[0].data.filter((it: any, i: any)=>{
+                return it.uidP === currentUserData.uid
+            })
+            console.log(checkArray,"OOOOOOOOOOOOOOOOOOOOOOOOO");
+            // const obj = jobsList[0].data.filter((item: { uidP: any; }, index: any)=>{
+            //     return  item.uidP === currentUserData.uid
+            // })
+            // console.log(newObj, "=================")
+            if(checkArray.length > 0){
+                onChangeData(checkArray) 
+            }
+           
             setLoading(false)
         })
     }
@@ -54,8 +71,8 @@ const JobView = ({ jobDetails, onPress, cu }: Props) => {
     if(loading){
         return <Loader />
     }
+console.log(jobDetails, "==========");
 
-    console.log(currentUserData.userType, "userType")
     return (
             <ScrollView>            
         <View>
@@ -63,6 +80,7 @@ const JobView = ({ jobDetails, onPress, cu }: Props) => {
             <Text left xxl style={{fontWeight: 'bold', paddingHorizontal: 24, marginTop: 20, paddingBottom: 10}}>Job Details</Text>
             {imageUrl ? (
                 <View style={tailwind('w-full h-64 items-center justify-center')}>
+                    {console.log(imageUrl, "imageUrlimageUrlimageUrlimageUrl")}
                     <Image
                         style={tailwind(
                           "w-full h-64 items-center justify-center"
@@ -88,22 +106,38 @@ const JobView = ({ jobDetails, onPress, cu }: Props) => {
                     <Text left lg>{description}</Text>
                 </View>
             </SafeAreaView>
+          
             {
                 currentUserData.userType == 'provider' ?
                 <View style={{...tailwind('px-6 py-2')}}>
                     {
-                        data?.jobResponseType == 'applied' ? 
+                        data[0]?.jobResponseType == 'applied'  &&  data.length > 0 ?
                         <View  style={{
                             width: 100, heigth: 100, backgroundColor:'#00C851', borderRadius: 12, padding: 4, justifyContent:'center', alignSelf:'center'
                         }}>
                         <Text  xl style={{fontWeight: 'bold', color: 'white', textAlign:'center'}}>Applied</Text>
                         </View>:
-                        <Button onPress={onPress} style={tailwind('rounded')} titleStyle={{ fontWeight: '700' }} lg title='Message' />
+                         data[0]?.jobResponseType == 'accepted'  &&  data.length > 0 ?
+                         <>
+                         <View  style={{
+                            width: 100, heigth: 100, backgroundColor:'#4285F4', borderRadius: 12, padding: 4, justifyContent:'center', alignSelf:'center'
+                        }}>
+                        <Text  xl style={{fontWeight: 'bold', color: 'white', textAlign:'center'}}>Accepted</Text>
+                        </View>
+                        </>
+                        : jobDetails.jobStatus != 0 ?
+                        <View  style={{
+                            width: 100, heigth: 100, backgroundColor:'#ff4444', borderRadius: 12, padding: 4, justifyContent:'center', alignSelf:'center'
+                        }}>
+                        <Text  xl style={{fontWeight: 'bold', color: 'white', textAlign:'center'}}>Expired</Text>
+                        </View>:
+                        
+                        <Button onPress={onPress} style={tailwind('rounded')} titleStyle={{ fontWeight: '700' }} lg title='Apply' />
                     }
                 
                 </View>: null
             }
-           
+          
         </View>
              </ScrollView>
     );
