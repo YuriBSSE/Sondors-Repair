@@ -16,7 +16,8 @@ import {
   arrayUnion,
   arrayRemove,
 } from "firebase/firestore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Modal from "../common/Modal";
 
 const ChatListItem = ({
   title,
@@ -33,10 +34,11 @@ const ChatListItem = ({
 }) => {
   const tailwind = useTailwind();
   const [currentUserData] = useAtom(currentUserDataAtom);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const db = getFirestore();
-  console.log(data.job, "=======================");
+  // console.log(data.job, "=======================");
 
-  console.log(data.userApplied, "IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
+  // console.log(data.userApplied, "IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
   const onJobAccept = async () => {
     // HQEhKAAdC1iDhPzwWSJP
     // HQEhKAAdC1iDhPzwWSJP
@@ -64,10 +66,12 @@ const ChatListItem = ({
     // await updateDoc(frankDocRef, {
     //     data: arrayRemove("applied")
     // });
-    
+
     await updateDoc(doc(db, "jobs", id), {
         'jobDetails.jobStatus': 1
     })
+
+    await data.getMyJob()
     // await updateDoc(washingtonRef, {
     //     data: arrayUnion('jobResponseType', 'accepted')
     // });
@@ -117,13 +121,33 @@ const ChatListItem = ({
   // }, [])
 
   return (
-    <View style={tailwind("px-5  pb-3 mt-1")}>
-      {currentUserData.userType == "provider" ? (
-        <>
-          <TouchableOpacity onPress={onPress}>
+    <>
+      <View style={tailwind("px-5  pb-3 mt-1")}>
+        {currentUserData.userType == "provider" ? (
+          <>
+            <TouchableOpacity onPress={onPress}>
+              <View style={tailwind("flex-row justify-between mt-1")}>
+                <Text sm left heavy>
+                  {title}
+                </Text>
+                <Text sm tertiary>
+                  {moment(createAt).fromNow()}
+                </Text>
+              </View>
+              <Text sm left tertiary style={tailwind("mt-1")}>
+                {subtitle}
+              </Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <TouchableOpacity onPress={()=>{
+            if (data.userApplied.jobResponseType === "accepted") {
+              onPress()
+            }
+          }}>
             <View style={tailwind("flex-row justify-between mt-1")}>
               <Text sm left heavy>
-                {title}
+                {title}dd
               </Text>
               <Text sm tertiary>
                 {moment(createAt).fromNow()}
@@ -133,40 +157,44 @@ const ChatListItem = ({
               {subtitle}
             </Text>
           </TouchableOpacity>
-        </>
-      ) : (
-        <>
-          <View style={tailwind("flex-row justify-between mt-1")}>
-            <Text sm left heavy>
-              {title}
-            </Text>
-            <Text sm tertiary>
-              {moment(createAt).fromNow()}
-            </Text>
-          </View>
-          <Text sm left tertiary style={tailwind("mt-1")}>
-            {subtitle}
-          </Text>
-        </>
-      )}
-      {currentUserData.userType !== "provider" && (
-        <View style={styles.btnCont}>
+        )}
+        {currentUserData.userType !== "provider" && (
+          data.userApplied.jobResponseType !== "accepted" ? <View style={styles.btnCont}>
+            <TouchableOpacity
+              // onPress={onPress}
+              style={styles.acceptBtn}
+              onPress={() => setIsModalOpen(true)}
+            >
+              <Text style={{ color: "white" }}>Accept</Text>
+            </TouchableOpacity>
+          </View> :
+          <View style={styles.btnCont}>
           <TouchableOpacity
             // onPress={onPress}
             style={styles.acceptBtn}
-            onPress={() => onJobAccept()}
+            onPress={() => setIsModalOpen(true)}
           >
-            <Text style={{ color: "white" }}>Accept</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => alert("cancel")}
-            style={styles.rejectBtn}
-          >
-            <Text style={{ color: "white" }}>Reject</Text>
+            <Text style={{ color: "white" }}>Mark as compelete</Text>
           </TouchableOpacity>
         </View>
-      )}
-    </View>
+        )}
+      </View>
+      {console.log(data)}
+      <Modal modalVisible={isModalOpen} setModalVisible={setIsModalOpen}>
+        <Text>
+          Are you sure? you want to accept this offer, it will delete all other
+          offers on this job.
+        </Text>
+        <View style={styles.btnContModal}>
+        <TouchableOpacity onPress={() => setIsModalOpen(false)} style={styles.btnNo}>
+            <Text style={{color:"white"}}>No</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {onJobAccept();setIsModalOpen(false);}} style={styles.btnYes}>
+            <Text style={{color:"white"}}>Yes</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+    </>
   );
 };
 
@@ -182,7 +210,7 @@ export default ChatListItem;
 const styles = StyleSheet.create({
   btnCont: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     marginVertical: "1.5%",
   },
   acceptBtn: {
@@ -197,4 +225,22 @@ const styles = StyleSheet.create({
     padding: "1.5%",
     borderRadius: 5,
   },
+  btnContModal:{
+    width:"100%",
+    justifyContent:"space-around",
+    flexDirection:"row",
+    marginTop:"3%"
+  },
+  btnYes:{
+    backgroundColor:"green",
+    width:"35%",
+    paddingVertical:"2%",
+    borderRadius:5
+  },
+  btnNo:{
+    backgroundColor:"red",
+    width:"35%",
+    paddingVertical:"2%",
+    borderRadius:5
+  }
 });
