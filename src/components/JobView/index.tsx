@@ -20,6 +20,7 @@ type Props = {
 }
 
 const JobView = ({ jobDetails, onPress }: Props) => {
+    console.log(jobDetails, "jobDetailsjobDetailsjobDetailsjobDetails")
     const tailwind = useTailwind();
     const { imageUrl, title, bikeModel, type, description, } = jobDetails;
     const db = getFirestore()
@@ -36,28 +37,20 @@ const JobView = ({ jobDetails, onPress }: Props) => {
                 const data = item.data()
                 return data
             })
-            // console.log(jobsList, '==============');
             const newObj = jobsList.filter((item)=>{
-                // console.log(item.id,"OOOOOOOOOOOOOOOOOOOOOO");
                 return item.id === jobDetails.id
-                // return item.data.filter((it: { uidP: any; },i: any)=>{
-                //    return  it.uidP === currentUserData.uid
-                // })
             })
-
-            const checkArray = newObj[0].data.filter((it: any, i: any)=>{
+            let checkArray = []
+            if(newObj.length > 0 ){checkArray = newObj[0]?.data.filter((it: any, i: any)=>{
                 return it.uidP === currentUserData.uid
-            })
-            console.log(checkArray,"OOOOOOOOOOOOOOOOOOOOOOOOO");
-            // const obj = jobsList[0].data.filter((item: { uidP: any; }, index: any)=>{
-            //     return  item.uidP === currentUserData.uid
-            // })
-            // console.log(newObj, "=================")
+            })}
             if(checkArray.length > 0){
                 onChangeData(checkArray) 
             }
            
             setLoading(false)
+        }).catch((e)=>{
+            console.log(e,"eeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
         })
     }
 
@@ -71,8 +64,7 @@ const JobView = ({ jobDetails, onPress }: Props) => {
     if(loading){
         return <Loader />
     }
-console.log(jobDetails, "==========");
-
+console.log(data, "datadatadatadatadata")
     return (
             <ScrollView>            
         <View>
