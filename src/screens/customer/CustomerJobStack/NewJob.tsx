@@ -35,6 +35,7 @@ import {
   query,
   where,
   getDocs,
+  
 } from "firebase/firestore";
 import streamClientAtom from "atoms/streamClientAtom";
 // import { getDatabase, ref, onValue } from 'firebase/database';
@@ -174,30 +175,38 @@ const CreateJob = ({ navigation }: Props) => {
 
     uploadBytes(storageRef, imageUrl, metadata).then((snapshot) => {
     //   console.log("Uploaded a blob or file!");
+    const jobsRef = collection(db, "jobs");
       getDownloadURL(snapshot.ref).then( async (downloadURL) => {
         console.log("File available at");
         setImageUrlFireStore(downloadURL);
         const URL = downloadURL
         const jobId = uuid.v4();
         const { currentUser } = auth;
+
+      
         // console.log(URL, "imageUrlFireStoreimageUrlFireStoreimageUrlFireStoreimageUrlFireStoreimageUrlFireStoreimageUrlFireStoreimageUrlFireStoreimageUrlFireStoreimageUrlFireStoreimageUrlFireStoreimageUrlFireStoreimageUrlFireStore")
-        await setDoc(doc(collection(db, "jobs")), {
-          jobId: jobId,
-          uid: currentUser?.uid,
+       const getID = await doc(collection(db, "jobs"))
+
+       let x = {
+        jobId: jobId,
+        uid: currentUser?.uid,
+        title: jobTitle,
+        status: "Lead",
+        id: getID.id,
+        jobDetails: {
           title: jobTitle,
-          status: "Lead",
-          jobDetails: {
-            title: jobTitle,
-            createdAt: dateAndTimeValue.toString(),
-            streamChatId: jobId,
-            description: jobDescription,
-            type: jobType,
-            bikeModel: bikeModel,
-            imageUrl: URL,
-            jobStatus: 0
-          },
-          data: [],
-        })
+          createdAt: dateAndTimeValue.toString(),
+          streamChatId: jobId,
+          description: jobDescription,
+          type: jobType,
+          bikeModel: bikeModel,
+          imageUrl: URL,
+          jobStatus: 0
+        },
+        data: [],
+      }
+
+      setDoc(getID, x)
           .then(() => {
             getMyJob();
           })

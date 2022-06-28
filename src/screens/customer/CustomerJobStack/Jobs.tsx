@@ -67,9 +67,15 @@ const Jobs = ({ navigation }: Props) => {
                         sections={jobs}
                         style={tailwind('w-full')}
                         keyExtractor={(item, index) => item.title + item.subtitle + index}
-                        renderItem={({ item: { title, subtitle, externalId, createAt } }) => <ChatListItem createAt={createAt} title={title} subtitle={subtitle} onPress={() => {
-                            navigation.navigate("JobChat", { externalId })
-                        }} />}
+                        renderItem={(mainItem
+                            // ,{ item: { title, subtitle, externalId, createAt } }
+                            ) =>{ 
+                            // console.log(mainItem.item,")___________________________________________))))))))))))")
+                            // return <Text>TESTING y</Text> 
+                            return <ChatListItem data={{userApplied:mainItem.item,job:mainItem.section?.id}} createAt={mainItem.item.createAt} title={mainItem.item.title} subtitle={mainItem.item.subtitle} onPress={() => {
+                            navigation.navigate("JobChat", { externalId:mainItem.item.externalId })
+                        }} />
+                        }}
                         // ItemSeparatorComponent={() => <View style={tailwind('w-full bg-gray-200 h-px')} />}
                         renderSectionHeader={({ section: { title, status, jobDetails } }) =>
                             <>
