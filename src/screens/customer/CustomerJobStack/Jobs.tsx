@@ -72,7 +72,7 @@ const Jobs = ({ navigation }: Props) => {
                             ) =>{ 
                             // console.log(mainItem.item,")___________________________________________))))))))))))")
                             // return <Text>TESTING y</Text> 
-                            return <ChatListItem data={{userApplied:mainItem.item,job:mainItem.section?.id}} createAt={mainItem.item.createAt} title={mainItem.item.title} subtitle={mainItem.item.subtitle} onPress={() => {
+                            return <ChatListItem data={{userApplied:mainItem.item,job:mainItem.section?.id,getMyJob:()=>getMyJob()}} createAt={mainItem.item.createAt} title={mainItem.item.title} subtitle={mainItem.item.subtitle} onPress={() => {
                             navigation.navigate("JobChat", { externalId:mainItem.item.externalId })
                         }} />
                         }}
