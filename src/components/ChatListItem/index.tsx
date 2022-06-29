@@ -18,6 +18,7 @@ import {
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Modal from "../common/Modal";
+import StarRating from 'react-native-star-rating';
 
 const ChatListItem = ({
   title,
@@ -35,16 +36,49 @@ const ChatListItem = ({
   const tailwind = useTailwind();
   const [currentUserData] = useAtom(currentUserDataAtom);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isRatingModal, setIsRatingModal] = useState(false);
+  const [rating, setRating] = useState(0)
   const db = getFirestore();
   const onJobAccept = async () => {
     let id = data.job.trim();
     const frankDocRef = doc(db, "jobs", id);
     const cityRef = doc(db, "jobs", id);
-    await setDoc(cityRef, { data: [{...data.userApplied, jobResponseType: 'accepted'}]}, { merge: true });
+    await setDoc(
+      cityRef,
+      { data: [{ ...data.userApplied, jobResponseType: "accepted" }] },
+      { merge: true }
+    );
+
+    // await updateDoc(frankDocRef, {
+    //     data: arrayRemove("applied")
+    // });
+
     await updateDoc(doc(db, "jobs", id), {
-        'jobDetails.jobStatus': 1
-    })
-    await data.getMyJob()
+      "jobDetails.jobStatus": 1,
+    });
+
+    await data.getMyJob();
+    // await updateDoc(washingtonRef, {
+    //     data: arrayUnion('jobResponseType', 'accepted')
+    // });
+
+    // Set the "capital" field of the city 'DC'
+
+    // const jobsRef = collection(db , "jobs");
+    // console.log({jobsRef})
+    // const queryGetMyJobs = await query(
+    //     jobsRef,
+    //     where("id", "==", data.job)
+    //   );
+    // console.log(queryGetMyJobs, "queryGetMyJobsqueryGetMyJobsqueryGetMyJobsqueryGetMyJobs")
+    // await updateDoc(doc(db, "jobs", `${data?.job}`), {
+    //     status: "AHSAN"
+    // }
+    // }).then(()=>{
+    //     alert("hit")
+    // }).catch((e)=>{
+    //     console.log(e)
+    // })
   };
 
 
@@ -69,11 +103,13 @@ const ChatListItem = ({
             </TouchableOpacity>
           </>
         ) : (
-          <TouchableOpacity onPress={()=>{
-            if (data.userApplied.jobResponseType === "accepted") {
-              onPress()
-            }
-          }}>
+          <TouchableOpacity
+            onPress={() => {
+              if (data.userApplied.jobResponseType === "accepted") {
+                onPress();
+              }
+            }}
+          >
             <View style={tailwind("flex-row justify-between mt-1")}>
               <Text sm left heavy>
                 {title}dd
@@ -87,39 +123,64 @@ const ChatListItem = ({
             </Text>
           </TouchableOpacity>
         )}
-        {currentUserData.userType !== "provider" && (
-          data.userApplied.jobResponseType !== "accepted" ? <View style={styles.btnCont}>
-            <TouchableOpacity
-              // onPress={onPress}
-              style={styles.acceptBtn}
-              onPress={() => setIsModalOpen(true)}
-            >
-              <Text style={{ color: "white" }}>Accept</Text>
-            </TouchableOpacity>
-          </View> :
-          <View style={styles.btnCont}>
-          <TouchableOpacity
-            // onPress={onPress}
-            style={styles.acceptBtn}
-            onPress={() => setIsModalOpen(true)}
-          >
-            <Text style={{ color: "white" }}>Mark as compelete</Text>
-          </TouchableOpacity>
-        </View>
-        )}
+        {currentUserData.userType !== "provider" &&
+          (data.userApplied.jobResponseType !== "accepted" ? (
+            <View style={styles.btnCont}>
+              <TouchableOpacity
+                // onPress={onPress}
+                style={styles.acceptBtn}
+                onPress={() => setIsModalOpen(true)}
+              >
+                <Text style={{ color: "white" }}>Accept</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <View style={styles.btnCont}>
+              <TouchableOpacity
+                // onPress={onPress}
+                style={styles.acceptBtn}
+                onPress={() => setIsRatingModal(true)}
+              >
+                <Text style={{ color: "white" }}>Mark as compelete</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
       </View>
-  
       <Modal modalVisible={isModalOpen} setModalVisible={setIsModalOpen}>
         <Text>
           Are you sure? you want to accept this offer, it will delete all other
           offers on this job.
         </Text>
         <View style={styles.btnContModal}>
-        <TouchableOpacity onPress={() => setIsModalOpen(false)} style={styles.btnNo}>
-            <Text style={{color:"white"}}>No</Text>
+          <TouchableOpacity
+            onPress={() => setIsModalOpen(false)}
+            style={styles.btnNo}
+          >
+            <Text style={{ color: "white" }}>No</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {onJobAccept();setIsModalOpen(false);}} style={styles.btnYes}>
-            <Text style={{color:"white"}}>Yes</Text>
+          <TouchableOpacity
+            onPress={() => {
+              onJobAccept();
+              setIsModalOpen(false);
+            }}
+            style={styles.btnYes}
+          >
+            <Text style={{ color: "white" }}>Yes</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+      {/* Rating modal */}
+      <Modal modalVisible={isRatingModal} setModalVisible={setIsRatingModal}>
+        <Text>Rate this service provider.</Text>
+        <View style={styles.btnContModal}>
+          <TouchableOpacity
+            onPress={() => setIsRatingModal(false)}
+            style={styles.btnNo}
+          >
+            <Text style={{ color: "white" }}>Cancel</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {alert("PP")}} style={styles.btnYes}>
+            <Text style={{color:"white"}}>Submit</Text>
           </TouchableOpacity>
         </View>
       </Modal>
@@ -154,22 +215,22 @@ const styles = StyleSheet.create({
     padding: "1.5%",
     borderRadius: 5,
   },
-  btnContModal:{
-    width:"100%",
-    justifyContent:"space-around",
-    flexDirection:"row",
-    marginTop:"3%"
+  btnContModal: {
+    width: "100%",
+    justifyContent: "space-around",
+    flexDirection: "row",
+    marginTop: "3%",
   },
-  btnYes:{
-    backgroundColor:"green",
-    width:"35%",
-    paddingVertical:"2%",
-    borderRadius:5
+  btnYes: {
+    backgroundColor: "green",
+    width: "35%",
+    paddingVertical: "2%",
+    borderRadius: 5,
   },
-  btnNo:{
-    backgroundColor:"red",
-    width:"35%",
-    paddingVertical:"2%",
-    borderRadius:5
-  }
+  btnNo: {
+    backgroundColor: "red",
+    width: "35%",
+    paddingVertical: "2%",
+    borderRadius: 5,
+  },
 });
