@@ -61,6 +61,7 @@ const SignUp = ({ navigation }: Props) => {
             .then((userCredential) => {
                 const { email, uid } = userCredential.user
                 setDoc(doc(firestore, "users", uid), {
+                    totalJobs: 0,
                     rating: 0,
                     distance: '',
                     email,

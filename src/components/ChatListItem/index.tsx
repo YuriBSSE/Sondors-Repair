@@ -18,7 +18,7 @@ import {
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Modal from "../common/Modal";
-import StarRating from 'react-native-star-rating';
+import StarRating from "react-native-star-rating";
 
 const ChatListItem = ({
   title,
@@ -26,6 +26,9 @@ const ChatListItem = ({
   createAt,
   onPress,
   data = {},
+  thatId,
+  jobDetailsData
+
 }: {
   onPress: () => any;
   title: string;
@@ -37,58 +40,128 @@ const ChatListItem = ({
   const [currentUserData] = useAtom(currentUserDataAtom);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRatingModal, setIsRatingModal] = useState(false);
-  const [rating, setRating] = useState(0)
+  const [dataaaa, onChangeDataaaa] = useState([])
+  const [rating, setRating] = useState(0);
+  const onStarRatingPress = (rating: number) => {
+    setRating(rating);
+  };
+  // console.log(jobDetailsData,"OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO-------------------------------------------------");
+
   const db = getFirestore();
+
+  var currentUserId = currentUserData.uid;
+  var userRef = doc(db, "users", currentUserId);
+
+  var jobID = data?.job?.trim();
+  if (jobID) {
+    var jobRef = doc(db, "jobs", jobID);
+  }
+  if (jobID) {
+    var jobRefUser = doc(db, "users", data.userApplied.uidP);
+  }
+  // console.log(data.userApplied.uidP, "TOTAL JOBS");
   const onJobAccept = async () => {
-    let id = data.job.trim();
-    const frankDocRef = doc(db, "jobs", id);
-    const cityRef = doc(db, "jobs", id);
     await setDoc(
-      cityRef,
+      jobRef,
       { data: [{ ...data.userApplied, jobResponseType: "accepted" }] },
       { merge: true }
     );
-
-    // await updateDoc(frankDocRef, {
-    //     data: arrayRemove("applied")
-    // });
-
-    await updateDoc(doc(db, "jobs", id), {
+    await updateDoc(doc(db, "jobs", jobID), {
       "jobDetails.jobStatus": 1,
     });
+    await data.getMyJob();
+  };
+
+  const completeTask = async () => {
+    //
+
+    await setDoc(
+      jobRef,
+      { data: [{ ...data.userApplied, jobResponseType: "completed" }] },
+      { merge: true }
+    );
+    await updateDoc(doc(db, "jobs", jobID), {
+      "jobDetails.jobStatus": 2,
+    });
+
+    // await updateDoc(doc(db, "users", currentUserId), {
+    //   "totalJobs": currentUserData.totalJobs + 1,
+    // });
+    // const q = query(collection(db, "users"), where("uid", "==", data.userApplied.uidP));
+
+    getDocs(collection(db, "users"))
+      .then(async (res) => {
+        const users = res.docs.map((item) => {
+          const data = item.data();
+          return data;
+        });
+        const newObj = users.filter((item) => {
+          return item.uid === data.userApplied.uidP;
+        });
+        // console.log(newObj, "+_+");
+
+        await setDoc(
+          jobRefUser,
+          { totalJobs: newObj[0].totalJobs + 1, rating: newObj[0].rating + rating },
+          { merge: true }
+        );
+      })
+      .catch((e) => {
+        console.log(e, "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+      });
+
+    // const querySnapshot = await getDocs(q);
+
+    // const querySnapshot = await getDocs(collection(db, "users"));
+    // console.log(querySnapshot, "SIZE");
+
+    // await setDoc(jobRefUser, { totalJobs: 9 }, { merge: true });
 
     await data.getMyJob();
-    // await updateDoc(washingtonRef, {
-    //     data: arrayUnion('jobResponseType', 'accepted')
-    // });
-
-    // Set the "capital" field of the city 'DC'
-
-    // const jobsRef = collection(db , "jobs");
-    // console.log({jobsRef})
-    // const queryGetMyJobs = await query(
-    //     jobsRef,
-    //     where("id", "==", data.job)
-    //   );
-    // console.log(queryGetMyJobs, "queryGetMyJobsqueryGetMyJobsqueryGetMyJobsqueryGetMyJobs")
-    // await updateDoc(doc(db, "jobs", `${data?.job}`), {
-    //     status: "AHSAN"
-    // }
-    // }).then(()=>{
-    //     alert("hit")
-    // }).catch((e)=>{
-    //     console.log(e)
-    // })
+    setIsRatingModal(false);
   };
+
+
+  const getData = async () => {
+    // console.log(thatId,"OOOOOOOOOOOOOOOOOOOOOOOOO");
+    getDocs(collection(db, "jobs")).then((res) => {
+      const jobsList = res.docs.map((item) => {
+          const data = item.data()
+          return data
+      })
+      const newObj = jobsList.filter((item)=>{
+          return item.id === jobDetailsData.id
+      })
+      let checkArray = []
+      if(newObj.length > 0 ){checkArray = newObj[0]?.data.filter((it: any, i: any)=>{
+          return it.uidP === currentUserData.uid
+      })}
+      // console.log(checkArray, "=====")
+      if(checkArray.length > 0){
+          onChangeDataaaa(checkArray) 
+      }
+
+  }).catch((e)=>{
+      console.log(e,"eeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+  })
+  }
+
+  useEffect(()=>{
+    getData()
+  },[])
 
 
   return (
     <>
-      <View style={tailwind("px-5  pb-3 mt-1")}>
-       
+      <View style={[tailwind("px-5  pb-3 mt-1"), {}]}>
         {currentUserData.userType == "provider" ? (
           <>
-            <TouchableOpacity onPress={onPress}>
+            <TouchableOpacity disabled={
+              dataaaa?.length < 0 ? true :
+              dataaaa[0]?.jobResponseType == "completed" ? true :
+              dataaaa[0]?.jobResponseType == "expired" ? true :
+              dataaaa[0]?.jobResponseType == "accepted" ? false : true
+            }  onPress={onPress}>
               <View style={tailwind("flex-row justify-between mt-1")}>
                 <Text sm left heavy>
                   {title}
@@ -112,7 +185,7 @@ const ChatListItem = ({
           >
             <View style={tailwind("flex-row justify-between mt-1")}>
               <Text sm left heavy>
-                {title}dd
+                {title}
               </Text>
               <Text sm tertiary>
                 {moment(createAt).fromNow()}
@@ -124,7 +197,7 @@ const ChatListItem = ({
           </TouchableOpacity>
         )}
         {currentUserData.userType !== "provider" &&
-          (data.userApplied.jobResponseType !== "accepted" ? (
+          (data?.userApplied?.jobResponseType === "applied" && (
             <View style={styles.btnCont}>
               <TouchableOpacity
                 // onPress={onPress}
@@ -134,56 +207,89 @@ const ChatListItem = ({
                 <Text style={{ color: "white" }}>Accept</Text>
               </TouchableOpacity>
             </View>
-          ) : (
-            <View style={styles.btnCont}>
+          ) )}
+          {data?.userApplied?.jobResponseType === "accepted" && <View style={styles.btnCont}>
               <TouchableOpacity
                 // onPress={onPress}
-                style={styles.acceptBtn}
+                style={{
+                  backgroundColor: "#00C851",
+                  width: "45%",
+                  padding: "1.5%",
+                  borderRadius: 5,
+                }}
                 onPress={() => setIsRatingModal(true)}
               >
-                <Text style={{ color: "white" }}>Mark as compelete</Text>
+                <Text style={{ color: "white" }}>Mark as Complete</Text>
               </TouchableOpacity>
-            </View>
-          ))}
+            </View>}
+            {data?.userApplied?.jobResponseType === "completed" && <View style={styles.btnCont}>
+              <TouchableOpacity
+              disabled
+                // onPress={onPress}
+                style={{
+                  backgroundColor: "#2BBBAD",
+                  width: "45%",
+                  padding: "1.5%",
+                  borderRadius: 5,
+                }}
+                // onPress={() => setIsRatingModal(true)}
+              >
+                <Text style={{ color: "white" }}>Completed</Text>
+              </TouchableOpacity>
+            </View>}
       </View>
-      <Modal modalVisible={isModalOpen} setModalVisible={setIsModalOpen}>
-        <Text>
-          Are you sure? you want to accept this offer, it will delete all other
-          offers on this job.
-        </Text>
-        <View style={styles.btnContModal}>
-          <TouchableOpacity
-            onPress={() => setIsModalOpen(false)}
-            style={styles.btnNo}
-          >
-            <Text style={{ color: "white" }}>No</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              onJobAccept();
-              setIsModalOpen(false);
-            }}
-            style={styles.btnYes}
-          >
-            <Text style={{ color: "white" }}>Yes</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
+      {isModalOpen && (
+        <Modal modalVisible={isModalOpen} setModalVisible={setIsModalOpen}>
+          <Text>
+            Are you sure? you want to accept this offer, it will delete all
+            other offers on this job.
+          </Text>
+          <View style={styles.btnContModal}>
+            <TouchableOpacity
+              onPress={() => setIsModalOpen(false)}
+              style={styles.btnNo}
+            >
+              <Text style={{ color: "white" }}>No</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                onJobAccept();
+                setIsModalOpen(false);
+              }}
+              style={styles.btnYes}
+            >
+              <Text style={{ color: "white" }}>Yes</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
+      )}
       {/* Rating modal */}
-      <Modal modalVisible={isRatingModal} setModalVisible={setIsRatingModal}>
-        <Text>Rate this service provider.</Text>
-        <View style={styles.btnContModal}>
-          <TouchableOpacity
-            onPress={() => setIsRatingModal(false)}
-            style={styles.btnNo}
-          >
-            <Text style={{ color: "white" }}>Cancel</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => {alert("PP")}} style={styles.btnYes}>
-            <Text style={{color:"white"}}>Submit</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
+      {isRatingModal && (
+        <Modal modalVisible={isRatingModal} setModalVisible={setIsRatingModal}>
+          <Text>Rate this service provider.</Text>
+          <View style={{height: 100, justifyContent:'center', alignItems:'center'}}>
+          <StarRating
+            maxStars={5}
+            starSize={35}
+            // starStyle={{  marginLeft: ml }}
+            rating={rating}
+            selectedStar={onStarRatingPress}
+            fullStarColor="#FCC736"
+          />
+          </View>
+          <View style={styles.btnContModal}>
+            <TouchableOpacity
+              onPress={() => setIsRatingModal(false)}
+              style={styles.btnNo}
+            >
+              <Text style={{ color: "white" }}>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={completeTask} style={styles.btnYes}>
+              <Text style={{ color: "white" }}>Submit</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
+      )}
     </>
   );
 };
@@ -204,7 +310,7 @@ const styles = StyleSheet.create({
     marginVertical: "1.5%",
   },
   acceptBtn: {
-    backgroundColor: "green",
+    backgroundColor: "#4285F4",
     width: "45%",
     padding: "1.5%",
     borderRadius: 5,

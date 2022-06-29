@@ -93,7 +93,7 @@ const JobChat = ({ route, navigation }: Props) => {
     useEffect(() => {
         navigation.setOptions({
             headerLeft: () => <HeaderLeft isBack isRoot onPress={() => navigation.goBack()} title={streamClient?.user?.name || "User"} />,
-            headerRight: () => <HeaderRight title={'View Job'} />,
+            // headerRight: () => <HeaderRight title={'View Job'} />,
         });
     }, []);
 

@@ -20,7 +20,7 @@ type Props = {
 }
 
 const JobView = ({ jobDetails, onPress }: Props) => {
-    console.log(jobDetails, "jobDetailsjobDetailsjobDetailsjobDetails")
+    // console.log(jobDetails, "jobDetailsjobDetailsjobDetailsjobDetails")
     const tailwind = useTailwind();
     const { imageUrl, title, bikeModel, type, description, } = jobDetails;
     const db = getFirestore()
@@ -65,7 +65,7 @@ const JobView = ({ jobDetails, onPress }: Props) => {
     if(loading){
         return <Loader />
     }
-console.log(data, "datadatadatadatadata")
+// console.log(data, "datadatadatadatadata")
     return (
             <ScrollView>            
         <View>
@@ -106,21 +106,29 @@ console.log(data, "datadatadatadatadata")
                     {
                         data[0]?.jobResponseType == 'applied'  &&  data.length > 0 ?
                         <View  style={{
-                            width: 100, heigth: 100, backgroundColor:'#00C851', borderRadius: 12, padding: 4, justifyContent:'center', alignSelf:'center'
+                            width: 150, heigth: 100, backgroundColor:'#00C851', borderRadius: 12, padding: 4, justifyContent:'center', alignSelf:'center'
                         }}>
                         <Text  xl style={{fontWeight: 'bold', color: 'white', textAlign:'center'}}>Applied</Text>
                         </View>:
                          data[0]?.jobResponseType == 'accepted'  &&  data.length > 0 ?
-                         <>
+                     
                          <View  style={{
-                            width: 100, heigth: 100, backgroundColor:'#4285F4', borderRadius: 12, padding: 4, justifyContent:'center', alignSelf:'center'
+                            width: 150, heigth: 100, backgroundColor:'#4285F4', borderRadius: 12, padding: 4, justifyContent:'center', alignSelf:'center'
                         }}>
-                        <Text  xl style={{fontWeight: 'bold', color: 'white', textAlign:'center'}}>Accepted</Text>
+                        <Text  xl style={{fontWeight: 'bold', color: 'white', textAlign:'center'}}>Acceptedd</Text>
                         </View>
-                        </>
+                        :
+                        jobDetails.jobStatus == 2 &&  data.length > 0 ?
+  
+                           <View  style={{
+                            width: 150, heigth: 100, backgroundColor:'#2BBBAD', borderRadius: 12, padding: 4, justifyContent:'center', alignSelf:'center'
+                        }}>
+                        <Text  xl style={{fontWeight: 'bold', color: 'white', textAlign:'center'}}>Completed</Text>
+                        </View>
+                      
                         : jobDetails.jobStatus != 0 ?
                         <View  style={{
-                            width: 100, heigth: 100, backgroundColor:'#ff4444', borderRadius: 12, padding: 4, justifyContent:'center', alignSelf:'center'
+                            width: 150, heigth: 100, backgroundColor:'#ff4444', borderRadius: 12, padding: 4, justifyContent:'center', alignSelf:'center'
                         }}>
                         <Text  xl style={{fontWeight: 'bold', color: 'white', textAlign:'center'}}>Expired</Text>
                         </View>:
@@ -128,7 +136,7 @@ console.log(data, "datadatadatadatadata")
                         <Button onPress={onPress} style={tailwind('rounded')} titleStyle={{ fontWeight: '700' }} lg title='Apply' />
                     }
                 
-                </View>: null
+                </View>:   null
             }
           
         </View>

@@ -6,7 +6,7 @@ import { useTailwind } from 'tailwind-rn';
 import { Ionicons } from '@expo/vector-icons';
 import isAuthenticatedAtom from 'atoms/isAuthenticatedAtom';
 import { useAtom } from 'jotai';
-
+import * as Updates from 'expo-updates';
 import Text from 'components/common/Text';
 import Colors from 'styles/Colors';
 
@@ -26,6 +26,7 @@ const Settings = ({ navigation }: Props) => {
     const logOut = () => {
         signOut(auth).then(() => {
            setIsAuthenticatedAtom(false)
+           Updates.reloadAsync();
           }).catch((error) => {
             // An error happened.
           });

@@ -17,9 +17,9 @@ const CustomerJobDetailsScreen = ({ route, navigation }: Props) => {
     const { jobDetails } = route.params;
 
     useEffect(() => {
-        navigation.setOptions({
-            headerRight: () => jobDetails.streamChatId ? <HeaderRight onPress={() => navigation.navigate("JobChat", { externalId: jobDetails.streamChatId! })} title='View chat' /> : null,
-        });
+        // navigation.setOptions({
+        //     headerRight: () => jobDetails.streamChatId ? <HeaderRight onPress={() => navigation.navigate("JobChat", { externalId: jobDetails.streamChatId! })} title='View chat' /> : null,
+        // });
     }, []);
 
     return (
