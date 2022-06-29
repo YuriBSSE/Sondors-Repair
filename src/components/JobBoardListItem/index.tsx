@@ -13,7 +13,8 @@ type Props = {
 }
 
 const JobBoardListItem = ({ job, onPress }: Props) => {
-    // console.log(job, "JOB OBJECT")
+    
+
     const tailwind = useTailwind();
     return (
         <TouchableOpacity onPress={onPress} style={tailwind('py-3 px-5')}>

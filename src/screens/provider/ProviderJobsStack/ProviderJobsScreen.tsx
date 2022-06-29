@@ -45,7 +45,7 @@ const ProviderJobsScreen = ({ navigation }: Props) => {
     useEffect(() => {
         getProviderJobs()
     }, [])
-
+    console.log(providerJobs, "providerJobsproviderJobs=======================")
     return (
         <SafeAreaView style={tailwind('flex bg-white items-center justify-center h-full')}>
             <View style={tailwind('px-5 mt-3')}>
@@ -56,13 +56,14 @@ const ProviderJobsScreen = ({ navigation }: Props) => {
                 <SectionList
                     sections={providerJobs}
                     keyExtractor={(item, index) => item.title + item.subtitle + index}
-                    renderItem={({ item: { title, subtitle, externalId, createAt } }) => <ChatListItem title={title} subtitle={subtitle} onPress={externalId ? () => navigation.navigate('JobChat', { externalId }) : () => Alert.alert('No chat exists')} createAt={createAt} />}
+                    renderItem={({ item: { title, subtitle, externalId, createAt, uidP } }) => <ChatListItem title={title} id={uidP} subtitle={subtitle} onPress={externalId ? () => navigation.navigate('JobChat', { externalId }) : () => Alert.alert('No chat exists')} createAt={createAt} />}
                     ListFooterComponent={() => <ViewOlderJob />}
                     renderSectionHeader={
                         ({ section: { title, status, jobDetails } }) =>
                             <JobsListSectionHeader
                                 title={title}
                                 status={status}
+                                jd={jobDetails}
                                 onPress={
                                     () => navigation.navigate('ProviderJobDetailsScreen', {
                                         jobDetails,

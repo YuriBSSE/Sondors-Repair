@@ -82,6 +82,7 @@ const Jobs = ({ navigation }: Props) => {
                                 <JobsListSectionHeader
                                     title={title}
                                     status={status}
+                                    jd={jobDetails}
                                     onPress={() => navigation.navigate('CustomerJobDetailsScreen', { jobDetails })}
                                 />
                             </>
