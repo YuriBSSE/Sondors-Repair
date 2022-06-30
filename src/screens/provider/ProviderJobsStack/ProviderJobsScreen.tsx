@@ -26,6 +26,7 @@ type Props = {
 const ViewOlderJob = () => {
     const tailwind = useTailwind();
     return (
+        <>
         <TouchableOpacity onPress={() => Alert.alert('No older jobs her')}>
             <View style={[tailwind('px-5 py-3  border-b border-gray-200  flex-row justify-between items-center'), { borderTopWidth: 1, borderColor: '#EDEDF2' }]}>
                 <Text left sm tertiary bold>View older completed jobs</Text>
@@ -34,6 +35,10 @@ const ViewOlderJob = () => {
                 </View>
             </View>
         </TouchableOpacity>
+        <View style={{
+            height: 200
+        }}></View>
+        </>
     )
 }
 
@@ -41,34 +46,68 @@ const ProviderJobsScreen = ({ navigation }: Props) => {
     const tailwind = useTailwind();
     const [providerJobs] = useAtom(providerJobsAtom);
     const { loading, getProviderJobs } = useApi()
- 
+    const [ value, onChangeValue ] = useState('All')
+    const [ flatlistData, onChangeFlatlistData ] = useState([])
     useEffect(() => {
         getProviderJobs()
     }, [])
+    // console.log(providerJobs, "providerJobsproviderJobs=======================")
+
+    const consoleLog = (data) =>{
+            console.log(data);
+            onChangeValue(data)
+    }
+
+    const filterFunc = () =>{
+       if(value !== "All"){
+        const x = providerJobs.filter((item,index)=>{
+                return  item?.data[0]?.jobResponseType == value.toLowerCase()
+        })
+        console.log(x);
+        onChangeFlatlistData([...x])
+    }else{
+        // alert("OOOO")
+     console.log(providerJobs)
+        onChangeFlatlistData([...providerJobs])
+     }
+    }
+
+    useEffect(()=>{
+        filterFunc()
+    },[value, providerJobs])
 
     return (
         <SafeAreaView style={tailwind('flex bg-white items-center justify-center h-full')}>
             <View style={tailwind('px-5 mt-3')}>
-                <ButtonTabs tabList={['All', 'Active', 'Leads', 'Inactive']} />
+                <ButtonTabs newFunc={consoleLog}  tabList={['All', 'Applied', 'Accepted', 'Completed']} />
             </View>
             <View style={tailwind('flex h-full justify-between w-full mt-2')}>
            {!loading ?
                 <SectionList
-                    sections={providerJobs}
+                    sections={flatlistData}
                     keyExtractor={(item, index) => item.title + item.subtitle + index}
-                    renderItem={({ item: { title, subtitle, externalId, createAt } }) => <ChatListItem title={title} subtitle={subtitle} onPress={externalId ? () => navigation.navigate('JobChat', { externalId }) : () => Alert.alert('No chat exists')} createAt={createAt} />}
+                    
+                    renderItem={({ item: { title, subtitle, externalId, createAt, uidP }, section: { jobDetails}  }) => <ChatListItem  
+
+                                                                                        jobDetailsData={jobDetails}
+                                                                                        thatId={uidP}
+                                                                                        title={title} subtitle={subtitle}
+                                                                                        onPress={externalId ? () => navigation.navigate('JobChat', { externalId }) : () => Alert.alert('No chat exists')} 
+                                                                                        createAt={createAt} 
+                                                                                        />}
                     ListFooterComponent={() => <ViewOlderJob />}
                     renderSectionHeader={
                         ({ section: { title, status, jobDetails } }) =>
                             <JobsListSectionHeader
                                 title={title}
                                 status={status}
+                                jd={jobDetails}
                                 onPress={
                                     () => navigation.navigate('ProviderJobDetailsScreen', {
                                         jobDetails,
                                         headerLeftTitle: 'Job Details',
                                         headerRightOnPress: jobDetails.streamChatId ? () => navigation.navigate('JobChat', { externalId: jobDetails.streamChatId }) : undefined,
-                                        headerRightTitle: jobDetails.streamChatId ? 'Go to chat' : undefined
+                                        // headerRightTitle: jobDetails.streamChatId ? 'Go to chat' : undefined
                                     })
                                 }
                             />

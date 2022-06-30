@@ -72,16 +72,21 @@ const Jobs = ({ navigation }: Props) => {
                             ) =>{ 
                             // console.log(mainItem.item,")___________________________________________))))))))))))")
                             // return <Text>TESTING y</Text> 
-                            return <ChatListItem data={{userApplied:mainItem.item,job:mainItem.section?.id,getMyJob:()=>getMyJob()}} createAt={mainItem.item.createAt} title={mainItem.item.title} subtitle={mainItem.item.subtitle} onPress={() => {
-                            navigation.navigate("JobChat", { externalId:mainItem.item.externalId })
-                        }} />
+                            return <ChatListItem 
+                            data={{userApplied:mainItem?.item,job:mainItem?.section?.id,getMyJob:()=>getMyJob()}} 
+                            createAt={mainItem?.item?.createAt} 
+                            title={mainItem?.item?.title} 
+                            subtitle={mainItem?.item?.subtitle} 
+                            onPress={() => {navigation.navigate("JobChat", { externalId:mainItem?.item?.externalId })}} />
                         }}
                         // ItemSeparatorComponent={() => <View style={tailwind('w-full bg-gray-200 h-px')} />}
                         renderSectionHeader={({ section: { title, status, jobDetails } }) =>
                             <>
                                 <JobsListSectionHeader
+                                
                                     title={title}
                                     status={status}
+                                    jd={jobDetails}
                                     onPress={() => navigation.navigate('CustomerJobDetailsScreen', { jobDetails })}
                                 />
                             </>

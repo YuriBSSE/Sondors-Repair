@@ -9,11 +9,12 @@ import ServiceLabel from 'components/common/ServiceLabel';
 
 const ProviderDetailsView = ({ providerDetails }: { providerDetails: Provider }) => {
     const tailwind = useTailwind()
-    
+    console.log(providerDetails,"providerDetails")
+    const totalRatting = providerDetails.rating / providerDetails.totalJobs 
     return (
         <View style={tailwind('flex flex-col px-6')}>
             <View style={tailwind('mt-4')}>
-                <Rating disabled={true} defaultRating={providerDetails.rating} />
+                <Rating disabled={true} defaultRating={totalRatting || 0} />
                 <Text left sm tertiary style={tailwind('mt-1')}>Member since September 2022</Text>
             </View>
             <View style={{...tailwind('mt-3'), maxHeight: 232}}>

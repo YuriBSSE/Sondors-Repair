@@ -8,12 +8,13 @@ type props = {
     tabList?: Array<any>;
 }
 
-const ButtonTabs = ({ tabList }: props) => {
+const ButtonTabs = ({ tabList, newFunc }: props) => {
     const tailwind = useTailwind();
     const [activeTab, setActiveTab] = useState('All')
 
     const handelActiveTab = (value: string) => {
         setActiveTab(value)
+        newFunc(value)
     }
 
     return (
