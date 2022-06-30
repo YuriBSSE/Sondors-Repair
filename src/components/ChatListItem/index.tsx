@@ -166,9 +166,9 @@ const ChatListItem = ({
                 <Text sm left heavy>
                   {title}
                 </Text>
-                <Text sm tertiary>
+                {/* <Text sm tertiary>
                   {moment(createAt).fromNow()}
-                </Text>
+                </Text> */}
               </View>
               <Text sm left tertiary style={tailwind("mt-1")}>
                 {subtitle}

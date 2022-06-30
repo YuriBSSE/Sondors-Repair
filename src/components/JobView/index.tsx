@@ -115,7 +115,7 @@ const JobView = ({ jobDetails, onPress }: Props) => {
                          <View  style={{
                             width: 150, heigth: 100, backgroundColor:'#4285F4', borderRadius: 12, padding: 4, justifyContent:'center', alignSelf:'center'
                         }}>
-                        <Text  xl style={{fontWeight: 'bold', color: 'white', textAlign:'center'}}>Acceptedd</Text>
+                        <Text  xl style={{fontWeight: 'bold', color: 'white', textAlign:'center'}}>Accepted</Text>
                         </View>
                         :
                         jobDetails.jobStatus == 2 &&  data.length > 0 ?

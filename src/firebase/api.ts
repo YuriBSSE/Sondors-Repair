@@ -37,7 +37,13 @@ const useApi = () => {
             })
             return dataJobsList
         }).then((dataJobsList: any) => {
-            setProvidersJobs(_.compact(dataJobsList))
+        
+            const j = dataJobsList.sort(function(a: { date: string | number | Date; },b: { date: string | number | Date; }){
+                // Turn your strings into dates, and then subtract them
+                // to get a value that is either negative, positive, or zero.
+                return new Date(b.jobDetails.createdAt) - new Date(a.jobDetails.createdAt);
+              });
+              setProvidersJobs(_.compact(j))
             setLoading(false)
         }).catch((error) => {
             const errorMessage = error.message;
