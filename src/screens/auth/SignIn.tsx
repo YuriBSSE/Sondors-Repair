@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { useTailwind } from 'tailwind-rn';
-import { View, Keyboard, Alert } from 'react-native';
+import { View, Keyboard, Alert, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { Image, Dimensions } from 'react-native';
 import Text from 'components/common/Text';
 import TextInput from 'components/common/TextInput';
@@ -60,25 +60,29 @@ const SignIn = ({ navigation }: Props) => {
 
     const { width } = Dimensions.get('window');
     return (
-        <View style={{ flex: 1, }}>
-            <View style={{ flex: 2 / 1.5, backgroundColor: '#fff', ...tailwind('flex items-center justify-center') }}>
-                <Image source={HomeImage} style={{ width: '100%', height: '100%', resizeMode: keyboardShow ? 'cover' : 'contain' }} />  
-            </View>
-            <View style={{ flex: 2, ...tailwind('bg-white flex items-center') }}>
-                <View >
-                    <Image resizeMode='cover'  source={SondorsLogoBlack} style={{ resizeMode: 'contain', alignSelf: 'center', width: width * .7 }}  /> 
-                </View>
-                <View style={tailwind('w-full px-6 mt-8')}>
-                    <TextInput value={email} lg placeholder='Email' onChangeText={(text) => setEmail(text)} />
-                    <TextInput value={password} secureTextEntry style={tailwind('mt-3')} lg placeholder='Password' onChangeText={(text) => setPassword(text)} />
-                    <Button onPress={onHandelSignIn} style={tailwind('mt-4 rounded')} titleStyle={{ fontWeight: '700' }} lg title='Sign in' />
-                    <Text lg tertiary style={tailwind('mt-2 mb-2')}>or</Text>
-                    <Button onPress={() =>  {
-                       navigation.navigate("SignUp")
-                    }} secondary titleStyle={{ fontWeight: '700' }} style={tailwind('mt-3 rounded')} lg title='Create account' />
-                </View>
-            </View>
-        </View>
+       <ScrollView>
+         <View style={{ height:1200 }}>
+       
+       <View style={{ flex: 1 / 1.5, backgroundColor: '#fff' }}>
+           <Image source={HomeImage} style={{ width: '100%', height: '100%', resizeMode: keyboardShow ? 'cover' : 'contain' }} />  
+       </View>
+       <View style={{ flex: 2, ...tailwind('bg-white flex items-center') }}>
+           <View >
+               <Image resizeMode='cover'  source={SondorsLogoBlack} style={{ resizeMode: 'contain', alignSelf: 'center', width: width * .7 }}  /> 
+           </View>
+           <View style={tailwind('w-full px-6 mt-8')}>
+               <TextInput value={email} lg placeholder='Email' onChangeText={(text) => setEmail(text)} />
+               <TextInput value={password} secureTextEntry style={tailwind('mt-3')} lg placeholder='Password' onChangeText={(text) => setPassword(text)} />
+               <Button onPress={onHandelSignIn} style={tailwind('mt-4 rounded')} titleStyle={{ fontWeight: '700' }} lg title='Sign in' />
+               <Text lg tertiary style={tailwind('mt-2 mb-2')}>or</Text>
+               <Button onPress={() =>  {
+                  navigation.navigate("SignUp")
+               }} secondary titleStyle={{ fontWeight: '700' }} style={tailwind('mt-3 rounded')} lg title='Create account' />
+           </View>
+       </View>
+       
+   </View>
+       </ScrollView>
     );
 }
 

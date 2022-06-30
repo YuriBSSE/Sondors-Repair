@@ -1,12 +1,12 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { useState } from 'react';
+import {TouchableOpacity,ScrollView} from "react-native"
 import { useTailwind } from 'tailwind-rn';
 import { View, Image, Dimensions, Alert } from 'react-native';
 import Text from 'components/common/Text';
 import TextInput from 'components/common/TextInput';
 import Button from 'components/common/Button';
 import Colors from 'styles/Colors';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { NavigationProp } from '@react-navigation/native';
 import SondorsLogoBlack from '../../assets/images/sondors-logo-black.png'
 
@@ -77,7 +77,8 @@ const SignUp = ({ navigation }: Props) => {
     }
 
     return (
-        <View style={{ flex: 1, ...tailwind('bg-white') }}>
+        <ScrollView style={{height:1200,backgroundColor:'white'}}>
+                    <View style={{ flex: 1, ...tailwind('bg-white') }}>
             <View style={{ ...tailwind('bg-white flex items-center px-6 pb-2 bg-white') }}>
                 <View style={{ marginTop: 55 }} >
                     <Image resizeMode='cover' source={SondorsLogoBlack} style={{ resizeMode: 'contain', alignSelf: 'center', width: width * .7 }} />
@@ -135,6 +136,7 @@ const SignUp = ({ navigation }: Props) => {
                 </TouchableOpacity>
             </View>
         </View>
+        </ScrollView>
     );
 }
 
