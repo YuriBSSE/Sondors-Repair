@@ -12,10 +12,12 @@ import Button from 'components/common/Button';
 import bikeServicesAtom from 'atoms/bikeServicesAtom';
 import providerRatingsAtom from 'atoms/providerRatingsAtom';
 import providerDistancesAtom from 'atoms/providerDistancesAtom';
+import currentUserDataAtom from 'atoms/currentUserDataAtom';
 import showProviderSearchFiltersAtom from 'atoms/showProviderSearchFiltersAtom';
 import KeyboardDismissView from 'components/common/KeyboardDismissView';
-import { collection, query, where, getDocs, getFirestore } from "firebase/firestore";
-
+import { collection, query, where, getDocs, getFirestore,orderBy,startAt,
+    endAt } from "firebase/firestore";
+import { geohashQueryBounds, distanceBetween } from "geofire-common";
 import { Loader } from 'components/common/Loader';
 import Text from 'components/common/Text';
 
@@ -29,6 +31,7 @@ const Providers = ({ navigation }: Props) => {
     const [providers, setProviders] = useAtom(providersAtom);
     const [providerRatings] = useAtom(providerRatingsAtom);
     const [providerDistances] = useAtom(providerDistancesAtom);
+    const [currentUserData] = useAtom(currentUserDataAtom);
     const [providerRating, setProviderRating] = useState<number | undefined | null>();
     const [bikeService, setBikeService] = useState('');
     const [providerName, setProviderName] = useState('');
@@ -38,6 +41,67 @@ const Providers = ({ navigation }: Props) => {
 
     const getAllProvider = async () => {
         setLoading(true)
+        // const center = [currentUserData.lat, currentUserData.lng];
+        // const radiusInM = 200;
+        // const bounds = geohashQueryBounds(center, radiusInM);
+        // // console.log(bounds)
+        // alert("PPPP")
+        // // console.log({bounds},"________________________________________________")
+        // const promises = [];
+        // const collectionRef = collection(db,'users')
+        // // const q1 = query(collectionRef,where("userType", "==", "provider"), orderBy("geohash"))
+        // // // console.log(q1,"_------------------------------------------------------------------")
+        // // getDocs(q1).then((res)=>{
+        // //     console.log(res,"LLLLLLLLLLLLLLLLLLLLL")
+        // //     // const jobsList = res.docs.map((item) => {
+        // //     //     const data = item.data()
+        // //     //     return data
+        // //     // })
+        // //     // console.log(jobsList,"-------------wwwww2222wwwwww")
+        // // })
+        // for (const b of bounds) {
+        //     const q = query(collectionRef, orderBy("geohash"),startAt(b[0]),endAt(b[1]));
+        //     promises.push(getDocs(q));
+        // }
+        // Promise.all(promises).then((snapshots) => {
+        //     const matchingDocs = [];
+        //     for (const snap of snapshots) {
+        //         // alert("OO")
+        //         // console.log({snap:snap.docs})
+        //         // console.log({snap:snap.docs})
+        //       for (const doc of snap.docs) {
+        //         const lat = doc.get('lat');
+        //         // console.log({lat:doc.get('lat')})
+        //         const lng = doc.get('lng');
+        //         // console.log({lng:doc.get('lng')})
+
+        //         // We have to filter out a few false positives due to GeoHash
+        //         // accuracy, but most will match
+        //         const distanceInKm = distanceBetween([lat, lng], center);
+        //         // console.log({distanceInKm:distanceInKm,distanceInKm1000:distanceInKm*3000})
+        //         const distanceInM = distanceInKm * 3000;
+        //         // console.log(distanceInM <= radiusInM,"condition")
+        //         if (distanceInM <= radiusInM) {
+        //           matchingDocs.push(doc);
+        //         }
+        //       }
+        //     }
+        
+        //     return matchingDocs;
+        //   }).then((matchingDocs) => {
+        //     // Process the matching documents
+        //     // [START_EXCLUDE]
+        //     console.log("eeeeeeeeeeeeeeennnnnnnnnnnnnnddddddddddd",(matchingDocs));
+        //         const jobsList = matchingDocs.data.map((item) => {
+        //         // const data = item.data()
+        //         // return data
+        //     })
+        //     // [END_EXCLUDE]
+        //   }).catch((error) => {
+        //     const errorMessage = error.message;
+        //     Alert.alert(errorMessage)
+        //     // setLoading(true)
+        // });
         const q = query(collection(db, "users"), where("userType", "==", 'provider'));
         await getDocs(q).then((querySnapshot) => {
             const providers: any = querySnapshot.docs.map((doc) => {
