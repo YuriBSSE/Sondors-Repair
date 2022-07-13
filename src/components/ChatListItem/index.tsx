@@ -42,6 +42,7 @@ const ChatListItem = ({
   const [isModalProfileOpen, setIsModalProfileOpen] = useState(false);
   const [isRatingModal, setIsRatingModal] = useState(false);
   const [dataaaa, onChangeDataaaa] = useState([])
+
   const [profileData, onChangeProfileData] = useState(null)
   const [rating, setRating] = useState(0);
   const onStarRatingPress = (rating: number) => {

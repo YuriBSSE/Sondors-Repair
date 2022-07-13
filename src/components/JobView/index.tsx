@@ -17,6 +17,7 @@ import currentUserDataAtom from 'atoms/currentUserDataAtom'
 import capitalizeFirstLetter from 'utilities/capitalizeFirstLetter';
 import StarRating from "react-native-star-rating";
 import Modal from "../common/Modal";
+import moment from 'moment'
 import {
     updateDoc,
     setDoc,
@@ -70,7 +71,7 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
     const { imageUrl, title, bikeModel, type, description, } = jobDetails;
     const db = getFirestore()
     const [currentUserData] = useAtom(currentUserDataAtom)
-
+    const dateAndTimeValue = new Date();
     const [loading, setLoading] = useState(false)
     const [data, onChangeData] = useState([])
     // const [isRatingModal, setIsRatingModal] = useState(false);
@@ -94,6 +95,7 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
         );
         await updateDoc(doc(db, "jobs", job), {
           "jobDetails.jobStatus": 2,
+          "jobDetails.createdAt": dateAndTimeValue.toString(),
         });
     
         getDocs(collection(db, "users"))
@@ -198,6 +200,7 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
                         />
                  </View> : null
                 }
+                <Text left sm tertiary style={tailwind('mt-1')}>You marked this job complete on {moment(jobDetails.createdAt).format("LL")}</Text>
                 <Text left xxl style={{fontWeight: 'bold'}}>{title}</Text>
                 <View style={tailwind('mt-0')}>
                 <Text left tertiary style={tailwind('mt-2')}>Details</Text>
@@ -265,6 +268,25 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
                 }}
               >
                 <Text style={{ color: "white" }}>Mark as Complete</Text>
+              </TouchableOpacity>
+             </View> : null
+          }
+          {
+             currentUserData.userType !== 'provider' && 
+             jobDetails.jobStatus == 2 ? <View style={{justifyContent:"center",alignContent:"center",alignItems:"center",marginTop:"5%"}}>
+                <TouchableOpacity
+                // onPress={onPress}
+                style={{
+                  backgroundColor: "lightgray",
+                  width: "90%",
+                  padding: "2.5%",
+                  borderRadius: 5,
+                }}
+                onPress={() => {
+                  navigation.navigate("MyJobs")
+                }}
+              >
+                <Text style={{ color: "white" }}>Job Completed</Text>
               </TouchableOpacity>
              </View> : null
           }
