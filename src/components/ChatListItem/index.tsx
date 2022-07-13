@@ -246,7 +246,10 @@ console.log(dataaaa[0], "DATA")
                   padding: "1.5%",
                   borderRadius: 5,
                 }}
-                onPress={() => setIsRatingModal(true)}
+                onPress={() => {
+                  // setIsRatingModal(true)
+                  console.log({jobID})
+                }}
               >
                 <Text style={{ color: "white" }}>Mark as Complete</Text>
               </TouchableOpacity>

@@ -1,4 +1,4 @@
-import { View, ScrollView, SafeAreaView,Image,Alert,TouchableOpacity } from 'react-native';
+import { View, ScrollView, SafeAreaView,Image,Alert,TouchableOpacity, StyleSheet } from 'react-native';
 import { useTailwind } from 'tailwind-rn';
 import {useEffect, useState} from 'react'
 import { useAtom } from 'jotai';
@@ -15,6 +15,17 @@ import { NavigationProp } from '@react-navigation/native';
 import Colors from "styles/Colors";
 import currentUserDataAtom from 'atoms/currentUserDataAtom'
 import capitalizeFirstLetter from 'utilities/capitalizeFirstLetter';
+import StarRating from "react-native-star-rating";
+import Modal from "../common/Modal";
+import {
+    updateDoc,
+    setDoc,
+    query,
+    where,
+    arrayUnion,
+    arrayRemove,
+  } from "firebase/firestore";
+
 type Props = {
     jobDetails: JobDetails;
     onPress?: () => void
@@ -53,7 +64,7 @@ const statusStyle = (value: string) => {
         break;
     }
   };
-const JobView = ({ jobDetails, onPress }: Props) => {
+const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Props) => {
     // console.log(jobDetails, "jobDetailsjobDetailsjobDetailsjobDetails")
     const tailwind = useTailwind();
     const { imageUrl, title, bikeModel, type, description, } = jobDetails;
@@ -62,7 +73,55 @@ const JobView = ({ jobDetails, onPress }: Props) => {
 
     const [loading, setLoading] = useState(false)
     const [data, onChangeData] = useState([])
-
+    // const [isRatingModal, setIsRatingModal] = useState(false);
+    const [rating, setRating] = useState(0);
+    const onStarRatingPress = (rating: number) => {
+      setRating(rating);
+    };
+    var job = jobID?.trim();
+    console.log({job})
+    if (jobID) {
+        var jobRef = doc(db, "jobs", jobID);
+      }
+    if (jobID && userApplied !== null) {
+        var jobRefUser = doc(db, "users", userApplied.uidP);
+      }
+    const completeTask = async () => {
+       if(jobID && userApplied !== null){ await setDoc(
+          jobRef,
+          { data: [{ ...userApplied, jobResponseType: "completed" }] },
+          { merge: true }
+        );
+        await updateDoc(doc(db, "jobs", job), {
+          "jobDetails.jobStatus": 2,
+        });
+    
+        getDocs(collection(db, "users"))
+          .then(async (res) => {
+            const users = res.docs.map((item) => {
+              const data = item.data();
+              return data;
+            });
+            const newObj = users.filter((item) => {
+              return item.uid === userApplied.uidP;
+            });
+            console.log(newObj, "+_+");
+    
+            await setDoc(
+              jobRefUser,
+              { totalJobs: newObj[0].totalJobs + 1, rating: newObj[0].rating + rating },
+              { merge: true }
+            );
+          })
+          .catch((e) => {
+            console.log(e, "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+          });
+    
+        // await data.getMyJob();
+    }
+        navigation.navigate("MyJobs")
+      };
+    
 
     const getJobs = async () => {
         setLoading(true)
@@ -90,6 +149,7 @@ const JobView = ({ jobDetails, onPress }: Props) => {
 
     useEffect(() => {
         setLoading(true)
+        setRating(0)
         getJobs().then(()=>{
           
         })
@@ -101,6 +161,7 @@ const JobView = ({ jobDetails, onPress }: Props) => {
     }
 // console.log(data, "datadatadatadatadata")
     return (
+        <>
             <ScrollView>            
         <View>
             {/* Add Image for Job */}
@@ -122,6 +183,21 @@ const JobView = ({ jobDetails, onPress }: Props) => {
                 </View>
             )}
             <SafeAreaView style={tailwind('flex grow px-6 py-3')}>
+                {
+                     currentUserData.userType !== 'provider' && 
+                     jobDetails.jobStatus == 1 ? 
+                     <View style={{marginVertical:"1.5%"}}>
+                        <StarRating
+                        maxStars={5}
+                        starSize={35}
+                        // starStyle={{  marginLeft: "0.5%" }}
+                        containerStyle={{width:"70%"}}
+                        rating={rating}
+                        selectedStar={onStarRatingPress}
+                        fullStarColor="#FCC736"
+                        />
+                 </View> : null
+                }
                 <Text left xxl style={{fontWeight: 'bold'}}>{title}</Text>
                 <View style={tailwind('mt-0')}>
                 <Text left tertiary style={tailwind('mt-2')}>Details</Text>
@@ -172,10 +248,78 @@ const JobView = ({ jobDetails, onPress }: Props) => {
                 
                 </View>:   null
             }
-          
+          {
+             currentUserData.userType !== 'provider' && 
+             jobDetails.jobStatus == 1 ? <View style={{justifyContent:"center",alignContent:"center",alignItems:"center",marginTop:"5%"}}>
+                <TouchableOpacity
+                // onPress={onPress}
+                style={{
+                  backgroundColor: "#00C851",
+                  width: "90%",
+                  padding: "2.5%",
+                  borderRadius: 5,
+                }}
+                onPress={() => {
+                    completeTask()
+                    // console.log(jobDetails,"----------------",userApplied)
+                }}
+              >
+                <Text style={{ color: "white" }}>Mark as Complete</Text>
+              </TouchableOpacity>
+             </View> : null
+          }
         </View>
              </ScrollView>
+             {/* Rating modal */}
+            {/* {isRatingModal && (
+                <Modal modalVisible={isRatingModal} setModalVisible={setIsRatingModal}>
+                <Text>Rate this service provider.</Text>
+                <View style={{height: 100, justifyContent:'center', alignItems:'center'}}>
+                <StarRating
+                    maxStars={5}
+                    starSize={35}
+                    // starStyle={{  marginLeft: ml }}
+                    rating={rating}
+                    selectedStar={onStarRatingPress}
+                    fullStarColor="#FCC736"
+                />
+                </View>
+                <View style={styles.btnContModal}>
+                    <TouchableOpacity
+                    onPress={() => setIsRatingModal(false)}
+                    style={styles.btnNo}
+                    >
+                    <Text style={{ color: "white" }}>Cancel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={completeTask} style={styles.btnYes}>
+                    <Text style={{ color: "white" }}>Submit</Text>
+                    </TouchableOpacity>
+                </View>
+                </Modal>
+            )} */}
+             </>
     );
 }
+
+// const styles = StyleSheet.create({
+//     btnContModal: {
+//         width: "100%",
+//         justifyContent: "space-around",
+//         flexDirection: "row",
+//         marginTop: "3%",
+//       },
+//       btnYes: {
+//         backgroundColor: "green",
+//         width: "35%",
+//         paddingVertical: "2%",
+//         borderRadius: 5,
+//       },
+//       btnNo: {
+//         backgroundColor: "red",
+//         width: "35%",
+//         paddingVertical: "2%",
+//         borderRadius: 5,
+//       },
+//   });
 
 export default JobView;
