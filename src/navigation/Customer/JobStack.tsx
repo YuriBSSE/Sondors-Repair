@@ -7,7 +7,7 @@ import NewJob from 'screens/customer/CustomerJobStack/NewJob';
 import CustomerJobDetailsScreen from 'screens/customer/CustomerJobStack/CustomerJobDetailsScreen';
 import HeaderLeft from 'components/HeaderLeft';
 import HeaderRight from 'components/HeaderRight';
-
+import ProfileScreen from './../../components/Profile/ProfileScreen'
 type Props = StackScreenProps<JobsStackParamList, 'MyJobs'>;
 const JobsStack = createStackNavigator<JobsStackParamList>();
 
@@ -19,6 +19,14 @@ const JobStack = ({ navigation }: Props) => {
                 headerLeft: () => <HeaderLeft isRoot title="My Jobs" />,
                 headerRight: () => <HeaderRight onPress={() => navigation.navigate('NewJob')} title="Create new" />,
                 headerShadowVisible: false
+            }} />
+             <JobsStack.Screen name="profile" component={ProfileScreen} options={{
+                headerLeft: () => null,
+                headerRight: () => <HeaderRight onPress={() => navigation.goBack()} title="Go back" />,
+                headerShown: true,
+                headerTitle: "Profile",
+                presentation: 'modal',
+                headerShadowVisible: false                
             }} />
             <JobsStack.Screen name="NewJob" component={NewJob} options={{
                 headerLeft: () => <HeaderLeft title="Create a job" isModal={true} />,

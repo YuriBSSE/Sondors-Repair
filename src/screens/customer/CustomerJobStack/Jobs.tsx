@@ -77,6 +77,7 @@ const Jobs = ({ navigation }: Props) => {
                             createAt={mainItem?.item?.createAt} 
                             title={mainItem?.item?.title} 
                             subtitle={mainItem?.item?.subtitle} 
+                            navigation={navigation}
                             onPress={() => {navigation.navigate("JobChat", { externalId:mainItem?.item?.externalId })}} />
                         }}
                         // ItemSeparatorComponent={() => <View style={tailwind('w-full bg-gray-200 h-px')} />}

@@ -12,13 +12,47 @@ import NewJobImage from 'assets/NewJobImage';
 import Button from 'components/common/Button';
 import HeaderRight from 'components/HeaderRight';
 import { NavigationProp } from '@react-navigation/native';
-
+import Colors from "styles/Colors";
 import currentUserDataAtom from 'atoms/currentUserDataAtom'
+import capitalizeFirstLetter from 'utilities/capitalizeFirstLetter';
 type Props = {
     jobDetails: JobDetails;
     onPress?: () => void
 }
-
+const statusStyle = (value: string) => {
+    switch (capitalizeFirstLetter(value)) {
+      case "Accepted":
+        return {
+          backgroundColor: '#ecfadc',
+          color: 'green',
+          paddingVertical: 4,
+        };
+        break;
+      case "Completed":
+        return {
+          backgroundColor: Colors.darkAccent,
+          color: Colors.dark,
+          paddingVertical: 4,
+        };
+        break;
+      case "Lead":
+        return {
+          backgroundColor: "#F5F8FF",
+          color: Colors.primary,
+          paddingVertical: 4,
+        };
+        break;
+      case "Offer Rejected":
+        return {
+          backgroundColor: "#FFF5F7",
+          color: Colors.errorText,
+          paddingVertical: 4,
+        };
+        break;
+      default:
+        break;
+    }
+  };
 const JobView = ({ jobDetails, onPress }: Props) => {
     // console.log(jobDetails, "jobDetailsjobDetailsjobDetailsjobDetails")
     const tailwind = useTailwind();
@@ -115,7 +149,7 @@ const JobView = ({ jobDetails, onPress }: Props) => {
                          <View  style={{
                             width: 150, heigth: 100, backgroundColor:'#4285F4', borderRadius: 12, padding: 4, justifyContent:'center', alignSelf:'center'
                         }}>
-                        <Text  xl style={{fontWeight: 'bold', color: 'white', textAlign:'center'}}>Acceptedd</Text>
+                        <Text  xl style={{fontWeight: 'bold', color: 'white', textAlign:'center'}}>Accepted</Text>
                         </View>
                         :
                         jobDetails.jobStatus == 2 &&  data.length > 0 ?
