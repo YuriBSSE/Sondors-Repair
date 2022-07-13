@@ -196,7 +196,7 @@ const CreateJob = ({ navigation }: Props) => {
         jobDetails: {
           title: jobTitle,
           createdAt: dateAndTimeValue.toString(),
-          streamChatId: jobId,
+          streamChatId: currentUser?.uid,
           description: jobDescription,
           type: jobType,
           bikeModel: bikeModel,

@@ -30,7 +30,7 @@ const OnboardingOne = ({ navigation }: Props) => {
     const db = getFirestore();
     const [shop, setSetShop] = useState(initialShop)
     const [workingDaysHours, setWorkingDaysHours] = useAtom(workingDays)
-
+    const [additional, onChangeAdditional] = useState([1])
 
     const handleOnChange = (name: string, value: any) => {
         setSetShop({ ...shop, [name]: value })
@@ -58,6 +58,13 @@ const OnboardingOne = ({ navigation }: Props) => {
         }).then(() => {
             navigation.navigate('OnboardingTwo')
         })
+    }
+
+    const additionalHours = async () => {
+        // Alert.alert("ASD")
+        const a = [...additional]
+        a.push(1)
+        onChangeAdditional(a)
     }
 
     return (
@@ -93,12 +100,23 @@ const OnboardingOne = ({ navigation }: Props) => {
             </View>
             <Text left title md bold style={tailwind('mt-8 px-6')}>Hours</Text>
             <ScrollView style={tailwind('px-6')}>
-                <DaysTimePicker setWorkingDaysHours={setWorkingDaysHours} DaysTimePickerClasses='mt-3' />
-            </ScrollView>
-            <View style={tailwind('p-6 px-6')}>
-                <TouchableOpacity style={tailwind('mb-3 mt-3')}>
+                {
+                    additional.map((x, i)=>{
+                        return(
+                            <DaysTimePicker setWorkingDaysHours={setWorkingDaysHours} DaysTimePickerClasses='mt-3' />
+                        )
+                    })
+                }
+                {/* <DaysTimePicker setWorkingDaysHours={setWorkingDaysHours} DaysTimePickerClasses='mt-3' /> */}
+                {/* <DaysTimePicker setWorkingDaysHours={setWorkingDaysHours} DaysTimePickerClasses='mt-3' /> */}
+                <TouchableOpacity onPress={additionalHours} style={tailwind('mb-3 mt-3')}>
                     <Text left md tertiary title >+ Additional Hours</Text>
                 </TouchableOpacity>
+            </ScrollView>
+            <View style={tailwind('p-6 px-6')}>
+                {/* <TouchableOpacity onPress={additionalHours} style={tailwind('mb-3 mt-3')}>
+                    <Text left md tertiary title >+ Additional Hours</Text>
+                </TouchableOpacity> */}
                 <Button
                     onPress={onContinue}
                     // onPress={() => navigation.navigate('OnboardingTwo')}

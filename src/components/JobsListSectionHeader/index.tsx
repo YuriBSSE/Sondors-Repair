@@ -14,26 +14,30 @@ const statusStyle = (value: string) => {
   switch (capitalizeFirstLetter(value)) {
     case "Accepted":
       return {
-        backgroundColor: Colors.darkAccent,
-        color: Colors.dark,
+        backgroundColor: '#ecfadc',
+        color: 'green',
+        paddingVertical: 4,
       };
       break;
     case "Completed":
       return {
         backgroundColor: Colors.darkAccent,
         color: Colors.dark,
+        paddingVertical: 4,
       };
       break;
     case "Lead":
       return {
         backgroundColor: "#F5F8FF",
         color: Colors.primary,
+        paddingVertical: 4,
       };
       break;
     case "Offer Rejected":
       return {
         backgroundColor: "#FFF5F7",
         color: Colors.errorText,
+        paddingVertical: 4,
       };
       break;
     default:
@@ -93,7 +97,7 @@ const JobsListSectionHeader = ({
     getJobs().then(() => {});
   }, [jd]);
 
-  console.log(data[0]?.jobResponseType, "TYPE");
+  // console.log(data[0]?.jobResponseType, "TYPE");
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -117,7 +121,7 @@ const JobsListSectionHeader = ({
                 alignItems: "center",
               }}
             >
-              {data[0]?.jobResponseType.toLowerCase() == "applied" &&
+              {data[0]?.jobResponseType.toLowerCase() == "active" &&
               data.length > 0 ? (
                 <>
                   <View
@@ -169,14 +173,10 @@ const JobsListSectionHeader = ({
                   >
                     <Text
                       bold
-                      lg
+                      
                       style={[
-                        statusStyle(status),
-                        {
-                          paddingVertical: 4,
-                          backgroundColor: "#33b5e5",
-                          color: "white",
-                        },
+                        statusStyle("Accepted"),
+                       
                         tailwind("px-2 rounded"),
                       ]}
                     >
@@ -184,13 +184,14 @@ const JobsListSectionHeader = ({
                     </Text>
                     <View style={tailwind("flex-row")}>
                       <Text style={{ marginRight: 12 }} sm right tertiary>
-                        {moment(jd.createdAt).calendar()}
+                        {/* {moment(jd.createdAt).calendar()} */}
+                        {moment(jd.createdAt).format("LT")}
                       </Text>
-                      <FontAwesome
+                      {/* <FontAwesome
                         name="clock-o"
                         size={16}
                         color={Colors.tertiaryText}
-                      />
+                      /> */}
                     </View>
                   </View>
                 </>
@@ -203,17 +204,13 @@ const JobsListSectionHeader = ({
                     justifyContent: "space-around",
                   }}
                 >
-                    {console.log(jd.jobStatus , "jd.jobStatus jd.jobStatus jd.jobStatus ")}
+                    {/* {console.log(jd.jobStatus , "jd.jobStatus jd.jobStatus jd.jobStatus ")} */}
                   <Text
                     bold
-                    lg
+                  
                     style={[
-                      statusStyle(status),
-                      {
-                        paddingVertical: 4,
-                        backgroundColor: "#2BBBAD",
-                        color: "white",
-                      },
+                      statusStyle("Completed"),
+                     
                       tailwind("px-2 rounded"),
                     ]}
                   >
@@ -221,13 +218,13 @@ const JobsListSectionHeader = ({
                   </Text>
                   <View style={tailwind("flex-row")}>
                     <Text style={{ marginRight: 12 }} sm right tertiary>
-                      {moment(jd.createdAt).calendar()}
+                    {moment(jd.createdAt).format("LT")}
                     </Text>
-                    <FontAwesome
+                    {/* <FontAwesome
                       name="clock-o"
                       size={16}
                       color={Colors.tertiaryText}
-                    />
+                    /> */}
                   </View>
                 </View>
               ) : jd.jobStatus != 0 ? (
@@ -241,28 +238,28 @@ const JobsListSectionHeader = ({
                 >
                   <Text
                     bold
-                    lg
+                   
                     style={[
                       statusStyle(status),
                       {
                         paddingVertical: 4,
-                        backgroundColor: "#CC0000",
-                        color: "white",
+                        backgroundColor: "#ffe7e6",
+                        color: "#CC0000",
                       },
                       tailwind("px-2 rounded"),
                     ]}
                   >
-                    Expired
+                    Offer Rejected
                   </Text>
                   <View style={tailwind("flex-row")}>
                     <Text style={{ marginRight: 12 }} sm right tertiary>
-                      {moment(jd.createdAt).calendar()}
+                    {moment(jd.createdAt).format("LT")}
                     </Text>
-                    <FontAwesome
+                    {/* <FontAwesome
                       name="clock-o"
                       size={16}
                       color={Colors.tertiaryText}
-                    />
+                    /> */}
                   </View>
                 </View>
               ) : (
@@ -276,28 +273,25 @@ const JobsListSectionHeader = ({
                 >
                   <Text
                     bold
-                    lg
+                    
                     style={[
-                      statusStyle(status),
-                      {
-                        paddingVertical: 4,
-                        backgroundColor: "#4285F4",
-                        color: "white",
-                      },
+                      statusStyle("Lead"),
+                     
                       tailwind("px-2 rounded"),
                     ]}
                   >
-                    Apply Now
+                    Lead
                   </Text>
                   <View style={tailwind("flex-row")}>
                     <Text style={{ marginRight: 12 }} sm right tertiary>
-                      {moment(jd.createdAt).calendar()}
+                      {/* {moment(jd.createdAt).calendar()} */}
+                      {moment(jd.createdAt).format("LT")}
                     </Text>
-                    <FontAwesome
+                    {/* <FontAwesome
                       name="clock-o"
                       size={16}
                       color={Colors.tertiaryText}
-                    />
+                    /> */}
                   </View>
                 </View>
               )}

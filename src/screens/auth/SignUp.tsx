@@ -30,7 +30,7 @@ const OwnerAccount = ({ }: OwnerAccountProps) => {
     const tailwind = useTailwind();
     return (
         <View style={{ flex: 1, ...tailwind('flex items-center justify-center bg-white') }}>
-            <Text md tertiary title>image/graphic to reflect Ower type selection</Text>
+            <Image style={{ height: 100, width: 100,}} resizeMode='cover' source={require('./../../assets/images/owner.png')} />
         </View>
     )
 }
@@ -40,7 +40,7 @@ const ProviderAccount = ({ }: ProviderAccountProps) => {
 
     return (
         <View style={{ flex: 1, ...tailwind('flex items-center justify-center bg-white') }}>
-            <Text md tertiary title>image/graphic to reflect Provider type selection</Text>
+                  <Image style={{ height: 150, width: 150,}} resizeMode='cover' source={require('./../../assets/images/sp.jpg')} />
         </View>
     )
 }
@@ -87,7 +87,7 @@ const SignUp = ({ navigation }: Props) => {
                 <Text xl title style={tailwind('mt-2')}>Are you a SONDORS owner or a service provider?</Text>
             </View>
             <Tab.Navigator
-                style={{ ...tailwind('mt-6') }}
+                style={{ height: 200 }}
                 initialRouteName="Owner"
                 screenOptions={
                     {
@@ -105,6 +105,7 @@ const SignUp = ({ navigation }: Props) => {
                     }
                 }
             >
+             
                 <Tab.Screen
                     listeners={{
                         tabPress: () => {
@@ -123,17 +124,19 @@ const SignUp = ({ navigation }: Props) => {
                 />
             </Tab.Navigator>
 
-            <View style={tailwind('w-full px-6')}>
+            <View style={[tailwind('w-full px-6')]}>
                 <TextInput lg placeholder='Email' onChangeText={(text) => setEmail(text)} />
                 <TextInput secureTextEntry style={tailwind('mt-3')} lg placeholder='Password' onChangeText={(text) => setPassword(text)} />
                 <Button onPress={signUp} style={tailwind('mt-3 rounded')} titleStyle={{ fontWeight: '700' }} lg title='Create account' />
                 <Text title md style={{ ...tailwind('mt-2') }}>By creating an account I agree to the</Text>
                 <Text md style={{ color: Colors.primary }}>Terms & Conditions</Text>
-                <TouchableOpacity onPress={() => {
+             
+                <TouchableOpacity  onPress={() => {
                     navigation.navigate("SignIn")
                 }}>
                     <Text md style={{ ...tailwind('my-6') }} sm tertiary>I already have an account — <Text title>sign in</Text> </Text>
                 </TouchableOpacity>
+               
             </View>
         </View>
         </ScrollView>

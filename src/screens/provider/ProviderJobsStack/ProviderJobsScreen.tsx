@@ -192,12 +192,13 @@ const ProviderJobsScreen = ({ navigation }: Props) => {
                   navigation.navigate("ProviderJobDetailsScreen", {
                     jobDetails,
                     headerLeftTitle: "Job Details",
-                    headerRightOnPress: jobDetails.streamChatId
+                    headerRightTitle: "Go to chat",
+                    headerRightOnPress: jobDetails?.streamChatId
                       ? () =>
                           navigation.navigate("JobChat", {
-                            externalId: jobDetails.streamChatId,
+                            externalId: jobDetails?.streamChatId,
                           })
-                      : undefined,
+                      :  () => Alert.alert("No chat exists"),
                   })
                 }
               />

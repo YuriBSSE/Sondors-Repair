@@ -27,8 +27,8 @@ const ChatListItem = ({
   onPress,
   data = {},
   thatId,
-  jobDetailsData
-
+  jobDetailsData,
+  navigation
 }: {
   onPress: () => any;
   title: string;
@@ -39,8 +39,10 @@ const ChatListItem = ({
   const tailwind = useTailwind();
   const [currentUserData] = useAtom(currentUserDataAtom);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalProfileOpen, setIsModalProfileOpen] = useState(false);
   const [isRatingModal, setIsRatingModal] = useState(false);
   const [dataaaa, onChangeDataaaa] = useState([])
+  const [profileData, onChangeProfileData] = useState(null)
   const [rating, setRating] = useState(0);
   const onStarRatingPress = (rating: number) => {
     setRating(rating);
@@ -98,7 +100,7 @@ const ChatListItem = ({
         const newObj = users.filter((item) => {
           return item.uid === data.userApplied.uidP;
         });
-        // console.log(newObj, "+_+");
+        console.log(newObj, "+_+");
 
         await setDoc(
           jobRefUser,
@@ -148,9 +150,25 @@ const ChatListItem = ({
 
   useEffect(()=>{
     getData()
+    getDocs(collection(db, "users"))
+    .then(async (res) => {
+      const users = res.docs.map((item) => {
+        const data = item.data();
+        return data;
+      });
+      const newObj = users.filter((item) => {
+        return item.uid === data.userApplied.uidP;
+      });
+      // console.log(newObj[0], "+_+");
+      onChangeProfileData(newObj[0])
+    
+    })
+    .catch((e) => {
+      console.log(e, "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+    });
   },[])
 
-
+console.log(dataaaa[0], "DATA")
   return (
     <>
       <View style={[tailwind("px-5  pb-3 mt-1"), {}]}>
@@ -198,6 +216,7 @@ const ChatListItem = ({
         )}
         {currentUserData.userType !== "provider" &&
           (data?.userApplied?.jobResponseType === "applied" && (
+            <>
             <View style={styles.btnCont}>
               <TouchableOpacity
                 // onPress={onPress}
@@ -207,6 +226,16 @@ const ChatListItem = ({
                 <Text style={{ color: "white" }}>Accept</Text>
               </TouchableOpacity>
             </View>
+            <View style={styles.btnCont}>
+              <TouchableOpacity
+                // onPress={onPress}
+                style={styles.acceptBtn}
+                onPress={() => navigation.navigate('profile', {profileData})}
+              >
+                <Text style={{ color: "white" }}>View Profile</Text>
+              </TouchableOpacity>
+            </View>
+            </>
           ) )}
           {data?.userApplied?.jobResponseType === "accepted" && <View style={styles.btnCont}>
               <TouchableOpacity
@@ -260,6 +289,23 @@ const ChatListItem = ({
             >
               <Text style={{ color: "white" }}>Yes</Text>
             </TouchableOpacity>
+          </View>
+        </Modal>
+      )}
+
+      {isModalProfileOpen && (
+        <Modal modalVisible={isModalProfileOpen} setModalVisible={setIsModalProfileOpen}>
+          <Text>
+            Profile
+          </Text>
+          <View style={styles.btnContModal}>
+            <TouchableOpacity
+              onPress={() => setIsModalProfileOpen(false)}
+              style={styles.btnNo}
+            >
+              <Text style={{ color: "white" }}>Close</Text>
+            </TouchableOpacity>
+     
           </View>
         </Modal>
       )}
