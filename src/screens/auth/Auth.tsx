@@ -6,6 +6,7 @@ import SignIn from './SignIn';
 import SignUp from './SignUp';
 import OnboardingOne from './OnboardingOne';
 import OnboardingTwo from './OnboardingTwo';
+import ForgotPassword from './ForgotPassword'
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,9 @@ const Auth = ({ isShop } : Props) => {
             }} />
             <Stack.Screen name="OnboardingTwo" component={OnboardingTwo} options={{
                 headerShown: false
+            }} />
+             <Stack.Screen name="Reset Password" component={ForgotPassword} options={{
+                headerShown: true
             }} />
         </Stack.Navigator>
     )

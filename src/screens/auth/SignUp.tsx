@@ -73,6 +73,14 @@ const SignUp = ({ navigation }: Props) => {
             .catch((error) => {
                 const errorMessage = error.message;
                 Alert.alert(errorMessage)
+                if(errorMessage.includes("Firebase:")){
+                    let a =  errorMessage.slice(10);
+                      Alert.alert(a)
+                    }
+                    if(errorMessage.includes("firebase:")){
+                      let a =  errorMessage.slice(10);
+                      Alert.alert(a)
+                    }
             });
     }
 

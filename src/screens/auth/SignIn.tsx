@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { useTailwind } from 'tailwind-rn';
-import { View, Keyboard, Alert, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { View, Keyboard, Alert, ScrollView, KeyboardAvoidingView,TouchableOpacity } from 'react-native';
 import { Image, Dimensions } from 'react-native';
 import Text from 'components/common/Text';
 import TextInput from 'components/common/TextInput';
@@ -54,7 +54,17 @@ const SignIn = ({ navigation }: Props) => {
         })
         .catch((error) => {
             const errorMessage = error.message;
-           Alert.alert(errorMessage)
+            // const a = errorMessage.includes("Firebase:")
+            console.log(typeof(errorMessage));
+            if(errorMessage.includes("Firebase:")){
+            let a =  errorMessage.slice(10);
+              Alert.alert(a)
+            }
+            if(errorMessage.includes("firebase:")){
+              let a =  errorMessage.slice(10);
+              Alert.alert(a)
+            }
+           
         });
       }
 
@@ -79,6 +89,12 @@ const SignIn = ({ navigation }: Props) => {
                   navigation.navigate("SignUp")
                }} secondary titleStyle={{ fontWeight: '700' }} style={tailwind('mt-3 rounded')} lg title='Create account' />
            </View>
+           <TouchableOpacity  onPress={() => {
+                    navigation.navigate("Reset Password")
+                }}>
+                    <Text md style={{ ...tailwind('my-6') }} sm tertiary><Text title>Forgot Password</Text> </Text>
+                </TouchableOpacity>
+               
        </View>
        
    </View>
