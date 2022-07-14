@@ -1,4 +1,4 @@
-import { TouchableOpacity, View, StyleSheet } from "react-native";
+import { TouchableOpacity, View, StyleSheet, Alert } from "react-native";
 import { useTailwind } from "tailwind-rn";
 import moment from "moment";
 import { useAtom } from "jotai";
@@ -13,12 +13,14 @@ import {
   setDoc,
   query,
   where,
+  onSnapshot,
   arrayUnion,
   arrayRemove,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Modal from "../common/Modal";
 import StarRating from "react-native-star-rating";
+import { getAuth } from "firebase/auth";
 
 const ChatListItem = ({
   title,
@@ -38,19 +40,38 @@ const ChatListItem = ({
 }) => {
   const tailwind = useTailwind();
   const [currentUserData] = useAtom(currentUserDataAtom);
+  const auth = getAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalProfileOpen, setIsModalProfileOpen] = useState(false);
   const [isRatingModal, setIsRatingModal] = useState(false);
   const [dataaaa, onChangeDataaaa] = useState([])
-
   const [profileData, onChangeProfileData] = useState(null)
   const [rating, setRating] = useState(0);
+  const { currentUser } = auth
   const onStarRatingPress = (rating: number) => {
     setRating(rating);
   };
-  // console.log(jobDetailsData,"OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO-------------------------------------------------");
-
+  
   const db = getFirestore();
+  const test = async (JobID) =>{
+    const jobsRef = collection(db, "jobs");
+    const queryGetMyJobs = await query(jobsRef, where("id", "==", JobID));
+    // alert("sss")
+    // console.log( data?.job?.trim(),"OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO-------------------------------------------------");
+    await getDocs(queryGetMyJobs).then((res) => {
+      // console.log(res)
+      const dataJobsList = res.docs.map((item) => item.data())
+      return dataJobsList
+  }).then((dataJobsList: any) => {
+      console.log({dataJobsList},"========================>>>>>>>>>>>>>>>>")
+      // setJobs(dataJobsList)
+      // setLoading(false)
+  }).catch((error) => {
+      const errorMessage = error.message;
+      Alert.alert(errorMessage)
+      // setLoading(false)
+  })
+  }
 
   var currentUserId = currentUserData.uid;
   var userRef = doc(db, "users", currentUserId);
@@ -73,6 +94,20 @@ const ChatListItem = ({
       "jobDetails.jobStatus": 1,
     });
     await data.getMyJob();
+  };
+
+  const onJobReject = async () => {
+  //  console.log(jobRef,"-------------------------------------------")
+    test()
+    // await setDoc(
+    //   jobRef,
+    //   { data: [{ ...data.userApplied, responseOnJob: "rejected" }] },
+    //   { merge: true }
+    // );
+    // // await updateDoc(doc(db, "jobs", jobID), {
+    // //   "jobDetails.jobStatus": 1,
+    // // });
+    // await data.getMyJob();
   };
 
   const completeTask = async () => {
@@ -133,7 +168,7 @@ const ChatListItem = ({
           return data
       })
       const newObj = jobsList.filter((item)=>{
-          return item.id === jobDetailsData.id
+          return item.id === jobDetailsData?.id
       })
       let checkArray = []
       if(newObj.length > 0 ){checkArray = newObj[0]?.data.filter((it: any, i: any)=>{
@@ -169,7 +204,7 @@ const ChatListItem = ({
     });
   },[])
 
-console.log(dataaaa[0], "DATA")
+// console.log(dataaaa[0], "DATA")
   return (
     <>
       <View style={[tailwind("px-5  pb-3 mt-1"), {}]}>
@@ -197,10 +232,11 @@ console.log(dataaaa[0], "DATA")
         ) : (
           <TouchableOpacity
             onPress={() => {
-              if (data.userApplied.jobResponseType === "accepted") {
+              // if (data.userApplied.jobResponseType === "accepted") {
                 onPress();
-              }
+              // }
             }}
+            style={{backgroundColor:"red"}}
           >
             <View style={tailwind("flex-row justify-between mt-1")}>
               <Text sm left heavy>
@@ -279,7 +315,7 @@ console.log(dataaaa[0], "DATA")
           </Text>
           <View style={styles.btnContModal}>
             <TouchableOpacity
-              onPress={() => setIsModalOpen(false)}
+              onPress={() => {setIsModalOpen(false);}}
               style={styles.btnNo}
             >
               <Text style={{ color: "white" }}>No</Text>

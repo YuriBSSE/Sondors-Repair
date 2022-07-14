@@ -39,6 +39,7 @@ const Jobs = ({ navigation }: Props) => {
             const dataJobsList = res.docs.map((item) => item.data())
             return dataJobsList
         }).then((dataJobsList: any) => {
+            // console.log({dataJobsList},"========================>>>>>>>>>>>>>>>>")
             setJobs(dataJobsList)
             setLoading(false)
         }).catch((error) => {
@@ -131,7 +132,7 @@ const Jobs = ({ navigation }: Props) => {
                             title={mainItem?.item?.title} 
                             subtitle={mainItem?.item?.subtitle} 
                             navigation={navigation}
-                            onPress={() => {navigation.navigate("JobChat", { externalId:mainItem?.item?.externalId })}} />
+                            onPress={() => {navigation.navigate("JobChat", { externalId:mainItem?.item?.externalId, jobID:mainItem?.section?.id, userApplied:mainItem?.item })}} />
                         }}
                         // ItemSeparatorComponent={() => <View style={tailwind('w-full bg-gray-200 h-px')} />}
                         renderSectionHeader={(data) =>
