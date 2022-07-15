@@ -217,7 +217,7 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
                 currentUserData.userType == 'provider' ?
                 <View style={{...tailwind('px-6 py-2')}}>
                     {
-                        data[0]?.jobResponseType == 'applied'  &&  data.length > 0 ?
+                        data[0]?.jobResponseType == 'applied' &&  data[0]?.responseOnJob != 'rejected'  &&  data.length > 0 ?
                         <View  style={{
                             width: 150, heigth: 100, backgroundColor:'#00C851', borderRadius: 12, padding: 4, justifyContent:'center', alignSelf:'center'
                         }}>
@@ -239,11 +239,11 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
                         <Text  xl style={{fontWeight: 'bold', color: 'white', textAlign:'center'}}>Completed</Text>
                         </View>
                       
-                        : jobDetails.jobStatus != 0 ?
+                        : jobDetails.jobStatus != 0 ||  data[0]?.responseOnJob == 'rejected' ?
                         <View  style={{
                             width: 150, heigth: 100, backgroundColor:'#ff4444', borderRadius: 12, padding: 4, justifyContent:'center', alignSelf:'center'
                         }}>
-                        <Text  xl style={{fontWeight: 'bold', color: 'white', textAlign:'center'}}>Expired</Text>
+                        <Text  xl style={{fontWeight: 'bold', color: 'white', textAlign:'center'}}>Offer Rejected</Text>
                         </View>:
                         
                         <Button onPress={onPress} style={tailwind('rounded')} titleStyle={{ fontWeight: '700' }} lg title='Apply' />

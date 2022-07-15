@@ -204,17 +204,18 @@ const ChatListItem = ({
     });
   },[])
 
-// console.log(dataaaa[0], "DATA")
+console.log(dataaaa[0] , "DATA")
   return (
     <>
       <View style={[tailwind("px-5  pb-3 mt-1"), {}]}>
         {currentUserData.userType == "provider" ? (
           <>
-            <TouchableOpacity disabled={
+            <TouchableOpacity  disabled={
               dataaaa?.length < 0 ? true :
               dataaaa[0]?.jobResponseType == "completed" ? true :
               dataaaa[0]?.jobResponseType == "expired" ? true :
-              dataaaa[0]?.jobResponseType == "accepted" ? false : true
+              dataaaa[0]?.responseOnJob == "rejected" ? true :
+              dataaaa[0]?.jobResponseType == "accepted" ? false : !dataaaa[0]?.hasOwnProperty("isChat") 
             }  onPress={onPress}>
               <View style={tailwind("flex-row justify-between mt-1")}>
                 <Text sm left heavy>

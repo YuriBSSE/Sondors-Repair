@@ -227,7 +227,7 @@ const JobsListSectionHeader = ({
                     /> */}
                   </View>
                 </View>
-              ) : jd.jobStatus != 0 ? (
+              ) : jd.jobStatus != 0 || data[0]?.responseOnJob == 'rejected' ? (
                 <View
                   style={{
                     flexDirection: "column",
@@ -262,7 +262,42 @@ const JobsListSectionHeader = ({
                     /> */}
                   </View>
                 </View>
-              ) : (
+              ) :data[0]?.responseOnJob == 'rejected' ? (
+                <View
+                  style={{
+                    flexDirection: "column",
+                    alignItems: "flex-end",
+                    height: 60,
+                    justifyContent: "space-around",
+                  }}
+                >
+                  <Text
+                    bold
+                   
+                    style={[
+                      statusStyle(status),
+                      {
+                        paddingVertical: 4,
+                        backgroundColor: "#ffe7e6",
+                        color: "#CC0000",
+                      },
+                      tailwind("px-2 rounded"),
+                    ]}
+                  >
+                    Offer Rejected
+                  </Text>
+                  <View style={tailwind("flex-row")}>
+                    <Text style={{ marginRight: 12 }} sm right tertiary>
+                    {moment(jd.createdAt).format("LT")}
+                    </Text>
+                    {/* <FontAwesome
+                      name="clock-o"
+                      size={16}
+                      color={Colors.tertiaryText}
+                    /> */}
+                  </View>
+                </View>
+              ): (
                 <View
                   style={{
                     flexDirection: "column",
