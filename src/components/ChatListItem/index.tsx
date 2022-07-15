@@ -53,25 +53,25 @@ const ChatListItem = ({
   };
   
   const db = getFirestore();
-  const test = async (JobID) =>{
-    const jobsRef = collection(db, "jobs");
-    const queryGetMyJobs = await query(jobsRef, where("id", "==", JobID));
-    // alert("sss")
-    // console.log( data?.job?.trim(),"OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO-------------------------------------------------");
-    await getDocs(queryGetMyJobs).then((res) => {
-      // console.log(res)
-      const dataJobsList = res.docs.map((item) => item.data())
-      return dataJobsList
-  }).then((dataJobsList: any) => {
-      console.log({dataJobsList},"========================>>>>>>>>>>>>>>>>")
-      // setJobs(dataJobsList)
-      // setLoading(false)
-  }).catch((error) => {
-      const errorMessage = error.message;
-      Alert.alert(errorMessage)
-      // setLoading(false)
-  })
-  }
+  // const test = async (JobID) =>{
+  //   const jobsRef = collection(db, "jobs");
+  //   const queryGetMyJobs = await query(jobsRef, where("id", "==", JobID));
+  //   // alert("sss")
+  //   // console.log( data?.job?.trim(),"OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO-------------------------------------------------");
+  //   await getDocs(queryGetMyJobs).then((res) => {
+  //     // console.log(res)
+  //     const dataJobsList = res.docs.map((item) => item.data())
+  //     return dataJobsList
+  // }).then((dataJobsList: any) => {
+  //     console.log({dataJobsList},"========================>>>>>>>>>>>>>>>>")
+  //     // setJobs(dataJobsList)
+  //     // setLoading(false)
+  // }).catch((error) => {
+  //     const errorMessage = error.message;
+  //     Alert.alert(errorMessage)
+  //     // setLoading(false)
+  // })
+  // }
 
   var currentUserId = currentUserData.uid;
   var userRef = doc(db, "users", currentUserId);
@@ -96,19 +96,19 @@ const ChatListItem = ({
     await data.getMyJob();
   };
 
-  const onJobReject = async () => {
-  //  console.log(jobRef,"-------------------------------------------")
-    test()
-    // await setDoc(
-    //   jobRef,
-    //   { data: [{ ...data.userApplied, responseOnJob: "rejected" }] },
-    //   { merge: true }
-    // );
-    // // await updateDoc(doc(db, "jobs", jobID), {
-    // //   "jobDetails.jobStatus": 1,
-    // // });
-    // await data.getMyJob();
-  };
+  // const onJobReject = async () => {
+  // //  console.log(jobRef,"-------------------------------------------")
+  //   // test()
+  //   // await setDoc(
+  //   //   jobRef,
+  //   //   { data: [{ ...data.userApplied, responseOnJob: "rejected" }] },
+  //   //   { merge: true }
+  //   // );
+  //   // // await updateDoc(doc(db, "jobs", jobID), {
+  //   // //   "jobDetails.jobStatus": 1,
+  //   // // });
+  //   // await data.getMyJob();
+  // };
 
   const completeTask = async () => {
     //
@@ -236,7 +236,6 @@ const ChatListItem = ({
                 onPress();
               // }
             }}
-            style={{backgroundColor:"red"}}
           >
             <View style={tailwind("flex-row justify-between mt-1")}>
               <Text sm left heavy>

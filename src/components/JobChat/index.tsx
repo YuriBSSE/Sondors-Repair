@@ -11,7 +11,7 @@ import HeaderRight from 'components/HeaderRight';
 
 import streamClientAtom from 'atoms/streamClientAtom';
 import Colors from 'styles/Colors';
-import { collection, doc, getDocs, getFirestore, query, setDoc, updateDoc, where } from 'firebase/firestore';
+import { collection, doc, getDocs, getFirestore, onSnapshot, query, setDoc, updateDoc, where } from 'firebase/firestore';
 
 const theme: DeepPartial<Theme> = {
     messageInput: {
@@ -80,7 +80,10 @@ const JobChat = ({ route, navigation }: Props) => {
     const tailwind = useTailwind();
     const [streamClient] = useAtom(streamClientAtom);
     const [channel, setChannel] = useState<ChannelType | false>();
-
+    const [isShowBtns, setIsShowBtns] = useState(true)
+    const [isState, setIsState] = useState(false)
+    const [job, setJob] = useState({})
+    var unsubscribe;
     useEffect(() => {
       
         const getChannels = async () => {
@@ -98,6 +101,10 @@ const JobChat = ({ route, navigation }: Props) => {
         });
     }, []);
 
+    useEffect(()=>{
+        return  unsubscribe
+    },[isState])
+
     // sets the OverlayProvider's bottomInset value for the Attachment Picker
     const tabBarHeight = useBottomTabBarHeight();
     const { setBottomInset } = useAttachmentPickerContext();
@@ -111,8 +118,7 @@ const JobChat = ({ route, navigation }: Props) => {
         </View>
     );
     const db = getFirestore();
-    const test = async (jobID) =>{
-    console.log(route?.params?.userApplied,"000001")
+    const rejectRequest = async (jobID) =>{
         const jobsRef = collection(db, "jobs");
       
         var jobRef = doc(db, "jobs", jobID);
@@ -121,13 +127,12 @@ const JobChat = ({ route, navigation }: Props) => {
         const dataJobsList = res.docs.map((item) => item.data())
         return dataJobsList
         }).then(async (dataJobsList: any) => {
-            // console.log(dataJobsList[0].data.findIndex(object => {
-            //     return object.uidP == route?.params?.userApplied?.uidP
-            //   }),"========================>>>>>>>>>>>>>>>>11",route?.params?.userApplied)
+            // console.log("========================>>>>>>>>>>>>>>>>11",dataJobsList)
             let temp = [...dataJobsList[0].data]
             temp.splice(dataJobsList[0].data.findIndex(object => {
                 return object.uidP == route?.params?.userApplied?.uidP
               }),1)
+
             await setDoc(
                 jobRef,
                 { data: [...temp,{ ...route?.params?.userApplied, responseOnJob: "rejected" }] },
@@ -143,36 +148,160 @@ const JobChat = ({ route, navigation }: Props) => {
     }
 
     const onJobReject = async () => {
-        //  console.log(jobRef,"-------------------------------------------")
-          test(route?.params?.jobID)
-          // await setDoc(
-          //   jobRef,
-          //   { data: [{ ...data.userApplied, responseOnJob: "rejected" }] },
-          //   { merge: true }
-          // );
-          // // await updateDoc(doc(db, "jobs", jobID), {
-          // //   "jobDetails.jobStatus": 1,
-          // // });
+        //  console.log(route?.params?.jobID,"-------------------------------------------")
+        setIsState(true)
+        rejectRequest(route?.params?.jobID)
           // await data.getMyJob();
     };
 
+    const onAcceptReq =  async (jobID) => {
+        var jobRef = doc(db, "jobs", jobID);
+        await setDoc(
+          jobRef,
+          { data: [{ ...route?.params?.userApplied, jobResponseType: "accepted",responseOnJob: "accepted" }] },
+          { merge: true }
+        );
+        setIsState(true)
+        await updateDoc(doc(db, "jobs", jobID), {
+          "jobDetails.jobStatus": 1,
+        });
+        // await data.getMyJob();
+      };
+   
 
-    return (
-        <>
-        <OverlayProvider value={{ style: theme }}>
-            <View style={tailwind('flex'),{position:"relative"}}>
-                <View style={{backgroundColor:"lightgrey",width:"100%",height:"8%",position:"absolute",top:0,zIndex:99,justifyContent:"center",alignItems:"center"}}>
-                    <TouchableOpacity onPress={onJobReject} style={{
-                        backgroundColor:"red",
+      const getProviderJobs = async (jobID) => {
+            const z = collection(db, "jobs");
+            if(!isState){
+                // alert("SAD")
+                unsubscribe = onSnapshot(z, async (querySnapshot: any[]) => {
+                    // console.log(route?.params?.userApplied,"---------------new")
+                    // setIsShowBtns(false)
+                    const jobsRef = collection(db, "jobs");
+                    var jobRef = doc(db, "jobs", jobID);
+                    const queryGetMyJobs = await query(jobsRef, where("id", "==", jobID));
+                    await getDocs(queryGetMyJobs).then((res) => {
+                        const dataJobsList = res.docs.map((item) => item.data())
+                            return dataJobsList
+                        }).then(async (dataJobsList: any) => {
+                        // console.log("========================>>>>>>>>>>>>>>>>11",dataJobsList[0])
+    
+                        setJob(dataJobsList[0])
+    
+                        // let temp = [...dataJobsList[0].data]
+                        // temp.splice(dataJobsList[0].data.findIndex(object => {
+                        //     return object.uidP == route?.params?.userApplied?.uidP
+                        // }),1)
+                        // await setDoc(
+                        //     jobRef,
+                        //     { data: [...temp,{ ...route?.params?.userApplied, isChat:true }] },
+                        //     { merge: true }
+                        // );
+                    }).catch((error) => {
+                        const errorMessage = error.message;
+                        Alert.alert(errorMessage)
+                    })
+                });
+            }
+     
+            
+        };
+
+    useEffect(() => {
+        getProviderJobs(route?.params?.jobID)
+        return unsubscribe
+    }, [])
+
+    const btnsUi = () => {
+        console.log(job,"PPPPoooo")
+        if(job.hasOwnProperty("data")){
+            if(!job?.data[0].hasOwnProperty("responseOnJob")){
+            return (
+                <View style={{
+                    backgroundColor:"white",
+                width:"100%",
+                height:100,
+                position:"absolute",
+                top:0,
+                zIndex:99,
+                justifyContent:"space-around",
+                alignItems:"center",
+                flexDirection:"row"
+                }}>
+                    <TouchableOpacity onPress={()=>onJobReject()} style={{
+                        backgroundColor:"white",
                         width:"45%",
                         paddingVertical:"2%",
                         borderRadius:5,
                         justifyContent:"center",
-                        alignItems:"center"
+                        alignItems:"center",
+                        borderWidth:1,
+                        borderColor:"gray"
                         }}>
                         <Text>Deny Service</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity onPress={()=>onAcceptReq(route?.params?.jobID)} style={{
+                        backgroundColor:"white",
+                        width:"45%",
+                        paddingVertical:"2%",
+                        borderRadius:5,
+                        justifyContent:"center",
+                        alignItems:"center",
+                        borderWidth:1,
+                        borderColor:"gray"
+                        }}>
+                        <Text>Accept Service</Text>
+                    </TouchableOpacity>
                 </View>
+            )
+        }}
+    }
+
+
+
+    return (
+        <>
+        
+        <OverlayProvider value={{ style: theme }}>
+            <View style={tailwind('flex'),{position:"relative"}}>
+                {btnsUi()}    
+                {/* <View style={{backgroundColor:"lightgrey",
+                width:"100%",
+                height:"8%",
+                position:"absolute",
+                top:0,
+                zIndex:99,
+                justifyContent:"space-around",
+                alignItems:"center",
+                flexDirection:"row"
+                }}>
+                    <TouchableOpacity 
+                    // onPress={()=>onJobReject()}
+                    onPress={()=>btnsUi()}
+                     style={{
+                        backgroundColor:"white",
+                        width:"45%",
+                        paddingVertical:"2%",
+                        borderRadius:5,
+                        justifyContent:"center",
+                        alignItems:"center",
+                        // borderWidth:"1%",
+                        // borderColor:"gray"
+                        }}>
+                        <Text>Deny Service</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={()=>onAcceptReq(route?.params?.jobID)} style={{
+                        backgroundColor:"white",
+                        width:"45%",
+                        paddingVertical:"2%",
+                        borderRadius:5,
+                        justifyContent:"center",
+                        alignItems:"center",
+                        // borderWidth:"1%",
+                        // borderColor:"gray"
+                        }}>
+                        <Text>Accept Service</Text>
+                    </TouchableOpacity>
+                </View> */}
                 <Chat client={streamClient}>
                     {channel ? (
                         <Channel channel={channel} AttachButton={() => null} Attachment={() => null} InputButtons={() => null}  >

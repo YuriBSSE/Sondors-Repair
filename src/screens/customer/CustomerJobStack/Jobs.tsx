@@ -13,7 +13,7 @@ import Button from 'components/common/Button';
 import { Loader } from 'components/common/Loader';
 
 import { getAuth } from "firebase/auth";
-import { getFirestore, collection, query, where, getDocs,onSnapshot, } from 'firebase/firestore';
+import { collection, doc, getDocs, getFirestore, onSnapshot, query, setDoc, updateDoc, where } from 'firebase/firestore';
 
 
 type Props = StackScreenProps<JobsStackParamList, 'MyJobs'>;
@@ -113,6 +113,36 @@ const Jobs = ({ navigation }: Props) => {
         );
     }
 
+
+    const updateChatStatus = async (jobID, userApplied) =>{
+        const jobsRef = collection(db, "jobs");
+      
+        var jobRef = doc(db, "jobs", jobID);
+        const queryGetMyJobs = await query(jobsRef, where("id", "==", jobID));
+        await getDocs(queryGetMyJobs).then((res) => {
+        const dataJobsList = res.docs.map((item) => item.data())
+        return dataJobsList
+        }).then(async (dataJobsList: any) => {
+            // console.log("========================>>>>>>>>>>>>>>>>11",dataJobsList)
+            let temp = [...dataJobsList[0].data]
+            temp.splice(dataJobsList[0].data.findIndex(object => {
+                return object.uidP == userApplied?.uidP
+              }),1)
+
+            await setDoc(
+                jobRef,
+                { data: [...temp,{ ...userApplied, isChat: true }] },
+                { merge: true }
+            );
+            // await updateDoc(doc(db, "jobs", jobID), {
+            //   "jobDetails.jobStatus": 0,
+            // });
+        }).catch((error) => {
+            const errorMessage = error.message;
+            Alert.alert(errorMessage)
+        })
+    }
+
     return (
         <SafeAreaView style={tailwind('flex bg-white items-center justify-center h-full')}>
             {
@@ -132,7 +162,10 @@ const Jobs = ({ navigation }: Props) => {
                             title={mainItem?.item?.title} 
                             subtitle={mainItem?.item?.subtitle} 
                             navigation={navigation}
-                            onPress={() => {navigation.navigate("JobChat", { externalId:mainItem?.item?.externalId, jobID:mainItem?.section?.id, userApplied:mainItem?.item })}} />
+                            onPress={() => {
+                                updateChatStatus(mainItem?.section?.id, mainItem?.item)
+                                navigation.navigate("JobChat", { externalId:mainItem?.item?.externalId, jobID:mainItem?.section?.id, userApplied:mainItem?.item })
+                            }} />
                         }}
                         // ItemSeparatorComponent={() => <View style={tailwind('w-full bg-gray-200 h-px')} />}
                         renderSectionHeader={(data) =>
