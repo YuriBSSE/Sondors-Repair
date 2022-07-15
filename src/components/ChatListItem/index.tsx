@@ -254,7 +254,7 @@ console.log(dataaaa[0] , "DATA")
         {currentUserData.userType !== "provider" &&
           (data?.userApplied?.jobResponseType === "applied" && (
             <>
-            <View style={styles.btnCont}>
+            {/* <View style={styles.btnCont}>
               <TouchableOpacity
                 // onPress={onPress}
                 style={styles.acceptBtn}
@@ -262,7 +262,7 @@ console.log(dataaaa[0] , "DATA")
               >
                 <Text style={{ color: "white" }}>Accept</Text>
               </TouchableOpacity>
-            </View>
+            </View> */}
             <View style={styles.btnCont}>
               <TouchableOpacity
                 // onPress={onPress}

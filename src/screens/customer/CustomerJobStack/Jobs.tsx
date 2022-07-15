@@ -155,7 +155,12 @@ const Jobs = ({ navigation }: Props) => {
                             // ,{ item: { title, subtitle, externalId, createAt } }
                             ) =>{ 
                             // console.log(mainItem.item,")___________________________________________))))))))))))")
-                            // return <Text>TESTING y</Text> 
+                            // return <Text>TESTING y</Text>
+                            if (mainItem?.item.hasOwnProperty("responseOnJob")) {
+                                if (mainItem?.item?.responseOnJob == "rejected") {
+                                    return null
+                                }
+                            } 
                             return <ChatListItem 
                             data={{userApplied:mainItem?.item,job:mainItem?.section?.id,getMyJob:()=>getMyJob()}} 
                             createAt={mainItem?.item?.createAt} 
