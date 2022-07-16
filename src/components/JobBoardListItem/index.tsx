@@ -26,7 +26,7 @@ const JobBoardListItem = ({ job, onPress }: Props) => {
           {job.title}
         </Text>
         <View style={{flexDirection:'column', alignItems:'flex-end',}}>
-        <View style={tailwind("flex-row")}>
+        {/* <View style={tailwind("flex-row")}>
             <Text style={{ marginRight: 12 }} sm right tertiary>
               {moment(job.createdAt).calendar()}
             </Text>
@@ -35,7 +35,7 @@ const JobBoardListItem = ({ job, onPress }: Props) => {
               size={16}
               color={Colors.tertiaryText}
             />
-          </View>
+          </View> */}
           <View style={tailwind("flex-row")}>
             <Text style={{ marginRight: 12 }} sm right tertiary>
               {moment(job.createdAt).format("LL")}

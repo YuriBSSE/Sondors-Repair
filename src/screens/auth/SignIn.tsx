@@ -23,6 +23,7 @@ const SignIn = ({ navigation }: Props) => {
 
     const [keyboardShow, setKeyboardShow] = useState(false)
     const [email, setEmail] = useState('')
+    // const [name, setName] = useState('')
     const [password, setPassword] = useState('')
 
 
@@ -81,6 +82,7 @@ const SignIn = ({ navigation }: Props) => {
                <Image resizeMode='cover'  source={SondorsLogoBlack} style={{ resizeMode: 'contain', alignSelf: 'center', width: width * .7 }}  /> 
            </View>
            <View style={tailwind('w-full px-6 mt-8')}>
+              {/* <TextInput value={name} lg placeholder='Name' onChangeText={(text) => setName(text)} /> */}
                <TextInput value={email} lg placeholder='Email' onChangeText={(text) => setEmail(text)} />
                <TextInput value={password} secureTextEntry style={tailwind('mt-3')} lg placeholder='Password' onChangeText={(text) => setPassword(text)} />
                <Button onPress={onHandelSignIn} style={tailwind('mt-4 rounded')} titleStyle={{ fontWeight: '700' }} lg title='Sign in' />
