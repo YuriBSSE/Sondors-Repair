@@ -275,7 +275,7 @@ const CreateJob = ({ navigation }: Props) => {
                   <View
                     style={tailwind("flex grow justify-between px-8 py-6 ")}
                   >
-                    <View>
+                    <View style={{height:350,justifyContent:"space-between"}}>
                       <PickerSelect
                         onValueChange={(selectedBikeModel: string) => {
                           setBikeModel(selectedBikeModel);
@@ -283,6 +283,7 @@ const CreateJob = ({ navigation }: Props) => {
                         items={bikeModels}
                         value={bikeModel}
                         placeholder="Type of bike"
+                        // style={{borderWidth:10,borderColor:"red"}}
                       />
                       <TextInput
                         value={jobTitle}
@@ -296,7 +297,7 @@ const CreateJob = ({ navigation }: Props) => {
                         items={bikeServices}
                         placeholder="Type of service needed"
                         value={jobType}
-                        style={tailwind("mt-3")}
+                        style={tailwind("mt-6")}
                       />
                       <TextInput
                         value={jobDescription}

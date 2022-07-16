@@ -200,7 +200,12 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
                         />
                  </View> : null
                 }
+                {
+                   jobDetails?.jobStatus == 2 &&  data.length > 0 &&
                 <Text left sm tertiary style={tailwind('mt-1')}>You marked this job complete on {moment(jobDetails.createdAt).format("LL")}</Text>
+
+                }
+                {/* <Text left sm tertiary style={tailwind('mt-1')}>You marked this job complete on {moment(jobDetails.createdAt).format("LL")}</Text> */}
                 <Text left xxl style={{fontWeight: 'bold'}}>{title}</Text>
                 <View style={tailwind('mt-0')}>
                 <Text left tertiary style={tailwind('mt-2')}>Details</Text>
@@ -246,7 +251,7 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
                         <Text  xl style={{fontWeight: 'bold', color: 'white', textAlign:'center'}}>Offer Rejected</Text>
                         </View>:
                         
-                        <Button onPress={onPress} style={tailwind('rounded')} titleStyle={{ fontWeight: '700' }} lg title='Apply' />
+                        <Button onPress={onPress} style={tailwind('rounded')} titleStyle={{ fontWeight: '700' }} lg title='Message' />
                     }
                 
                 </View>:   null

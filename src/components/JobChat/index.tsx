@@ -217,9 +217,9 @@ const JobChat = ({ route, navigation }: Props) => {
             if(!job?.data[0].hasOwnProperty("responseOnJob")){
             return (
                 <View style={{
-                    backgroundColor:"white",
+                    backgroundColor:"#e6e6e6",
                 width:"100%",
-                height:100,
+                height:60,
                 position:"absolute",
                 top:0,
                 zIndex:99,
