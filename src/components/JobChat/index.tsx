@@ -80,7 +80,7 @@ const JobChat = ({ route, navigation }: Props) => {
     const tailwind = useTailwind();
     const [streamClient] = useAtom(streamClientAtom);
     const [channel, setChannel] = useState<ChannelType | false>();
-    const [isShowBtns, setIsShowBtns] = useState(true)
+    // const [isGettingData, setI sShowBtns] = useState(true)
     const [isState, setIsState] = useState(false)
     const [job, setJob] = useState({})
     var unsubscribe;
@@ -97,9 +97,15 @@ const JobChat = ({ route, navigation }: Props) => {
     useEffect(() => {
         navigation.setOptions({
             headerLeft: () => <HeaderLeft isBack isRoot onPress={() => navigation.goBack()} title={streamClient?.user?.name || "User"} />,
-            // headerRight: () => <HeaderRight title={'View Job'} />,
+            headerRight: () => <HeaderRight title={'View Job'} onPress={()=>{
+                job.hasOwnProperty("jobDetails") ? navigation.navigate('CustomerJobDetailsScreen', { 
+                    jobDetails:job?.jobDetails,
+                    userApplied:job?.data[0],
+                    jobID:job?.id }) : alert("Loading")
+            }} />
+            ,
         });
-    }, []);
+    }, [job]);
 
     useEffect(()=>{
         return  unsubscribe
@@ -175,7 +181,6 @@ const JobChat = ({ route, navigation }: Props) => {
                 // alert("SAD")
                 unsubscribe = onSnapshot(z, async (querySnapshot: any[]) => {
                     // console.log(route?.params?.userApplied,"---------------new")
-                    // setIsShowBtns(false)
                     const jobsRef = collection(db, "jobs");
                     var jobRef = doc(db, "jobs", jobID);
                     const queryGetMyJobs = await query(jobsRef, where("id", "==", jobID));
@@ -212,7 +217,6 @@ const JobChat = ({ route, navigation }: Props) => {
     }, [])
 
     const btnsUi = () => {
-        console.log(job,"PPPPoooo")
         if(job.hasOwnProperty("data")){
             if(!job?.data[0].hasOwnProperty("responseOnJob")){
             return (
@@ -263,7 +267,7 @@ const JobChat = ({ route, navigation }: Props) => {
         
         <OverlayProvider value={{ style: theme }}>
             <View style={tailwind('flex'),{position:"relative"}}>
-                {btnsUi()}    
+                {job?.jobDetails?.jobStatus == 0 && btnsUi()}    
                 {/* <View style={{backgroundColor:"lightgrey",
                 width:"100%",
                 height:"8%",

@@ -165,7 +165,7 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
     return (
         <>
             <ScrollView>            
-        <View>
+        <View style={{marginBottom:20}}>
             {/* Add Image for Job */}
             <Text left xxl style={{fontWeight: 'bold', paddingHorizontal: 24, marginTop: 20, paddingBottom: 10}}>Job Details</Text>
             {imageUrl ? (
@@ -262,7 +262,7 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
                 <TouchableOpacity
                 // onPress={onPress}
                 style={{
-                  backgroundColor: "#00C851",
+                  backgroundColor: Colors.green,
                   width: "90%",
                   padding: "2.5%",
                   borderRadius: 5,
@@ -272,7 +272,7 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
                     // console.log(jobDetails,"----------------",userApplied)
                 }}
               >
-                <Text style={{ color: "white" }}>Mark as Complete</Text>
+                <Text style={{ color: "white" }}>Mark Complete</Text>
               </TouchableOpacity>
              </View> : null
           }
