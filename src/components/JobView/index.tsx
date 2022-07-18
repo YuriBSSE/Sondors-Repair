@@ -165,7 +165,7 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
     return (
         <>
             <ScrollView>            
-        <View>
+        <View >
             {/* Add Image for Job */}
             <Text left xxl style={{fontWeight: 'bold', paddingHorizontal: 24, marginTop: 20, paddingBottom: 10}}>Job Details</Text>
             {imageUrl ? (
@@ -184,7 +184,9 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
                     <Text lg>No image</Text>
                 </View>
             )}
-            <SafeAreaView style={tailwind('flex grow px-6 py-3')}>
+          <ScrollView style={{height: '60%'}}>
+            <View style={{flexDirection:'column', justifyContent:'space-around', alignItems:'center'}}>
+            <SafeAreaView style={[tailwind('flex grow px-6 py-3'),{ width: '96%', alignSelf:'center'}]}>
                 {
                      currentUserData.userType !== 'provider' && 
                      jobDetails.jobStatus == 1 ? 
@@ -200,7 +202,12 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
                         />
                  </View> : null
                 }
-                <Text left sm tertiary style={tailwind('mt-1')}>You marked this job complete on {moment(jobDetails.createdAt).format("LL")}</Text>
+                {
+                  currentUserData.userType !== 'provider' && 
+                  jobDetails.jobStatus == 2 ?
+                  <Text left sm tertiary style={tailwind('mt-1')}>You marked this job complete on {moment(jobDetails.createdAt).format("LL")}</Text>: null
+                }
+                <View style={{ flexDirection:'column', justifyContent:'flex-start', alignItems:'flex-start', height: 300}}>
                 <Text left xxl style={{fontWeight: 'bold'}}>{title}</Text>
                 <View style={tailwind('mt-0')}>
                 <Text left tertiary style={tailwind('mt-2')}>Details</Text>
@@ -209,19 +216,21 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
                 </View>
                 <View style={tailwind('mt-4')}>
                     <Text left tertiary>Description</Text>
-                    <Text left lg>{description}</Text>
+                    <Text left lg numberOfLines={8}>{description}</Text>
+                </View>
                 </View>
             </SafeAreaView>
           
             {
                 currentUserData.userType == 'provider' ?
-                <View style={{...tailwind('px-6 py-2')}}>
+                <View style={{width: '96%', alignSelf:'center'}}>
                     {
                         data[0]?.jobResponseType == 'applied' &&  data[0]?.responseOnJob != 'rejected'  &&  data.length > 0 ?
                         <View  style={{
-                            width: 150, heigth: 100, backgroundColor:'#00C851', borderRadius: 12, padding: 4, justifyContent:'center', alignSelf:'center'
+                            width: "100%", heigth: 100,  borderRadius: 12, padding: 4, justifyContent:'center', alignSelf:'center'
                         }}>
-                        <Text  xl style={{fontWeight: 'bold', color: 'white', textAlign:'center'}}>Applied</Text>
+                           <Button  style={tailwind('rounded')} titleStyle={{ fontWeight: '700' }} lg title='Message' />
+                        {/* <Text  xl style={{fontWeight: 'bold', color: 'white', textAlign:'center'}}>Applied</Text> */}
                         </View>:
                          data[0]?.jobResponseType == 'accepted'  &&  data.length > 0 ?
                      
@@ -241,9 +250,10 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
                       
                         : jobDetails.jobStatus != 0 ||  data[0]?.responseOnJob == 'rejected' ?
                         <View  style={{
-                            width: 150, heigth: 100, backgroundColor:'#ff4444', borderRadius: 12, padding: 4, justifyContent:'center', alignSelf:'center'
+                             width: "100%", heigth: 100,  borderRadius: 12, padding: 4, justifyContent:'center', alignSelf:'center'
                         }}>
-                        <Text  xl style={{fontWeight: 'bold', color: 'white', textAlign:'center'}}>Offer Rejected</Text>
+                               <Button  style={[tailwind('rounded')]} titleStyle={{ fontWeight: '700' }} lg title='Offer Rejected' />
+                       
                         </View>:
                         
                         <Button onPress={onPress} style={tailwind('rounded')} titleStyle={{ fontWeight: '700' }} lg title='Apply' />
@@ -251,6 +261,8 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
                 
                 </View>:   null
             }
+            </View>
+            </ScrollView>
           {
              currentUserData.userType !== 'provider' && 
              jobDetails.jobStatus == 1 ? <View style={{justifyContent:"center",alignContent:"center",alignItems:"center",marginTop:"5%"}}>
