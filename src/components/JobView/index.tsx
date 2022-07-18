@@ -186,7 +186,7 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
             )}
           <ScrollView style={{height: '60%'}}>
             <View style={{flexDirection:'column', justifyContent:'space-around', alignItems:'center'}}>
-            <SafeAreaView style={[tailwind('flex grow px-6 py-3'),{ width: '96%', alignSelf:'center'}]}>
+            <SafeAreaView style={[tailwind('flex grow px-6 py-3'),{ width: '90%', alignSelf:'center'}]}>
                 {
                      currentUserData.userType !== 'provider' && 
                      jobDetails.jobStatus == 1 ? 
@@ -208,7 +208,7 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
                   <Text left sm tertiary style={tailwind('mt-1')}>You marked this job complete on {moment(jobDetails.createdAt).format("LL")}</Text>: null
                 }
                 <View style={{ flexDirection:'column', justifyContent:'flex-start', alignItems:'flex-start', height: 300}}>
-                <Text left xxl style={{fontWeight: 'bold'}}>{title}</Text>
+                <Text left xxl style={{fontWeight: 'bold', top: 2}}>{title}</Text>
                 <View style={tailwind('mt-0')}>
                 <Text left tertiary style={tailwind('mt-2')}>Details</Text>
                 <Text left defaultColor style={tailwind('mt-0')}>{bikeModel.toUpperCase()}</Text>
@@ -223,7 +223,7 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
           
             {
                 currentUserData.userType == 'provider' ?
-                <View style={{width: '96%', alignSelf:'center'}}>
+                <View style={{width: '92%', alignSelf:'center'}}>
                     {
                         data[0]?.jobResponseType == 'applied' &&  data[0]?.responseOnJob != 'rejected'  &&  data.length > 0 ?
                         <View  style={{
