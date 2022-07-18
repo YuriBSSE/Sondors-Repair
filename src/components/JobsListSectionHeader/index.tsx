@@ -103,7 +103,9 @@ const JobsListSectionHeader = ({
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={{ borderTopWidth: 1, borderColor: "#EDEDF2",backgroundColor:"#E6E6E6" }}
+      style={{ borderTopWidth: 1, borderColor: "#EDEDF2",
+      backgroundColor:currentUserData.userType !== "provider" ? "#E6E6E6" : "#ffffff"
+     }}
     >
       <View
         style={[
@@ -114,14 +116,14 @@ const JobsListSectionHeader = ({
           <Text style={{ color: Colors.dark, fontSize:17 }} bold lg>
             {title}
           </Text>
-          <View style={{flexDirection:"row",alignItems:"center",justifyContent:"center"}}>
+          {currentUserData.userType !== "provider" && <View style={{flexDirection:"row",alignItems:"center",justifyContent:"center"}}>
             <Text style={{ color: jd?.jobStatus == 0 ? Colors.primary 
               : jd?.jobStatus == 1 ? "green" : Colors.dark
               , fontSize:14,marginRight:5 }} >
               {jd?.jobStatus == 0 ? "Reviewing Offers" : jd?.jobStatus == 1 ? "In Progress" : "Completed"}
             </Text>
             <AntDesign name="right" size={13} color="black" />
-          </View>
+          </View>}
           {currentUserData.userType == "provider" ? (
             <View
               style={{
