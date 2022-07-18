@@ -80,7 +80,7 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
       setRating(rating);
     };
     var job = jobID?.trim();
-    console.log({job})
+    // console.log({job})
     if (jobID) {
         var jobRef = doc(db, "jobs", jobID);
       }
@@ -107,7 +107,7 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
             const newObj = users.filter((item) => {
               return item.uid === userApplied.uidP;
             });
-            console.log(newObj);
+            // console.log(newObj, "+_+");
     
             await setDoc(
               jobRefUser,
