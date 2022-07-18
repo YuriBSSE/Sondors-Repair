@@ -5,6 +5,7 @@ import Button from "../common/Button";
 import Divider from "components/common/Divider";
 import Text from "../common/Text";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useState } from 'react';
 import Colors from "styles/Colors";
 import { useAtom } from 'jotai';
@@ -39,6 +40,7 @@ type DaysTimePickerProps = {
 
 export const Days = ({ getDays, daysValue, isEdit }: DaysProps) => {
     const tailwind = useTailwind()
+
     const [days, setDays] = useState<any>([
         "monday",
         "tuesday",
@@ -113,7 +115,7 @@ export const Days = ({ getDays, daysValue, isEdit }: DaysProps) => {
 
 export const CustomDateTimePicker = ({ marginRight, marginLeft, getHours, name, value, isEdit }: CustomDateTimePickerProps) => {
     const tailwind = useTailwind()
-
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [show, setShow] = useState<boolean>(false)
 
     const handelOnchangeTimePicker = (event: any) => {
@@ -125,12 +127,37 @@ export const CustomDateTimePicker = ({ marginRight, marginLeft, getHours, name, 
         }
     }
 
+    const showDatePicker = () => {
+        setDatePickerVisibility(true);
+      };
+    
+      const hideDatePicker = () => {
+        setDatePickerVisibility(false);
+      };
+    
+      const handleConfirm = (date) => {
+        // console.warn("A date has been picked: ", date);
+        // hideDatePicker();
+        // if (event.type === "dismissed") setShow(false)
+        // if (event.type === "set") {
+            // setShow(false)
+            setDatePickerVisibility(false);
+            getHours && getHours(name, date)
+        // }
+      };
+
     return (
         <SafeAreaView style={tailwind('flex flex-row')}>
-            <TouchableOpacity onPress={() => setShow(true)} style={{ ...styles.timerBtn, marginRight, marginLeft }}>
+            <TouchableOpacity onPress={showDatePicker} style={{ ...styles.timerBtn, marginRight, marginLeft }}>
                 <Text md tertiary>{moment(value || '2022-05-06T00:00:00.448Z').format('LT')}</Text>
             </TouchableOpacity>
-            {show && <DateTimePicker testID='timePicker' value={isEdit ? new Date(value) : new Date()} mode='time' onChange={handelOnchangeTimePicker} />}
+            <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="time"
+                onConfirm={handleConfirm}
+                onCancel={hideDatePicker}
+            />
+            {/* {show && <DateTimePicker testID='timePicker' value={isEdit ? new Date(value) : new Date()} mode='time' onChange={handelOnchangeTimePicker} />} */}
         </SafeAreaView>
     )
 }

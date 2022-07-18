@@ -51,7 +51,7 @@ const SignUp = ({ navigation }: Props) => {
     const firestore = getFirestore();
     const tailwind = useTailwind();
     const { width } = Dimensions.get('window')
-
+    const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [userType, setUserType] = useState('owner')
@@ -61,6 +61,7 @@ const SignUp = ({ navigation }: Props) => {
             .then((userCredential) => {
                 const { email, uid } = userCredential.user
                 setDoc(doc(firestore, "users", uid), {
+                    username: name,
                     totalJobs: 0,
                     rating: 0,
                     distance: '',
@@ -133,7 +134,8 @@ const SignUp = ({ navigation }: Props) => {
             </Tab.Navigator>
 
             <View style={[tailwind('w-full px-6')]}>
-                <TextInput lg placeholder='Email' onChangeText={(text) => setEmail(text)} />
+            <TextInput value={name} lg placeholder='Name' onChangeText={(text) => setName(text)} />
+                <TextInput lg placeholder='Email' style={tailwind('mt-3')} onChangeText={(text) => setEmail(text)} />
                 <TextInput secureTextEntry style={tailwind('mt-3')} lg placeholder='Password' onChangeText={(text) => setPassword(text)} />
                 <Button onPress={signUp} style={tailwind('mt-3 rounded')} titleStyle={{ fontWeight: '700' }} lg title='Create account' />
                 <Text title md style={{ ...tailwind('mt-2') }}>By creating an account I agree to the</Text>

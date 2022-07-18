@@ -66,7 +66,7 @@ const statusStyle = (value: string) => {
     }
   };
 const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Props) => {
-    // console.log(jobDetails, "jobDetailsjobDetailsjobDetailsjobDetails")
+
     const tailwind = useTailwind();
     const { imageUrl, title, bikeModel, type, description, } = jobDetails;
     const db = getFirestore()
