@@ -109,7 +109,7 @@ const ProviderJobDetailsScreen = ({ route, navigation }: Props) => {
   };
 
   const onApply = async () => {
-    console.log(currentUsers?.username,"========================================================")
+    // console.log(currentUsers?.username,"========================================================")
     setLoading(true);
     const applyOnJobRef = doc(db, "jobs", `${jobDetails.id}`);
     await updateDoc(applyOnJobRef, {

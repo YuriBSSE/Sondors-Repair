@@ -150,6 +150,7 @@ const JobChat = ({ route, navigation }: Props) => {
         }).catch((error) => {
             const errorMessage = error.message;
             Alert.alert(errorMessage)
+            
         })
     }
 
