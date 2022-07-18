@@ -107,7 +107,7 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
             const newObj = users.filter((item) => {
               return item.uid === userApplied.uidP;
             });
-            console.log(newObj, "+_+");
+            console.log(newObj);
     
             await setDoc(
               jobRefUser,
