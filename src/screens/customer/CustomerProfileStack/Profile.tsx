@@ -54,7 +54,7 @@ const Profile = ({ navigation }: Props) => {
                     <Text tertiary left sm style={tailwind('mt-2 px-3 ml')}>Member since September 2022</Text>
                 </View>
                 <View style={tailwind('mt-12 px-3')}>
-                    <Text tertiary left bold xl>SONDORS</Text>
+                    <Text tertiary left bold xl>Your SONDORS</Text>
                     <FlatList
                         style={tailwind('mb-6')}
                         keyExtractor={(item) => item.id}

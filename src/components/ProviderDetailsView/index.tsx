@@ -18,7 +18,7 @@ const ProviderDetailsView = ({ providerDetails }: { providerDetails: Provider })
                 <Text left sm tertiary style={tailwind('mt-1')}>Member since September 2022</Text>
             </View>
             <View style={{...tailwind('mt-3'), maxHeight: 232}}>
-                <Text left bold sm tertiary>Services Provided</Text>
+                <Text left bold lg tertiary style={{fontWeight:"700"}}>Services Provided</Text>
                 <ScrollView contentContainerStyle={{...tailwind('flex-row mt-1 pb-3'), flexWrap: 'wrap'}}>
                     {providerDetails.services.map((service: string) => (
                         <ServiceLabel key={service} title={service} />
@@ -26,12 +26,12 @@ const ProviderDetailsView = ({ providerDetails }: { providerDetails: Provider })
                 </ScrollView>
             </View>
             <View style={tailwind('mt-8')}>
-                <Text left bold sm tertiary>Address</Text>
+                <Text left bold lg tertiary style={{fontWeight:"700"}}>Address</Text>
                 <Text left>{providerDetails.address.street1}</Text>
                 <Text left>{providerDetails.address.street2}</Text>
             </View>
             <View style={tailwind('mt-6')}>
-                <Text left bold sm tertiary>Hours</Text>
+                <Text left bold lg tertiary style={{fontWeight:"700"}}>Hours</Text>
                 {providerDetails.hours.map((item: Hour) => 
               { 
                   return  (

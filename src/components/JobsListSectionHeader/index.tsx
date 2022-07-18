@@ -10,6 +10,8 @@ import Colors from "styles/Colors";
 import { FontAwesome } from "@expo/vector-icons";
 import moment from "moment";
 import currentUserDataAtom from "atoms/currentUserDataAtom";
+import { AntDesign } from '@expo/vector-icons'; 
+
 const statusStyle = (value: string) => {
   switch (capitalizeFirstLetter(value)) {
     case "Accepted":
@@ -101,17 +103,25 @@ const JobsListSectionHeader = ({
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={{ borderTopWidth: 1, borderColor: "#EDEDF2" }}
+      style={{ borderTopWidth: 1, borderColor: "#EDEDF2",backgroundColor:"#E6E6E6" }}
     >
       <View
         style={[
-          tailwind("px-5 flex-row justify-between items-center mt-3 mb-3"),
+          tailwind("px-5 flex-row justify-between items-center mt-3 mb-3")
         ]}
       >
         <>
-          <Text style={{ color: Colors.dark }} bold lg>
+          <Text style={{ color: Colors.dark, fontSize:17 }} bold lg>
             {title}
           </Text>
+          <View style={{flexDirection:"row",alignItems:"center",justifyContent:"center"}}>
+            <Text style={{ color: jd?.jobStatus == 0 ? Colors.primary 
+              : jd?.jobStatus == 1 ? "green" : Colors.dark
+              , fontSize:14,marginRight:5 }} >
+              {jd?.jobStatus == 0 ? "Reviewing Offers" : jd?.jobStatus == 1 ? "In Progress" : "Completed"}
+            </Text>
+            <AntDesign name="right" size={13} color="black" />
+          </View>
           {currentUserData.userType == "provider" ? (
             <View
               style={{

@@ -19,10 +19,12 @@ const CustomerJobDetailsScreen = ({ route, navigation }: Props) => {
     navigation.setOptions({
       headerRight: () =>
         jobDetails.streamChatId ? (
-          <HeaderRight
+          jobDetails?.jobStatus !== 0 && <HeaderRight
             onPress={() =>
               navigation.navigate("JobChat", {
-                externalId: jobDetails.streamChatId,
+                externalId: userApplied.externalId,
+                jobID: jobID,
+                userApplied:userApplied
               })
             }
             title="View chat"

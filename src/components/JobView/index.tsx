@@ -256,7 +256,7 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
                        
                         </View>:
                         
-                        <Button onPress={onPress} style={tailwind('rounded')} titleStyle={{ fontWeight: '700' }} lg title='Apply' />
+                        <Button onPress={onPress} style={tailwind('rounded')} titleStyle={{ fontWeight: '700' }} lg title='Message' />
                     }
                 
                 </View>:   null
@@ -269,7 +269,7 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
                 <TouchableOpacity
                 // onPress={onPress}
                 style={{
-                  backgroundColor: "#00C851",
+                  backgroundColor: Colors.green,
                   width: "90%",
                   padding: "2.5%",
                   borderRadius: 5,
@@ -279,7 +279,7 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
                     // console.log(jobDetails,"----------------",userApplied)
                 }}
               >
-                <Text style={{ color: "white" }}>Mark as Complete</Text>
+                <Text style={{ color: "white" }}>Mark Complete</Text>
               </TouchableOpacity>
              </View> : null
           }

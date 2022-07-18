@@ -28,7 +28,7 @@ const Rating = ({ disabled,  defaultRating, isLabel = true, isCount = true, ml =
 
     return (
         <View>
-            {isLabel && <Text left sm tertiary bold>Rating</Text>}
+            {isLabel && <Text left lg tertiary bold style={{fontWeight:"700"}}>Rating</Text>}
             <View style={tailwind('flex-row items-center mt-1')}>
                 {isCount && <Text xBold lg left>{rating || defaultRating}</Text>}
                 <StarRating

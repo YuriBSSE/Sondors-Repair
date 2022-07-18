@@ -207,7 +207,7 @@ const ChatListItem = ({
 console.log(dataaaa[0] , "DATA")
   return (
     <>
-      <View style={[tailwind("px-5  pb-3 mt-1"), {}]}>
+      <View style={[tailwind("px-5  pb-2 mt-1"), {borderBottomColor:"#e6e6e6",borderBottomWidth:1}]}>
         {currentUserData.userType == "provider" ? (
           <>
             <TouchableOpacity  disabled={
@@ -240,14 +240,15 @@ console.log(dataaaa[0] , "DATA")
           >
             <View style={tailwind("flex-row justify-between mt-1")}>
               <Text sm left heavy>
-                {title}
+                {/* {title} */}
+              {data?.userApplied?.hasOwnProperty("userName") ? data?.userApplied?.userName : null}
               </Text>
               <Text sm tertiary>
                 {moment(createAt).fromNow()}
               </Text>
             </View>
             <Text sm left tertiary style={tailwind("mt-1")}>
-              {subtitle}
+              {title}
             </Text>
           </TouchableOpacity>
         )}
@@ -274,7 +275,7 @@ console.log(dataaaa[0] , "DATA")
             </View>
             </>
           ) )}
-          {data?.userApplied?.jobResponseType === "accepted" && <View style={styles.btnCont}>
+          {/* {data?.userApplied?.jobResponseType === "accepted" && <View style={styles.btnCont}>
               <TouchableOpacity
                 // onPress={onPress}
                 style={{
@@ -290,7 +291,7 @@ console.log(dataaaa[0] , "DATA")
               >
                 <Text style={{ color: "white" }}>Mark as Complete</Text>
               </TouchableOpacity>
-            </View>}
+            </View>} */}
             {data?.userApplied?.jobResponseType === "completed" && <View style={styles.btnCont}>
               <TouchableOpacity
               disabled

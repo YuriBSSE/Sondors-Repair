@@ -15,7 +15,7 @@ type Props = {
     onPress?: (event: GestureResponderEvent) => void | undefined;
 }
 
-const HeaderLeft = ({ isModal = false, isRoot = false, title, onPress, isBack }: Props) => {
+const HeaderLeft = ({ isModal = false, isRoot = false, title, onPress, isBack,pStyleTxt = {} }: Props) => {
     const tailwind = useTailwind()
     return (
         isModal || isRoot ? (
@@ -25,12 +25,12 @@ const HeaderLeft = ({ isModal = false, isRoot = false, title, onPress, isBack }:
                         <AntDesign name="arrowleft" size={20} color="black" />
                     </TouchableOpacity>
                 }
-                <Text style={isBack ? tailwind('px-3') : tailwind('')} xBold xl title>{title}</Text>
+                <Text style={isBack ? tailwind('px-3') : tailwind(''),pStyleTxt,{fontSize:22}} xBold xl title>{title}</Text>
             </View>
         ) : (
             <TouchableOpacity style={tailwind('flex-row items-center pl-5')} onPress={onPress}>
                 <Ionicons name="chevron-back" size={20} color={Colors.primary} />
-                <Text bold lg style={{ color: Colors.primary }}>{title}</Text>
+                <Text bold lg style={{ color: Colors.primary,fontSize:20 }}>{title}</Text>
             </TouchableOpacity>
         )
     )
