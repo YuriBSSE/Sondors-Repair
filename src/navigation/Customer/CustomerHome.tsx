@@ -17,6 +17,7 @@ import * as Location from 'expo-location';
 import { doc, getFirestore, updateDoc } from "firebase/firestore";
 import { geohashForLocation } from "geofire-common";
 
+
 const CustomerRootTab = createBottomTabNavigator<CustomerRootTabParamList>();
 
 const CustomerHome = () => {
@@ -57,6 +58,7 @@ const CustomerHome = () => {
 
     return (
         <CustomerRootTab.Navigator>
+      
             <CustomerRootTab.Screen name="JobStack" component={JobStack} options={
                 {
                     headerShown: false,

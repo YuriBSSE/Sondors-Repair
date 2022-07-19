@@ -20,7 +20,7 @@ const PickerSelect = ({
     const tailwind = useTailwind();
     const pickerStyle: TextStyle = tailwind('border py-3 px-2 rounded-sm');
     return (
-        <View style={{borderRadius: 5, borderWidth: 0.5, borderColor: '#e6e6e6' }} >
+        <View style={{borderRadius: 5, borderWidth: 0.5, borderColor: '#f0f0f0' }} >
         <RNPickerSelect
             onValueChange={onValueChange}
             items={items}

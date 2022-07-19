@@ -168,7 +168,7 @@ const Providers = ({ navigation }: Props) => {
             </View>
         );
     }
-
+console.log(providers, "========================")
     return (
         <SafeAreaView style={tailwind('flex bg-white items-center justify-center h-full')}>
             <KeyboardDismissView>

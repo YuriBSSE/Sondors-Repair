@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect,useRef } from "react";
 import {
   Alert,
   SafeAreaView,
@@ -26,6 +26,7 @@ import TextInput from "components/common/TextInput";
 import PickerSelect from "components/common/PickerSelect";
 import uuid from "react-native-uuid";
 import { getAuth } from "firebase/auth";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
   getFirestore,
   setDoc,
@@ -71,7 +72,7 @@ const CreateJob = ({ navigation }: Props) => {
   const [bikeServices] = useAtom(bikeServicesAtom);
   const [loading, setLoading] = useState(false);
   const [streamClient] = useAtom(streamClientAtom);
-
+  const refText = useRef()
   const formCompleted = bikeModel && jobTitle && jobType && jobDescription;
   const dateAndTimeValue = new Date();
 
@@ -151,7 +152,8 @@ const CreateJob = ({ navigation }: Props) => {
         setLoading(false);
       })
       .then(() => {
-        navigation.navigate("MyJobs");
+        setPreviewMode(true)
+        // navigation.navigate("MyJobs");
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -211,7 +213,8 @@ const CreateJob = ({ navigation }: Props) => {
             getMyJob();
           })
           .then(() => {
-            navigation.navigate("MyJobs");
+            setPreviewMode(true)
+            // navigation.navigate("MyJobs");
           })
           .catch((error) => {
             setLoading(false);
@@ -228,8 +231,9 @@ const CreateJob = ({ navigation }: Props) => {
   return (
     <SafeAreaView style={tailwind("flex bg-white h-full")}>
       {!loading ? (
-        <KeyboardDismissView>
+       
           <ScrollView>
+            <KeyboardAwareScrollView>
             <View style={tailwind("flex h-full justify-between")}>
               {/* New Job Form */}
               {previewMode ? (
@@ -242,6 +246,7 @@ const CreateJob = ({ navigation }: Props) => {
                     bikeModel,
                     type: jobType,
                     description: jobDescription,
+                    jobViewState: true
                   }}
                 />
               ) : (
@@ -289,6 +294,7 @@ const CreateJob = ({ navigation }: Props) => {
                         value={jobTitle}
                         onChangeText={(text) => setJobTitle(text)}
                         placeholder="Job title"
+                        style={{borderColor: 'black' ,borderRadius: 5, borderWidth: 1,}}
                       />
                       <PickerSelect
                         onValueChange={(selectedServiceType: string) =>
@@ -297,21 +303,25 @@ const CreateJob = ({ navigation }: Props) => {
                         items={bikeServices}
                         placeholder="Type of service needed"
                         value={jobType}
-                        style={tailwind("mt-6")}
+                      
                       />
                       <TextInput
+                        style={[tailwind("h-36 leading-4"),{borderColor: 'black' ,borderRadius: 5, borderWidth: 1,}]}
                         value={jobDescription}
                         onChangeText={(text) => setJobDescription(text)}
                         multiline={true}
                         placeholder={jobDescriptionPlaceholder}
-                        style={tailwind("h-36 leading-4")}
+                        
                       />
                     </View>
                   </View>
                 </View>
               )}
               {/* Preview Button */}
-              <View style={tailwind("px-8 py-6")}>
+              {console.log(previewMode)}
+              {
+                !previewMode &&
+                <View style={tailwind("px-8 py-6")}>
                 <Button
                   onPress={onCreateNewJob}
                   disabled={!formCompleted}
@@ -319,9 +329,12 @@ const CreateJob = ({ navigation }: Props) => {
                   title={"Create"}
                 />
               </View>
+              }
+             
             </View>
+            </KeyboardAwareScrollView>
           </ScrollView>
-        </KeyboardDismissView>
+      
       ) : (
         <Loader />
       )}
