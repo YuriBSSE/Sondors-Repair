@@ -68,6 +68,12 @@ const SignUp = ({ navigation }: Props) => {
                     email,
                     uid,
                     userType,
+                    bikes:[{
+                        "dateAdded": "Fri Jul 29 2022 20:22:32 GMT+0500 (PKT)",
+                        "id": "a5d25595-aab2-4b0f-97bb-0cb18ac12481",
+                        "image": "",
+                        "model": "sondors mxs",
+                      }],
                     createAt: Timestamp.now()
                 });
             })

@@ -17,6 +17,8 @@ import ProviderHome from "./src/navigation/Provider/ProviderHome";
 import utilities from "./tailwind.json";
 import isAuthenticatedAtom from "atoms/isAuthenticatedAtom";
 import currentUserDataAtom from "atoms/currentUserDataAtom";
+import customerDetailsAtom from "atoms/customerDetailsAtom";
+
 
 import {
   getAuth,
@@ -40,6 +42,7 @@ export default function App() {
   const [isUser, setIsUser] = useState("");
   const [isShop, setIsShope] = useState<boolean>(false);
   const [currentUserData, setCurrentUserData] = useAtom(currentUserDataAtom);
+  const [customerDetailData, setCustomerDetailData] = useAtom(customerDetailsAtom);
 
   useEffect(() => {
     setIsAuthenticatedAtom(true);
@@ -53,8 +56,10 @@ export default function App() {
         const userDocRef = doc(db, "users", user.uid);
         getDoc(userDocRef).then((currentUser) => {
           const userData = currentUser.data();
+          console.log("*********************************************************************",userData.bikes)
           setCurrentUserData(userData);
           if (userData?.userType === "owner") {
+            setCustomerDetailData({bikes:userData?.bikes})
             setIsUser("customer");
           } else {
             if ((userData?.userType === "provider", userData?.isShop)) {
