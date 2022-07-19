@@ -13,6 +13,7 @@ import { Loader } from "components/common/Loader";
 
 import Auth from "./src/screens/auth/Auth";
 import CustomerHome from "./src/navigation/Customer/CustomerHome";
+import OnBoardingScreensStacks from "navigation/Customer/OnBoardingStack";
 import ProviderHome from "./src/navigation/Provider/ProviderHome";
 import utilities from "./tailwind.json";
 import isAuthenticatedAtom from "atoms/isAuthenticatedAtom";
@@ -97,11 +98,18 @@ export default function App() {
             <OverlayProvider topInset={60}>
               <Stack.Navigator>
                 {isAuthenticated && isUser === "customer" ? (
+                  <>
+                  <Stack.Screen
+                      name="onBoarding"
+                      component={OnBoardingScreensStacks}
+                      options={{ headerShown: false }}
+                    />
                   <Stack.Screen
                     name="CustomerHome"
                     component={CustomerHome}
                     options={{ headerShown: false }}
                   />
+                  </>
                 ) : isAuthenticated && isUser === "provider" ? (
                   <Stack.Screen
                     name="ProviderHome"

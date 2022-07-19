@@ -8,12 +8,14 @@ import CustomerJobDetailsScreen from 'screens/customer/CustomerJobStack/Customer
 import HeaderLeft from 'components/HeaderLeft';
 import HeaderRight from 'components/HeaderRight';
 import ProfileScreen from './../../components/Profile/ProfileScreen'
+
 type Props = StackScreenProps<JobsStackParamList, 'MyJobs'>;
 const JobsStack = createStackNavigator<JobsStackParamList>();
 
 const JobStack = ({ navigation }: Props) => {
     return (
         <JobsStack.Navigator>
+            
             <JobsStack.Screen name="MyJobs" component={Jobs} options={{
                 headerTitle: "",
                 headerLeft: () => <HeaderLeft pStyleTxt={{fontSize:22}} isRoot title="My Jobs" />,
@@ -22,26 +24,27 @@ const JobStack = ({ navigation }: Props) => {
             }} />
              <JobsStack.Screen name="profile" component={ProfileScreen} options={{
                 headerLeft: () => null,
-                headerRight: () => <HeaderRight onPress={() => navigation.goBack()} title="Go back" />,
+                headerRight: () => null,
                 headerShown: true,
-                headerTitle: "Profile",
-                presentation: 'modal',
+                headerTitle: "",
+                presentation: 'card',
                 headerShadowVisible: false                
             }} />
             <JobsStack.Screen name="NewJob" component={NewJob} options={{
                 headerLeft: () => <HeaderLeft pStyleTxt={{fontSize:22}} title="Create a job" isModal={true} />,
-                headerRight: () => <HeaderRight pStyleText={{fontSize:18}} onPress={() => navigation.goBack()} title="Cancel" />,
+                headerRight: () => <HeaderRight pStyleText={{fontSize:18}} onPress={() => navigation.navigate('MyJobs')} title="Cancel" />,
                 headerShown: true,
                 headerTitle: "",
                 presentation: 'modal',
                 headerShadowVisible: false                
             }} />
             <JobsStack.Screen name="CustomerJobDetailsScreen" component={CustomerJobDetailsScreen} options={{
-                headerLeft: () => <HeaderLeft pStyleTxt={{fontSize:22}} onPress={() => navigation.goBack()} title="My Jobs" />,
+                headerLeft: () => <HeaderLeft pStyleTxt={{fontSize:22}} onPress={() => navigation.navigate('MyJobs')} title="My Jobs" />,
                 headerShown: true,
                 headerTitle: "",
                 headerShadowVisible: false
             }} />
+        
             <JobsStack.Screen name="JobChat" component={JobChat} options={{
                 headerLeft: () => <HeaderLeft pStyleTxt={{fontSize:22}} onPress={() => navigation.popToTop()} title="" />,
                 headerTitle: "",
