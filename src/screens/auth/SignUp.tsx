@@ -9,7 +9,7 @@ import Button from 'components/common/Button';
 import Colors from 'styles/Colors';
 import { NavigationProp } from '@react-navigation/native';
 import SondorsLogoBlack from '../../assets/images/sondors-logo-black.png'
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, setDoc, doc, Timestamp } from 'firebase/firestore';
@@ -92,7 +92,8 @@ const SignUp = ({ navigation }: Props) => {
     }
 
     return (
-        <ScrollView style={{height:1200,backgroundColor:'white'}}>
+        <ScrollView style={{backgroundColor:'white'}}>
+            <KeyboardAwareScrollView>
                     <View style={{ flex: 1, ...tailwind('bg-white') }}>
             <View style={{ ...tailwind('bg-white flex items-center px-6 pb-2 bg-white') }}>
                 <View style={{ marginTop: 55 }} >
@@ -155,6 +156,7 @@ const SignUp = ({ navigation }: Props) => {
                
             </View>
         </View>
+        </KeyboardAwareScrollView>
         </ScrollView>
     );
 }

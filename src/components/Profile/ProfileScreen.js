@@ -54,6 +54,7 @@ const ProfileScreen = ({ route, navigation }) => {
 
   console.log(profile, "SADASDASDASD");
   return (
+    <ScrollView>
     <View style={tailwind("flex flex-col px-6")}>
       <View style={tailwind("mt-4")}>
         <Text left sm tertiary style={tailwind("mt-1")}>
@@ -61,7 +62,7 @@ const ProfileScreen = ({ route, navigation }) => {
         </Text>
         <View style={tailwind("mt-2")}>
           <Text left lg style={tailwind("mt-1")}>
-            {profile?.name}
+            {profile?.username}
           </Text>
         </View>
       </View>
@@ -131,6 +132,7 @@ const ProfileScreen = ({ route, navigation }) => {
         })}
       </View>
     </View>
+    </ScrollView>
   );
 };
 

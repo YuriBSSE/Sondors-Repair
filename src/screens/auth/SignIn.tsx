@@ -19,7 +19,7 @@ import Button from "components/common/Button";
 import { NavigationProp } from "@react-navigation/native";
 import HomeImage from "../../assets/images/sondors.png";
 import SondorsLogoBlack from "../../assets/images/sondors-logo-black.png";
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 type Props = {
@@ -82,6 +82,7 @@ const SignIn = ({ navigation }: Props) => {
 
       <View style={{}}>
         <ScrollView>
+        <KeyboardAwareScrollView>
           <Image
             source={HomeImage}
             style={{ width: "100%", height: 300, resizeMode: "cover" }}
@@ -144,6 +145,7 @@ const SignIn = ({ navigation }: Props) => {
               <Text title>Forgot Password</Text>{" "}
             </Text>
           </TouchableOpacity>
+          </KeyboardAwareScrollView>
         </ScrollView>
       </View>
     </View>

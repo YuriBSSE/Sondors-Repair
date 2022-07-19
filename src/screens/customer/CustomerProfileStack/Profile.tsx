@@ -83,6 +83,7 @@ const Profile = ({ navigation }: Props) => {
       <View style={tailwind("flex flex-col w-full px-2")}>
         <View style={tailwind("mt-4")}>
           <Rating
+          disabled
             isLabel={false}
             isCount={false}
             defaultRating={currentUserData.rating}
