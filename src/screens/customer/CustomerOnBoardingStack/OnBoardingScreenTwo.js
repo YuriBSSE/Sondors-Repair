@@ -12,6 +12,8 @@ const OnBoardingScreenTwo = ({ navigation }) => {
 
 
 
+
+
   return (
     <SafeAreaView
       style={tailwind(

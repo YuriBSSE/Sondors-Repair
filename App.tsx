@@ -20,7 +20,6 @@ import isAuthenticatedAtom from "atoms/isAuthenticatedAtom";
 import currentUserDataAtom from "atoms/currentUserDataAtom";
 import customerDetailsAtom from "atoms/customerDetailsAtom";
 
-
 import {
   getAuth,
   onAuthStateChanged,
@@ -41,9 +40,11 @@ export default function App() {
   const [isAuthenticated, setIsAuthenticatedAtom] =
     useAtom(isAuthenticatedAtom);
   const [isUser, setIsUser] = useState("");
+  const [userDataa, onChangeUserData] = useState(null);
   const [isShop, setIsShope] = useState<boolean>(false);
   const [currentUserData, setCurrentUserData] = useAtom(currentUserDataAtom);
-  const [customerDetailData, setCustomerDetailData] = useAtom(customerDetailsAtom);
+  const [customerDetailData, setCustomerDetailData] =
+    useAtom(customerDetailsAtom);
 
   useEffect(() => {
     setIsAuthenticatedAtom(true);
@@ -57,10 +58,11 @@ export default function App() {
         const userDocRef = doc(db, "users", user.uid);
         getDoc(userDocRef).then((currentUser) => {
           const userData = currentUser.data();
-          console.log("*********************************************************************",userData.bikes)
+          // console.log("*********************************************************************",userData.bikes)
           setCurrentUserData(userData);
           if (userData?.userType === "owner") {
-            setCustomerDetailData({bikes:userData?.bikes})
+            setCustomerDetailData({ bikes: userData?.bikes });
+            onChangeUserData(userData);
             setIsUser("customer");
           } else {
             if ((userData?.userType === "provider", userData?.isShop)) {
@@ -104,16 +106,26 @@ export default function App() {
               <Stack.Navigator>
                 {isAuthenticated && isUser === "customer" ? (
                   <>
-                  <Stack.Screen
-                      name="onBoarding"
-                      component={OnBoardingScreensStacks}
-                      options={{ headerShown: false }}
-                    />
-                  <Stack.Screen
-                    name="CustomerHome"
-                    component={CustomerHome}
-                    options={{ headerShown: false }}
-                  />
+                    {userDataa.userProfileCompleted ? (
+                      <Stack.Screen
+                        name="CustomerHome"
+                        component={CustomerHome}
+                        options={{ headerShown: false }}
+                      />
+                    ) : (
+                      <>
+                        <Stack.Screen
+                          name="onBoarding"
+                          component={OnBoardingScreensStacks}
+                          options={{ headerShown: false }}
+                        />
+                        <Stack.Screen
+                          name="CustomerHome"
+                          component={CustomerHome}
+                          options={{ headerShown: false }}
+                        />
+                      </>
+                    )}
                   </>
                 ) : isAuthenticated && isUser === "provider" ? (
                   <Stack.Screen

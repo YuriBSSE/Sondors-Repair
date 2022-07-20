@@ -48,7 +48,7 @@ const CustomerHome = () => {
     useEffect(() => {
         const streamUserName = currentUserData.email.split('@')[0]
         const streamUserId = currentUserData?.uid
-        getLocation(streamUserId)
+        // getLocation(streamUserId)
         const setupClient = async () => {
             await streamClient.connectUser({ id: streamUserId, name: streamUserName }, streamClient.devToken(streamUserId));
         };

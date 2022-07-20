@@ -55,6 +55,7 @@ const SignUp = ({ navigation }: Props) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [userType, setUserType] = useState('owner')
+    const [loginType, setLoginType] = useState(false)
 
     const signUp = async () => {
         createUserWithEmailAndPassword(auth, email, password)
@@ -68,14 +69,11 @@ const SignUp = ({ navigation }: Props) => {
                     email,
                     uid,
                     userType,
-                    bikes:[{
-                        "dateAdded": "Fri Jul 29 2022 20:22:32 GMT+0500 (PKT)",
-                        "id": "a5d25595-aab2-4b0f-97bb-0cb18ac12481",
-                        "image": "",
-                        "model": "sondors mxs",
-                      }],
+                    userProfileCompleted: false,
+                    bikes:[],
                     createAt: Timestamp.now()
                 });
+              
             })
             .catch((error) => {
                 const errorMessage = error.message;
@@ -126,6 +124,7 @@ const SignUp = ({ navigation }: Props) => {
                     listeners={{
                         tabPress: () => {
                             setUserType('owner')
+                            
                         },
                     }}
                     name="Owner" component={() => <OwnerAccount />} />
