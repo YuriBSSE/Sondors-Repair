@@ -19,7 +19,7 @@ const JobStack = ({ navigation }: Props) => {
             <JobsStack.Screen name="MyJobs" component={Jobs} options={{
                 headerTitle: "",
                 headerLeft: () => <HeaderLeft pStyleTxt={{fontSize:22}} isRoot title="My Jobs" />,
-                headerRight: () => <HeaderRight pStyleText={{fontSize:18}} onPress={() => navigation.navigate('NewJob')} title="Create new" />,
+                headerRight: () => <HeaderRight pStyleText={{fontSize:18}} parentStyle={{width:120}} onPress={() => navigation.navigate('NewJob')} title="Create new" />,
                 headerShadowVisible: false
             }} />
              <JobsStack.Screen name="profile" component={ProfileScreen} options={{
