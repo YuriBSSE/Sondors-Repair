@@ -81,10 +81,7 @@ const NewBike = ({ navigation }: Props) => {
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
-    });
-
-    console.log(result);
-  
+    });  
 
     if (!result.cancelled) {
       const uploadUrl = await uploadImageAsync(result.uri);
@@ -111,7 +108,7 @@ const NewBike = ({ navigation }: Props) => {
     return blob;
   }
 
-  const onCreateNewJob = async () => {
+  const onCreateNewBike = async () => {
     setLoader(true)
     const timespamp = Date.now();
 
@@ -232,7 +229,7 @@ const NewBike = ({ navigation }: Props) => {
               alignItems:"center"
             }}
             disabled={loader}
-            onPress={onCreateNewJob}
+            onPress={onCreateNewBike}
           >
             {
               loader ? 

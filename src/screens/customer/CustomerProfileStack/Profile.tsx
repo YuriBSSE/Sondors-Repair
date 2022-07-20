@@ -188,17 +188,18 @@ const Profile = ({ navigation }: Props) => {
                       >
                         <TouchableOpacity
                           style={{ padding: 8 }}
-                          onPress={() =>
+                          onPress={() =>{
+                            setOpenDrpDown(null)
                             navigation.navigate("EditBike", {
                               bikeDetails: item,
                             })
-                          }
+                          }}
                         >
                           <Text>Edit</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                           style={{ padding: 8 }}
-                          onPress={() => confirmDeleteBike(item.id)}
+                          onPress={() => {confirmDeleteBike(item.id); setOpenDrpDown(null);}}
                         >
                           <Text style={{ color: "red" }}>Delete</Text>
                         </TouchableOpacity>
