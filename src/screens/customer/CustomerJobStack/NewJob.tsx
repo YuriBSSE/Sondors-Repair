@@ -112,28 +112,28 @@ const CreateJob = ({ navigation }: Props) => {
     return blob;
   }
 
-  const uploadImageOnFireStore = async () => {
-    // console.log(imageUrl, "BLOB");
-    const timespamp = Date.now();
+  // const uploadImageOnFireStore = async () => {
+  //   // console.log(imageUrl, "BLOB");
+  //   const timespamp = Date.now();
 
-    const metadata = {
-      contentType: "image/jpeg",
-    };
-    const storage = getStorage();
-    const storageRef = ref(storage, `Job-Create-Image/${timespamp}`);
+  //   const metadata = {
+  //     contentType: "image/jpeg",
+  //   };
+  //   const storage = getStorage();
+  //   const storageRef = ref(storage, `Job-Create-Image/${timespamp}`);
 
-    uploadBytes(storageRef, imageUrl, metadata).then((snapshot) => {
-    //   console.log("Uploaded a blob or file!");
-      getDownloadURL(snapshot.ref).then((downloadURL) => {
-        console.log("File available at");
+  //   uploadBytes(storageRef, imageUrl, metadata).then((snapshot) => {
+  //   //   console.log("Uploaded a blob or file!");
+  //     getDownloadURL(snapshot.ref).then((downloadURL) => {
+  //       console.log("File available at");
      
-        setImageUrlFireStore(downloadURL);
-      });
+  //       setImageUrlFireStore(downloadURL);
+  //     });
   
-    });
+  //   });
 
    
-  };
+  // };
 
   const getMyJob = async () => {
     const { currentUser } = auth;

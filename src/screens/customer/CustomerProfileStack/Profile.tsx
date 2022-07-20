@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   Alert,
+  Image,
 } from "react-native";
 import { useTailwind } from "tailwind-rn";
 import { useAtom } from "jotai";
@@ -45,7 +46,7 @@ const Profile = ({ navigation }: Props) => {
       //     initialMemo
       //   );
       //   setCustomerDetails({ ...customerDetails, bikes: newBikes });
-    //   const jobsRef = collection(db, "jobs");
+      //   const jobsRef = collection(db, "jobs");
       var jobRef = doc(db, "users", currentUserData?.uid);
       let temp = [...customerDetails?.bikes];
       temp.splice(
@@ -56,7 +57,7 @@ const Profile = ({ navigation }: Props) => {
       );
       await setDoc(
         jobRef,
-        {...currentUserData,bikes:[...temp]},
+        { ...currentUserData, bikes: [...temp] },
         { merge: true }
       );
       setCustomerDetails({ ...customerDetails, bikes: [...temp] });
@@ -77,20 +78,22 @@ const Profile = ({ navigation }: Props) => {
       ]
     );
   }
-//   const date = new TimeStamp(yourTimeStamp.seconds , yourTimeStamp.nanoseconds).toDate();
+  //   const date = new TimeStamp(yourTimeStamp.seconds , yourTimeStamp.nanoseconds).toDate();
   return (
     <SafeAreaView style={tailwind("flex bg-white items-center h-full")}>
       <View style={tailwind("flex flex-col w-full px-2")}>
         <View style={tailwind("mt-4")}>
           <Rating
-          disabled
+            disabled
             isLabel={false}
             isCount={false}
             defaultRating={currentUserData.rating}
           />
           <Text tertiary left sm style={tailwind("mt-2 px-3 ml")}>
             {/* Member since September 2022 */}
-            {`Member since ${moment(currentUserData?.createAt.toDate()).format("MMMM YYYY")}`}
+            {`Member since ${moment(currentUserData?.createAt.toDate()).format(
+              "MMMM YYYY"
+            )}`}
           </Text>
         </View>
         <View style={tailwind("mt-12 px-3")}>
@@ -98,8 +101,9 @@ const Profile = ({ navigation }: Props) => {
             Your SONDORS
           </Text>
           <FlatList
-            style={[tailwind("mb-6")]}
+            style={{height: 600}}
             keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={false}
             ListFooterComponent={<View style={{ height: 20 }} />}
             renderItem={({ item }: { item: CustomerBike }) => {
               return (
@@ -114,7 +118,7 @@ const Profile = ({ navigation }: Props) => {
                   onPress={() => console.log("OOO")}
                   disabled={true}
                 >
-                  <View
+                  {/* <View
                     style={[
                       tailwind("justify-center items-center"),
                       {
@@ -122,9 +126,16 @@ const Profile = ({ navigation }: Props) => {
                         width: "50%",
                       },
                     ]}
-                  >
-                    <Text sm>BIKE IMAGE</Text>
-                  </View>
+                  > */}
+                    {/* <Text sm>BIKE IMAGE</Text> */}
+                    <Image source={{uri:item?.image}} resizeMode='contain' style={[
+                      tailwind("justify-center items-center"),
+                      {
+                        backgroundColor: Colors.secondaryBackground,
+                        width: 180,
+                      },
+                    ]} />
+                  {/* </View> */}
                   <View
                     style={[
                       tailwind("flex-col px-3 pb-3.5 pt-5 justify-between"),
@@ -136,10 +147,9 @@ const Profile = ({ navigation }: Props) => {
                       <Text left tertiary sm>
                         Date Added
                       </Text>
-                      {console.log(item.dateAdded,"PPP")}
+                      {console.log(item.dateAdded, "PPP")}
                       <Text sm left>
-                      {moment(item?.dateAdded).format("LL")}
-                    
+                        {moment(item?.dateAdded).format("LL")}
                       </Text>
                     </View>
                   </View>
@@ -199,10 +209,16 @@ const Profile = ({ navigation }: Props) => {
               );
             }}
             data={customerDetails.bikes}
-          />
-          <Button
-            title="Add new"
-            onPress={() => navigation.navigate("NewBike")}
+            ListFooterComponent={
+              <>
+                 <View style={{ height: 20 }} />
+                <Button
+                  title="Add new"
+                  onPress={() => navigation.navigate("NewBike")}
+                />
+                <View style={{ height: 20 }} />
+              </>
+            }
           />
         </View>
       </View>

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, TouchableOpacity, View, Text } from "react-native";
+import { SafeAreaView, TouchableOpacity, View, Text, Image, ActivityIndicator } from "react-native";
 import { useTailwind } from "tailwind-rn";
 import { useAtom } from "jotai";
 import { StackScreenProps } from "@react-navigation/stack";
-
+import * as ImagePicker from "expo-image-picker";
 import customerDetailsAtom from "atoms/customerDetailsAtom";
 import KeyboardDismissView from "components/common/KeyboardDismissView";
 import Colors from "styles/Colors";
@@ -15,8 +15,10 @@ import HeaderRight from "components/HeaderRight";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import currentUserDataAtom from "atoms/currentUserDataAtom";
-import { doc, getFirestore, setDoc } from "firebase/firestore";
+import { collection, doc, getFirestore, setDoc } from "firebase/firestore";
 import uuid from "react-native-uuid";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { getAuth } from "firebase/auth";
 
 type Props = StackScreenProps<ProfileStackParamList, "NewBike">;
 
@@ -26,35 +28,27 @@ const NewBike = ({ navigation }: Props) => {
   const [updatedModel, setUpdatedModel] = useState("");
   const [updatedDateAdded, setUpdatedDateAdded] = useState("");
   const [updatedImage, setUpdatedImage] = useState("");
+  const [loader, setLoader] = useState("");
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const [bikeModels] = useAtom(bikeModelsAtom);
   const dateAndTimeValue = new Date();
   const [currentUserData, setCurrentUserData] = useAtom(currentUserDataAtom);
+  
+  const [imageUploaded, setImageUploaded] = useState(false);
+  const [image, setImage] = useState<any | null>(null);
+  const [imageUrl, setImageUrl] = useState<any | null>(null);
+  const [imageUrlFireStore, setImageUrlFireStore] = useState<any | null>(null);
   const db = getFirestore();
+  const auth = getAuth();
 
-  const updateCustomerDetails = async () => {
-    // const newBike = {
-    //     id: String(Number(customerDetails.bikes.slice(-1)[0].id) + 1),
-    //     model: updatedModel,
-    //     dateAdded: updatedDateAdded,
-    //     image: updatedImage
-    // };
-    // const newBikes = [...customerDetails.bikes, newBike];
-    // const newCustomerDetails = {
-    //     name: customerDetails.name,
-    //     password: customerDetails.password,
-    //     rating: customerDetails.rating,
-    //     bikes: newBikes
-    // };
-    // setCustomerDetails(newCustomerDetails);
-    // navigation.goBack();
+  const updateCustomerDetails = async (imgUrl) => {
+   
     const newBike = {
       id: uuid.v4(),
       model: updatedModel,
       dateAdded: updatedDateAdded.toString(),
-      image: updatedImage,
+      image: imgUrl,
     };
-    console.log({ newBike });
     if (updatedModel != "" || updatedDateAdded != "") {
       var jobRef = doc(db, "users", currentUserData?.uid);
 
@@ -67,8 +61,7 @@ const NewBike = ({ navigation }: Props) => {
         ...customerDetails,
         bikes: [...customerDetails.bikes, newBike],
       });
-      // alert("OO");
-      navigation.goBack();
+      // navigation.goBack();
     } else {
       alert("Something Wrong");
     }
@@ -82,11 +75,78 @@ const NewBike = ({ navigation }: Props) => {
     });
   }, []);
 
+  async function uploadImage() {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+  
+
+    if (!result.cancelled) {
+      const uploadUrl = await uploadImageAsync(result.uri);
+      setImageUrl(uploadUrl);
+      setImage(result.uri);
+    }
+    setImageUploaded(true);
+  }
+
+  async function uploadImageAsync(uri: string) {
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function (e) {
+        console.log(e);
+        reject(new TypeError("Network request failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", uri, true);
+      xhr.send(null);
+    });
+    return blob;
+  }
+
+  const onCreateNewJob = async () => {
+    setLoader(true)
+    const timespamp = Date.now();
+
+    const metadata = {
+      contentType: "image/jpeg",
+    };
+    const storage = getStorage();
+    const storageRef = ref(storage, `Bike-Create-Image/${timespamp}`);
+
+
+    uploadBytes(storageRef, imageUrl, metadata).then((snapshot) => {
+      const jobsRef = collection(db, "jobs");
+      getDownloadURL(snapshot.ref).then( async (downloadURL) => {
+        console.log("File available at");
+        setImageUrlFireStore(downloadURL);
+        const URL = downloadURL
+        // const jobId = uuid.v4();
+        // const { currentUser } = auth;
+        updateCustomerDetails(URL)
+        setLoader(false)
+        navigation.goBack();
+    });
+  }).catch((err)=>{
+    setLoader(false)
+  })
+  }
+  
+
+
   return (
     <SafeAreaView style={tailwind("flex bg-white items-center h-full")}>
       <KeyboardDismissView>
         <>
-          <View
+        { 
+        image == null ? <View
             style={[
               tailwind("w-full h-48 items-center justify-center"),
               { backgroundColor: Colors.secondaryBackground },
@@ -95,9 +155,15 @@ const NewBike = ({ navigation }: Props) => {
             <Text placeholder lg>
               BIKE IMAGE
             </Text>
-          </View>
+          </View> :
+          <Image source={{uri:image}} style={[
+            tailwind("w-full h-48 items-center justify-center"),
+          ]} />}
           <View style={tailwind("pt-4 px-5 w-full")}>
-            <TouchableOpacity onPress={() => setUpdatedImage("")}>
+            <TouchableOpacity 
+              // onPress={() => setUpdatedImage("")}
+              onPress={()=>{uploadImage()}}
+            >
               <Text bold hyperlink left>
                 Upload image
               </Text>
@@ -165,9 +231,16 @@ const NewBike = ({ navigation }: Props) => {
               justifyContent:"center",
               alignItems:"center"
             }}
-            onPress={updateCustomerDetails}
+            disabled={loader}
+            onPress={onCreateNewJob}
           >
-            <Text style={{color:"white"}}>Save</Text>
+            {
+              loader ? 
+              <View style={{justifyContent:'center', alignItems:'center'}}>
+              <ActivityIndicator size={20} color={'white'} />
+              </View>: <Text style={{color:"white"}}>Save</Text>
+            }
+           
           </TouchableOpacity>
         </>
       </KeyboardDismissView>
