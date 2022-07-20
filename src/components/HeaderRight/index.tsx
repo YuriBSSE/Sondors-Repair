@@ -10,10 +10,10 @@ type Props = {
     icon?: any;
 }
 
-const HeaderRight = ({ title, onPress, icon, pStyleText={} }: Props) => {
+const HeaderRight = ({ title, onPress, icon, pStyleText={},parentStyle={} }: Props) => {
     const tailwind = useTailwind()
     return (
-        <TouchableOpacity onPress={onPress} style={tailwind('pr-5')}>
+        <TouchableOpacity onPress={onPress} style={[tailwind('pr-5'),parentStyle]}>
             <Text heavy hyperlink lg style={pStyleText}>{icon} {title}</Text>
             
         </TouchableOpacity>
