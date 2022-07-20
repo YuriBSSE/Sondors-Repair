@@ -81,30 +81,30 @@ const Profile = ({ navigation }: Props) => {
   //   const date = new TimeStamp(yourTimeStamp.seconds , yourTimeStamp.nanoseconds).toDate();
   return (
     <SafeAreaView style={tailwind("flex bg-white items-center h-full")}>
-      <View style={tailwind("flex flex-col w-full px-2")}>
-        <View style={tailwind("mt-4")}>
+      <View style={tailwind("flex flex-col w-full")}>
+        <View style={{padding: 10}}>
           <Rating
             disabled
             isLabel={false}
             isCount={false}
             defaultRating={currentUserData.rating}
           />
-          <Text tertiary left sm style={tailwind("mt-2 px-3 ml")}>
+          <Text tertiary left sm style={tailwind("mt-2 px-2 ")}>
             {/* Member since September 2022 */}
             {`Member since ${moment(currentUserData?.createAt.toDate()).format(
               "MMMM YYYY"
             )}`}
           </Text>
         </View>
-        <View style={tailwind("mt-12 px-3")}>
+        <View style={[tailwind("mt-8 px-3")]}>
           <Text tertiary left bold xl>
             Your SONDORS
           </Text>
           <FlatList
-            style={{height: 600}}
+            style={{height: 600, alignSelf:'center' }}
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
-            ListFooterComponent={<View style={{ height: 20 }} />}
+            // ListFooterComponent={<View style={{ height: 80 }} />}
             renderItem={({ item }: { item: CustomerBike }) => {
               return (
                 <TouchableOpacity
@@ -113,6 +113,9 @@ const Profile = ({ navigation }: Props) => {
                     {
                       borderColor: Colors.secondaryBackground,
                       borderWidth: 1,
+                      width: '98%',
+                      height: 110,
+                      alignSelf:'center'
                     },
                   ]}
                   onPress={() => console.log("OOO")}
@@ -217,7 +220,7 @@ const Profile = ({ navigation }: Props) => {
                   title="Add new"
                   onPress={() => navigation.navigate("NewBike")}
                 />
-                <View style={{ height: 20 }} />
+                <View style={{ height: 100 }} />
               </>
             }
           />

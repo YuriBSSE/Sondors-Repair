@@ -208,7 +208,7 @@ const JobView = ({ jobDetails,userApplied = null,jobID, onPress,navigation }: Pr
                   <Text left sm tertiary style={tailwind('mt-1')}>You marked this job complete on {moment(jobDetails.createdAt).format("LL")}</Text>: null
                 }
                 <View style={{ flexDirection:'column', justifyContent:'flex-start', alignItems:'flex-start', height: 300}}>
-                <Text left xxl style={{fontWeight: 'bold', top: 2}}>{title}</Text>
+                <Text left xxl style={{fontWeight: 'bold', marginTop: 10}}>{title}</Text>
                 <View style={tailwind('mt-0')}>
                 <Text left tertiary style={tailwind('mt-2')}>Details</Text>
                 <Text left defaultColor style={tailwind('mt-0')}>{bikeModel.toUpperCase()}</Text>

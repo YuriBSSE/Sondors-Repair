@@ -161,15 +161,15 @@ const NewBike = ({ navigation }: Props) => {
               // onPress={() => setUpdatedImage("")}
               onPress={()=>{uploadImage()}}
             >
-              <Text bold hyperlink left>
-                Upload image
+              <Text bold hyperlink left style={{color: 'blue'}}>
+                Upload new image
               </Text>
             </TouchableOpacity>
             <Text left bold tertiary style={tailwind("mt-8")}>
               Model
             </Text>
             <PickerSelect
-              style={tailwind("mt-3")}
+            
               items={bikeModels}
               value={updatedModel}
               onValueChange={(text: string) => {
@@ -183,7 +183,7 @@ const NewBike = ({ navigation }: Props) => {
             </Text>
             <TouchableOpacity
               style={[
-                tailwind("mt-3"),
+             
                 {
                   // backgroundColor:"red",
                   width: "100%",
@@ -192,7 +192,7 @@ const NewBike = ({ navigation }: Props) => {
                   alignItems: "flex-start",
                   paddingLeft: 8,
                   borderWidth: 1,
-                  borderColor: "#e6e6e6",
+            
                 },
               ]}
               onPress={() => setIsDatePickerVisible(true)}
