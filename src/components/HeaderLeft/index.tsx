@@ -19,13 +19,13 @@ const HeaderLeft = ({ isModal = false, isRoot = false, title, onPress, isBack,pS
     const tailwind = useTailwind()
     return (
         isModal || isRoot ? (
-            <View style={[tailwind('flex-row justify-between px-6 items-center'),{width: 300}]}>
+            <View style={[tailwind('flex-row justify-between px-3 items-center'),{width: 270, alignItems:'center', justifyContent:'flex-start',}]}>
                 {isBack &&
                     <TouchableOpacity onPress={onPress}>
                         <AntDesign name="arrowleft" size={20} color="black" />
                     </TouchableOpacity>
                 }
-                <Text style={isBack ? tailwind('px-3') : tailwind(''),pStyleTxt,{fontSize:22}} xBold xl title>{title}</Text>
+                <Text style={isBack ? tailwind('px-3') : tailwind(''),pStyleTxt,{fontSize:22, left: 5}} xBold xl title>{title}</Text>
             </View>
         ) : (
             <TouchableOpacity style={tailwind('flex-row items-center pl-5')} onPress={onPress}>

@@ -8,7 +8,7 @@ import { RouteProp, NavigationProp } from '@react-navigation/native';
 import { useTailwind } from 'tailwind-rn';
 import HeaderLeft from 'components/HeaderLeft';
 import HeaderRight from 'components/HeaderRight';
-
+import currentUserDataAtom from 'atoms/currentUserDataAtom';
 import streamClientAtom from 'atoms/streamClientAtom';
 import Colors from 'styles/Colors';
 import { collection, doc, getDocs, getFirestore, onSnapshot, query, setDoc, updateDoc, where } from 'firebase/firestore';
@@ -80,7 +80,7 @@ const JobChat = ({ route, navigation }: Props) => {
     const tailwind = useTailwind();
     const [streamClient] = useAtom(streamClientAtom);
     const [channel, setChannel] = useState<ChannelType | false>();
-    // const [isGettingData, setI sShowBtns] = useState(true)
+    const [userData, onChangeuserData] = useAtom(currentUserDataAtom)
     const [isState, setIsState] = useState(false)
     const [job, setJob] = useState({})
     var unsubscribe;
@@ -97,12 +97,12 @@ const JobChat = ({ route, navigation }: Props) => {
     useEffect(() => {
         navigation.setOptions({
             headerLeft: () => <HeaderLeft isBack isRoot onPress={() => navigation.goBack()} title={streamClient?.user?.name || "User"} />,
-            headerRight: () => <HeaderRight title={'View Job'} onPress={()=>{
-                job.hasOwnProperty("jobDetails") ? navigation.navigate('CustomerJobDetailsScreen', { 
+            headerRight: () =>  { return userData?.userType != 'provider' && <HeaderRight title={'View Job'} onPress={()=>{
+                job.hasOwnProperty("jobDetails") && navigation.navigate('CustomerJobDetailsScreen', { 
                     jobDetails:job?.jobDetails,
                     userApplied:job?.data[0],
-                    jobID:job?.id }) : alert("Loading")
-            }} />
+                    jobID:job?.id }) 
+            }} />}
             ,
         });
     }, [job]);
