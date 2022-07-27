@@ -12,7 +12,7 @@ type Props = {
 }
 
 const ProviderSearchListItem = ({ provider, onPress }: Props) => {
-    const { name, address, rating, distance, services } = provider;
+    const { name, address, rating, distance, services,  } = provider;
     const tailwind = useTailwind();
     return (
         <TouchableOpacity onPress={onPress}>
@@ -27,6 +27,9 @@ const ProviderSearchListItem = ({ provider, onPress }: Props) => {
                 </View>
                 <View style={tailwind('mt-1')}>
                     <Text tertiary left>{address.street1}</Text>
+                </View>
+                <View style={tailwind('mt-1')}>
+                    <Text tertiary left>{address.street2}</Text>
                 </View>
                 <View style={[tailwind('mt-2'), {display: 'flex', flexWrap: 'wrap', flexDirection: 'row'}]}>
                     {services.map((service: string,i) => {
