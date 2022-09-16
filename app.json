@@ -26,7 +26,7 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "com.sondors.sondorsrepair",
+      "bundleIdentifier": "com.sondors.sondorsrepair105",
       "supportsTablet": true
     },
     "android": {
