@@ -1,4 +1,5 @@
 type JobDetails = {
+    jobStatus: number;
     uid: string | undefined | null
     id: string | undefined
     title: string;
@@ -16,7 +17,7 @@ type ChatRequest = {
     subtitle: string;
     createAt: string;
 };
-  
+
 type Job = {
     jobId: string,
     uuid: string,
