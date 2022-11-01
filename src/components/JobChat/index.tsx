@@ -84,14 +84,22 @@ const JobChat = ({ route, navigation }: Props) => {
     const [isState, setIsState] = useState(false)
     const [job, setJob] = useState({})
     var unsubscribe;
+
+    // console.log(route?.params?.externalId, "====================================ahsan===============================================")
+
+    const getChannels = async () => {
+        const channels = await streamClient.queryChannels({ id: route?.params?.externalId  }, [], { watch: false });
+        console.log(channels, "===================channels======================");
+        if(channels?.length > 0){
+            setChannel(channels?.shift() || false);
+        }
+        // setChannel(channels.shift() || false);
+    };
     useEffect(() => {
       
-        const getChannels = async () => {
-            const channels = await streamClient.queryChannels({ id: route.params.externalId  }, [], { watch: false });
-        
-            setChannel(channels.shift() || false);
-        };
-        getChannels().catch(console.log)
+      
+        getChannels().catch((err)=> console.log(err, "=========err==========="))
+        // .catch(console.log)
     }, []);
 
     useEffect(() => {

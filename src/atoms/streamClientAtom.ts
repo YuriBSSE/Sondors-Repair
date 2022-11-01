@@ -5,6 +5,7 @@ import Constants from 'expo-constants';
 const { streamChatApiKey } = Constants.manifest!.extra!;
 
 const streamClient = StreamChat.getInstance(streamChatApiKey);
+console.log(streamChatApiKey, "streamClient=================================================")
 
 const streamClientAtom = atom(streamClient);
 
