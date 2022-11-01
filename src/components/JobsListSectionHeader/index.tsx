@@ -98,6 +98,9 @@ const JobsListSectionHeader = ({
     setLoading(true);
     getJobs().then(() => {});
   }, [jd]);
+  if (jd.jobStatus != 0 || data[0]?.responseOnJob == 'rejected') {
+    return null
+  }
 
   // console.log(data[0]?.jobResponseType, "TYPE");
   return (
