@@ -27,7 +27,8 @@
     ],
     "ios": {
       "bundleIdentifier": "com.sondors.sondorsrepair105",
-      "supportsTablet": true
+      "supportsTablet": true,
+      "buildNumber": "5"
     },
     "android": {
       "adaptiveIcon": {
