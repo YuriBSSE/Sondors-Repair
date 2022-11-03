@@ -31,7 +31,7 @@ const array = [
     date: new Date(),
     title: "SONDORS X",
     Value: false,
-    imageAddress: "https://sondors.com/wp-content/uploads/X-White.png",
+    imageAddress: "https://firebasestorage.googleapis.com/v0/b/expo-9eeab.appspot.com/o/Bike-Create-Image%2Fbike12.png?alt=media&token=e91c6218-027c-438a-99ab-915d4fd8a028",
   },
   {
     id: 2,
@@ -39,7 +39,7 @@ const array = [
     date: new Date(),
     title: "SONDORS XS",
     Value: false,
-    imageAddress: "https://sondors.com/wp-content/uploads/XS-Torch.png",
+    imageAddress: "https://firebasestorage.googleapis.com/v0/b/expo-9eeab.appspot.com/o/Bike-Create-Image%2Fbike12.png?alt=media&token=e91c6218-027c-438a-99ab-915d4fd8a028",
   },
   {
     id: 3,
@@ -47,7 +47,7 @@ const array = [
     date: new Date(),
     title: "SONDORS Fold X",
     Value: false,
-    imageAddress: "https://sondors.com/wp-content/uploads/Fold-X-Silver.png",
+    imageAddress: "https://firebasestorage.googleapis.com/v0/b/expo-9eeab.appspot.com/o/Bike-Create-Image%2Fbike2.png?alt=media&token=52d1d321-fe8f-4ea8-be31-6ea1cbed5e00",
   },
   {
     id: 4,
@@ -55,7 +55,7 @@ const array = [
     date: new Date(),
     title: "SONDORS Fold XS",
     Value: false,
-    imageAddress: "https://sondors.com/wp-content/uploads/Fold-XS-Torch.png",
+    imageAddress: "https://firebasestorage.googleapis.com/v0/b/expo-9eeab.appspot.com/o/Bike-Create-Image%2Fbike8.png?alt=media&token=fd80d5f0-4214-4c91-84da-45c4c323ce73",
   },
   {
     id: 5,
@@ -63,7 +63,7 @@ const array = [
     date: new Date(),
     title: "SONDORS MXS",
     Value: false,
-    imageAddress: "https://sondors.com/wp-content/uploads/MXS-Black.png",
+    imageAddress: "https://firebasestorage.googleapis.com/v0/b/expo-9eeab.appspot.com/o/Bike-Create-Image%2Fbike3.png?alt=media&token=d90c56ad-2ee1-4af4-8d64-b6ba76e5ebf2",
   },
   {
     id: 6,
@@ -71,7 +71,7 @@ const array = [
     date: new Date(),
     title: "SONDORS Smart Step",
     Value: false,
-    imageAddress: "https://sondors.com/wp-content/uploads/Smart-Step-Black.png",
+    imageAddress: "https://firebasestorage.googleapis.com/v0/b/expo-9eeab.appspot.com/o/Bike-Create-Image%2Fbike5.png?alt=media&token=d1b32421-1421-450d-b96a-9460605f514e",
   },
   {
     id: 7,
@@ -79,7 +79,7 @@ const array = [
     date: new Date(),
     title: "SONDORS LX",
     Value: false,
-    imageAddress: "https://sondors.com/wp-content/uploads/LX-Black.png",
+    imageAddress: "https://firebasestorage.googleapis.com/v0/b/expo-9eeab.appspot.com/o/Bike-Create-Image%2Fbike10.png?alt=media&token=5c5d21a6-d117-4935-89f4-df42b8fe1676",
   },
   {
     id: 8,
@@ -88,7 +88,7 @@ const array = [
     title: "SONDORS Rockstar",
     Value: false,
     imageAddress:
-      "https://sondors.com/wp-content/uploads/Rockstar-Matte-Black.png",
+      "https://firebasestorage.googleapis.com/v0/b/expo-9eeab.appspot.com/o/Bike-Create-Image%2Fbike1.png?alt=media&token=a6867f93-1152-4430-98d2-319a6ca6de51",
   },
   {
     id: 9,
@@ -96,7 +96,7 @@ const array = [
     date: new Date(),
     title: "SONDORS MadMods Retro",
     Value: false,
-    imageAddress: "https://sondors.com/wp-content/uploads/Retro.png",
+    imageAddress: "https://firebasestorage.googleapis.com/v0/b/expo-9eeab.appspot.com/o/Bike-Create-Image%2Fbike4.png?alt=media&token=eed82da8-342e-44c3-9643-91559c669a92",
   },
   {
     id: 10,
@@ -104,7 +104,7 @@ const array = [
     date: new Date(),
     title: "SONDORS MadMods Scrambler",
     Value: false,
-    imageAddress: "https://sondors.com/wp-content/uploads/Scrambler.png",
+    imageAddress: "https://firebasestorage.googleapis.com/v0/b/expo-9eeab.appspot.com/o/Bike-Create-Image%2Fbike11.png?alt=media&token=96d2b495-806e-49e5-a87a-f516596a92a5",
   },
   {
     id: 11,
@@ -112,7 +112,7 @@ const array = [
     date: new Date(),
     title: "SONDORS MadMods Cafe",
     Value: false,
-    imageAddress: "https://sondors.com/wp-content/uploads/Cafe.png",
+    imageAddress: "https://firebasestorage.googleapis.com/v0/b/expo-9eeab.appspot.com/o/Bike-Create-Image%2Fbike6.png?alt=media&token=76c8b9e2-2567-4ae1-9e9b-b118de50b3c7",
   },
   {
     id: 12,
@@ -121,7 +121,7 @@ const array = [
     title: "SONDORS Cruiser",
     Value: false,
     imageAddress:
-      "https://sondors.com/wp-content/uploads/Cruiser-Matte-Black.png",
+      "https://firebasestorage.googleapis.com/v0/b/expo-9eeab.appspot.com/o/Bike-Create-Image%2Fbike9.png?alt=media&token=657c61f2-8df0-4c24-8179-3dd8c3c6ebb6",
   },
 ];
 

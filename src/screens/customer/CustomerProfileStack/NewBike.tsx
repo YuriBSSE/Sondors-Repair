@@ -49,7 +49,7 @@ const NewBike = ({ navigation }: Props) => {
       dateAdded: updatedDateAdded.toString(),
       image: imgUrl,
     };
-    if (updatedModel != "" || updatedDateAdded != "") {
+    if (updatedModel != "" && updatedDateAdded != "" && imgUrl !== null) {
       var jobRef = doc(db, "users", currentUserData?.uid);
 
       await setDoc(
@@ -122,12 +122,12 @@ const NewBike = ({ navigation }: Props) => {
     uploadBytes(storageRef, imageUrl, metadata).then((snapshot) => {
       const jobsRef = collection(db, "jobs");
       getDownloadURL(snapshot.ref).then( async (downloadURL) => {
-        console.log("File available at");
-        setImageUrlFireStore(downloadURL);
+        console.log("File available at",imageUrl);
+        imageUrl !== null && setImageUrlFireStore(downloadURL);
         const URL = downloadURL
         // const jobId = uuid.v4();
         // const { currentUser } = auth;
-        updateCustomerDetails(URL)
+        imageUrl !== null ? updateCustomerDetails(URL) : updateCustomerDetails(null)
         setLoader(false)
         navigation.goBack();
     });

@@ -136,7 +136,7 @@ const ChatListItem = ({
         const newObj = users.filter((item) => {
           return item.uid === data.userApplied.uidP;
         });
-        console.log(newObj, "+_+");
+        // console.log(newObj, "+_+");
 
         await setDoc(
           jobRefUser,
@@ -174,13 +174,13 @@ const ChatListItem = ({
       if(newObj.length > 0 ){checkArray = newObj[0]?.data.filter((it: any, i: any)=>{
           return it.uidP === currentUserData.uid
       })}
-      // console.log(checkArray, "=====")
+      // console.log(checkArray, "==ahsan===")
       if(checkArray.length > 0){
           onChangeDataaaa(checkArray) 
       }
 
   }).catch((e)=>{
-      console.log(e,"eeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+      console.log(e,"error")
   })
   }
 
@@ -192,19 +192,30 @@ const ChatListItem = ({
         const data = item.data();
         return data;
       });
-      const newObj = users.filter((item) => {
-        return item.uid === data.userApplied.uidP;
-      });
+      let newObj
+      if(data?.userApplied?.uidP){
+         newObj = users.filter((item) => {
+          // console.log(thatId, "==========ahsasdasdasdasdasdan===============")
+          return item.uid === data.userApplied.uidP;
+        });
+      }else{
+
+         newObj = users.filter((item) => {
+          // console.log(thatId, "==========ahsasdasdasdasdasdan===============")
+          return item.uid === thatId;
+        });
+      }
+   
       // console.log(newObj[0], "+_+");
       onChangeProfileData(newObj[0])
     
     })
     .catch((e) => {
-      console.log(e, "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+      console.log(e, "eeeeeeeeeeeaaaeeeeeeeeeeeeeeeeeee");
     });
   },[])
 
-console.log(dataaaa[0] , "DATA")
+// console.log(dataaaa[0] , "DATA")
   return (
     <>
       <View style={[tailwind("px-5  pb-2 mt-1"), {borderBottomColor:"#e6e6e6",borderBottomWidth:1}]}>
@@ -224,6 +235,7 @@ console.log(dataaaa[0] , "DATA")
                 {/* <Text sm tertiary>
                   {moment(createAt).fromNow()}
                 </Text> */}
+                <Text>Go to chat</Text>
               </View>
               <Text sm left tertiary style={tailwind("mt-1")}>
                 {subtitle}
@@ -238,18 +250,21 @@ console.log(dataaaa[0] , "DATA")
               // }
             }}
           >
-            <View style={tailwind("flex-row justify-between mt-1")}>
+            <View style={[tailwind("flex-row justify-between mt-1")]}>
               <Text sm left heavy>
                 {/* {title} */}
               {data?.userApplied?.hasOwnProperty("userName") ? data?.userApplied?.userName : null}
               </Text>
-              <Text sm tertiary>
-                {moment(createAt).fromNow()}
-              </Text>
+              <Text>Go to chat</Text>
             </View>
-            <Text sm left tertiary style={tailwind("mt-1")}>
-              {title}
-            </Text>
+            <View style={{flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
+              <Text sm left tertiary style={tailwind("mt-1")}>
+                {title}
+              </Text>
+              <Text sm tertiary>
+                  {moment(createAt).fromNow()}
+                </Text>
+            </View>
           </TouchableOpacity>
         )}
         {currentUserData.userType !== "provider" &&

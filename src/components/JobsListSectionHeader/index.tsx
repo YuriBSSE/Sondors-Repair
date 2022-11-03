@@ -10,7 +10,7 @@ import Colors from "styles/Colors";
 import { FontAwesome } from "@expo/vector-icons";
 import moment from "moment";
 import currentUserDataAtom from "atoms/currentUserDataAtom";
-import { AntDesign } from '@expo/vector-icons'; 
+import { AntDesign } from '@expo/vector-icons';
 
 const statusStyle = (value: string) => {
   switch (capitalizeFirstLetter(value)) {
@@ -57,6 +57,10 @@ const JobsListSectionHeader = ({
   status: string;
   onPress: (event: GestureResponderEvent) => void;
 }) => {
+
+  console.log(title, "title");
+  console.log(status, "status");
+  console.log(jd, "jd");
   const tailwind = useTailwind();
 
   const db = getFirestore();
@@ -76,15 +80,19 @@ const JobsListSectionHeader = ({
         const newObj = jobsList.filter((item) => {
           return item.id === jd.id;
         });
+        // console.log(newObj.length, "====================================================================================================================")
         let checkArray = [];
         if (newObj.length > 0) {
           checkArray = newObj[0]?.data.filter((it: any, i: any) => {
             return it.uidP === currentUserData.uid;
           });
         }
-        // console.log(checkArray, "=====")
+
+        // alert(checkArray.length)
         if (checkArray.length > 0) {
           onChangeData(checkArray);
+        } else {
+          onChangeData([])
         }
 
         setLoading(false);
@@ -96,19 +104,21 @@ const JobsListSectionHeader = ({
 
   useEffect(() => {
     setLoading(true);
-    getJobs().then(() => {});
+    getJobs().then(() => { });
   }, [jd]);
-  if (jd.jobStatus != 0 || data[0]?.responseOnJob == 'rejected') {
-    return null
-  }
+
+  // if (jd.jobStatus != 0 || data[0]?.responseOnJob == 'rejected') {
+  //   return null
+  // }
 
   // console.log(data[0]?.jobResponseType, "TYPE");
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={{ borderTopWidth: 1, borderColor: "#EDEDF2",
-      backgroundColor:currentUserData.userType !== "provider" ? "#E6E6E6" : "#ffffff"
-     }}
+      style={{
+        borderTopWidth: 1, borderColor: "#EDEDF2",
+        backgroundColor: currentUserData.userType !== "provider" ? "#E6E6E6" : "#ffffff"
+      }}
     >
       <View
         style={[
@@ -116,13 +126,17 @@ const JobsListSectionHeader = ({
         ]}
       >
         <>
-          <Text style={{ color: Colors.dark, fontSize:17 }} bold lg>
-            {title}
-          </Text>
-          {currentUserData.userType !== "provider" && <View style={{flexDirection:"row",alignItems:"center",justifyContent:"center"}}>
-            <Text style={{ color: jd?.jobStatus == 0 ? Colors.primary 
-              : jd?.jobStatus == 1 ? "green" : Colors.dark
-              , fontSize:14,marginRight:5 }} >
+          <View style={{ width: "65%" }}>
+            <Text style={{ color: Colors.dark, fontSize: 17, textAlign: 'left' }} bold lg>
+              {title}
+            </Text>
+          </View>
+          {currentUserData.userType !== "provider" && <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+            <Text style={{
+              color: jd?.jobStatus == 0 ? Colors.primary
+                : jd?.jobStatus == 1 ? "green" : Colors.dark
+              , fontSize: 14, marginRight: 0
+            }} >
               {jd?.jobStatus == 0 ? "Reviewing Offers" : jd?.jobStatus == 1 ? "In Progress" : "Completed"}
             </Text>
             <AntDesign name="right" size={13} color="black" />
@@ -131,13 +145,13 @@ const JobsListSectionHeader = ({
             <View
               style={{
                 justifyContent: "flex-end",
-                width: 180,
+                // width: 180,
                 flexDirection: "row",
                 alignItems: "center",
               }}
             >
               {data[0]?.jobResponseType.toLowerCase() == "active" &&
-              data.length > 0 ? (
+                data.length > 0 ? (
                 <>
                   <View
                     style={{
@@ -188,10 +202,10 @@ const JobsListSectionHeader = ({
                   >
                     <Text
                       bold
-                      
+
                       style={[
                         statusStyle("Accepted"),
-                       
+
                         tailwind("px-2 rounded"),
                       ]}
                     >
@@ -219,13 +233,13 @@ const JobsListSectionHeader = ({
                     justifyContent: "space-around",
                   }}
                 >
-                    {/* {console.log(jd.jobStatus , "jd.jobStatus jd.jobStatus jd.jobStatus ")} */}
+                  {/* {console.log(jd.jobStatus , "jd.jobStatus jd.jobStatus jd.jobStatus ")} */}
                   <Text
                     bold
-                  
+
                     style={[
                       statusStyle("Completed"),
-                     
+
                       tailwind("px-2 rounded"),
                     ]}
                   >
@@ -233,7 +247,7 @@ const JobsListSectionHeader = ({
                   </Text>
                   <View style={tailwind("flex-row")}>
                     <Text style={{ marginRight: 12 }} sm right tertiary>
-                    {moment(jd.createdAt).format("LT")}
+                      {moment(jd.createdAt).format("LT")}
                     </Text>
                     {/* <FontAwesome
                       name="clock-o"
@@ -253,7 +267,7 @@ const JobsListSectionHeader = ({
                 >
                   <Text
                     bold
-                   
+
                     style={[
                       statusStyle(status),
                       {
@@ -268,7 +282,7 @@ const JobsListSectionHeader = ({
                   </Text>
                   <View style={tailwind("flex-row")}>
                     <Text style={{ marginRight: 12 }} sm right tertiary>
-                    {moment(jd.createdAt).format("LT")}
+                      {moment(jd.createdAt).format("LT")}
                     </Text>
                     {/* <FontAwesome
                       name="clock-o"
@@ -277,7 +291,7 @@ const JobsListSectionHeader = ({
                     /> */}
                   </View>
                 </View>
-              ) :data[0]?.responseOnJob == 'rejected' ? (
+              ) : data[0]?.responseOnJob == 'rejected' ? (
                 <View
                   style={{
                     flexDirection: "column",
@@ -288,7 +302,7 @@ const JobsListSectionHeader = ({
                 >
                   <Text
                     bold
-                   
+
                     style={[
                       statusStyle(status),
                       {
@@ -303,7 +317,7 @@ const JobsListSectionHeader = ({
                   </Text>
                   <View style={tailwind("flex-row")}>
                     <Text style={{ marginRight: 12 }} sm right tertiary>
-                    {moment(jd.createdAt).format("LT")}
+                      {moment(jd.createdAt).format("LT")}
                     </Text>
                     {/* <FontAwesome
                       name="clock-o"
@@ -312,7 +326,7 @@ const JobsListSectionHeader = ({
                     /> */}
                   </View>
                 </View>
-              ): (
+              ) : (
                 <View
                   style={{
                     flexDirection: "column",
@@ -323,10 +337,10 @@ const JobsListSectionHeader = ({
                 >
                   <Text
                     bold
-                    
+
                     style={[
                       statusStyle("Lead"),
-                     
+
                       tailwind("px-2 rounded"),
                     ]}
                   >

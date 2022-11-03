@@ -87,12 +87,17 @@ const ProviderJobsScreen = ({ navigation }: Props) => {
   const filterFunc = () => {
     if (value !== "All") {
       const x = dataa.filter((item, index) => {
+        console.log(item?.data[0]?.jobResponseType ,"==", value.toLowerCase())
         return item?.data[0]?.jobResponseType == value.toLowerCase();
       });
-
+      // console.log(x, "==========================================================sadasdasdas=d=========", dataa.le)
       onChangeFlatlistData([...x]);
     } else {
-      onChangeFlatlistData([...dataa]);
+      const y = dataa.filter((item, index) => {
+        console.log(item?.data[0]?.jobResponseType ,"==", value.toLowerCase())
+        return item?.data[0]?.jobResponseType == "applied" || item?.data[0]?.jobResponseType == "accepted" || item?.data[0]?.jobResponseType == "completed"
+      });
+      onChangeFlatlistData([...y]);
     }
   };
 
@@ -114,6 +119,7 @@ const ProviderJobsScreen = ({ navigation }: Props) => {
           const data = item;
           data.jobDetails.id = item.id;
           // console.log(data);
+          // console.log(currentUser, "currentUser")
           if (data.data.length > 0) {
             const userIn = data.data.filter((o: any) => {
               if (o.uidP === currentUser.uid) {
@@ -183,7 +189,8 @@ const ProviderJobsScreen = ({ navigation }: Props) => {
             ListFooterComponent={() => <ViewOlderJob />}
             renderSectionHeader={({
               section: { title, status, jobDetails },
-            }) => (
+            }) => 
+            (
               <JobsListSectionHeader
                 title={title}
                 status={status}
@@ -192,7 +199,7 @@ const ProviderJobsScreen = ({ navigation }: Props) => {
                   navigation.navigate("ProviderJobDetailsScreen", {
                     jobDetails,
                     headerLeftTitle: "Job Details",
-                    headerRightTitle: "Go to chat",
+                    headerRightTitle: "",
                     headerRightOnPress: jobDetails?.streamChatId
                       ? () =>
                           navigation.navigate("JobChat", {

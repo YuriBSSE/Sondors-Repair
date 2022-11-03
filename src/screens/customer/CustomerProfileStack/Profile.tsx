@@ -131,6 +131,7 @@ const Profile = ({ navigation }: Props) => {
                     ]}
                   > */}
                     {/* <Text sm>BIKE IMAGE</Text> */}
+                    {console.log(item?.image, "====================IMAGE=====================")}
                     <Image source={{uri:item?.image}} resizeMode='contain' style={[
                       tailwind("justify-center items-center"),
                       {
