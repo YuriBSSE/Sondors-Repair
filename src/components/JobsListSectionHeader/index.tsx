@@ -58,9 +58,9 @@ const JobsListSectionHeader = ({
   onPress: (event: GestureResponderEvent) => void;
 }) => {
 
-  console.log(title, "title");
-  console.log(status, "status");
-  console.log(jd, "jd");
+  // console.log(title, "title");
+  // console.log(status, "status");
+  // console.log(jd, "jd");
   const tailwind = useTailwind();
 
   const db = getFirestore();
@@ -178,7 +178,8 @@ const JobsListSectionHeader = ({
                     </Text>
                     <View style={tailwind("flex-row")}>
                       <Text style={{ marginRight: 12 }} sm right tertiary>
-                        {moment(jd.createdAt).calendar()}
+                        {/* {moment(jd.createdAt).calendar()} */}
+                        {moment(jd.createdAt).fromNow()}
                       </Text>
                       <FontAwesome
                         name="clock-o"
@@ -214,7 +215,8 @@ const JobsListSectionHeader = ({
                     <View style={tailwind("flex-row")}>
                       <Text style={{ marginRight: 12 }} sm right tertiary>
                         {/* {moment(jd.createdAt).calendar()} */}
-                        {moment(jd.createdAt).format("LT")}
+                        {/* {moment(jd.createdAt).format("LT")} */}
+                        {moment(jd.createdAt).fromNow()}
                       </Text>
                       {/* <FontAwesome
                         name="clock-o"
@@ -247,7 +249,8 @@ const JobsListSectionHeader = ({
                   </Text>
                   <View style={tailwind("flex-row")}>
                     <Text style={{ marginRight: 12 }} sm right tertiary>
-                      {moment(jd.createdAt).format("LT")}
+                      {/* {moment(jd.createdAt).format("LT")} */}
+                      {moment(jd.createdAt).fromNow()}
                     </Text>
                     {/* <FontAwesome
                       name="clock-o"
@@ -282,7 +285,8 @@ const JobsListSectionHeader = ({
                   </Text>
                   <View style={tailwind("flex-row")}>
                     <Text style={{ marginRight: 12 }} sm right tertiary>
-                      {moment(jd.createdAt).format("LT")}
+                      {/* {moment(jd.createdAt).format("LT")} */}
+                      {moment(jd.createdAt).fromNow()}
                     </Text>
                     {/* <FontAwesome
                       name="clock-o"
@@ -317,7 +321,8 @@ const JobsListSectionHeader = ({
                   </Text>
                   <View style={tailwind("flex-row")}>
                     <Text style={{ marginRight: 12 }} sm right tertiary>
-                      {moment(jd.createdAt).format("LT")}
+                      {/* {moment(jd.createdAt).format("LT")} */}
+                      {moment(jd.createdAt).fromNow()}
                     </Text>
                     {/* <FontAwesome
                       name="clock-o"
@@ -349,7 +354,8 @@ const JobsListSectionHeader = ({
                   <View style={tailwind("flex-row")}>
                     <Text style={{ marginRight: 12 }} sm right tertiary>
                       {/* {moment(jd.createdAt).calendar()} */}
-                      {moment(jd.createdAt).format("LT")}
+                      {/* {moment(jd.createdAt).format("LT")} */}
+                      {moment(jd.createdAt).fromNow()}
                     </Text>
                     {/* <FontAwesome
                       name="clock-o"

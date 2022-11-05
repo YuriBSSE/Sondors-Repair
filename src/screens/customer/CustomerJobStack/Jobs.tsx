@@ -40,7 +40,17 @@ const Jobs = ({ navigation }: Props) => {
             return dataJobsList
         }).then((dataJobsList: any) => {
             // console.log({dataJobsList},"========================>>>>>>>>>>>>>>>>")
-            setJobs(dataJobsList)
+            const j = dataJobsList.sort(function (
+                a: { date: string | number | Date },
+                b: { date: string | number | Date }
+              ) {
+                return (
+                  new Date(b.jobDetails.createdAt) - new Date(a.jobDetails.createdAt)
+                );
+              });
+            setJobs(_.compact(j))
+            //   onChangeDataa(_.compact(j));
+            // setJobs(dataJobsList)
             setLoading(false)
         }).catch((error) => {
             const errorMessage = error.message;

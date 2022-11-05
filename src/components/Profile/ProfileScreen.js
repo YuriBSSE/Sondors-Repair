@@ -29,7 +29,7 @@ import HeaderLeft from "components/HeaderLeft";
 import HeaderRight from "components/HeaderRight";
 
 const ProfileScreen = ({ route, navigation }) => {
-  console.log(route.params.profileData, "profileData");
+  // console.log(route.params.profileData, "profileData");
   const profile = route.params.profileData;
   const tailwind = useTailwind();
 
@@ -52,7 +52,7 @@ const ProfileScreen = ({ route, navigation }) => {
     });
   }, []);
 
-  console.log(profile, "SADASDASDASD");
+  // console.log(profile, "SADASDASDASD");
   return (
     <ScrollView>
     <View style={tailwind("flex flex-col px-6")}>

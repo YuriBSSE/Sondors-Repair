@@ -89,7 +89,7 @@ const JobChat = ({ route, navigation }: Props) => {
 
     const getChannels = async () => {
         const channels = await streamClient.queryChannels({ id: route?.params?.externalId  }, [], { watch: false });
-        console.log(channels, "===================channels======================");
+        // console.log(channels, "===================channels======================");
         if(channels?.length > 0){
             setChannel(channels?.shift() || false);
         }

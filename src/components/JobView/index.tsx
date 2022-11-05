@@ -164,7 +164,7 @@ const JobView = ({ jobDetails, userApplied = null, jobID, onPress, navigation }:
   if (loading) {
     return <Loader />
   }
-  console.log(currentUserData.userType, "datadatadatadatadata")
+  // console.log(currentUserData.userType, "datadatadatadatadata")
   return (
     <>
       <ScrollView>
