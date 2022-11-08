@@ -163,27 +163,41 @@ const Providers = ({ navigation }: Props) => {
   const searchFilterFunction = (
     text: React.SetStateAction<string>,
     zipCode: string,
-    providerRating: React.SetStateAction<number | null | undefined>
+    providerRating: React.SetStateAction<number | null | undefined>,
+    bikeService: string
   ) => {
-    // if()
-    // console.log(providerRating, "providerRating");
-    // if (providerRating) {
-    //   const newData = mainData.find((x) => x.rating === providerRating);
-    //   console.log(providerRating, "providerRating",  newData, "RATING");
-    //     if (newData) {
-    //         setProviders(newData);
-    //         setProviderRating(providerRating);
-    //         setShowProviderSearchFilters(false);
-    //     } else {
-    //         setProviders(newData);
-    //         setProviderRating(providerRating);
-    //         setShowProviderSearchFilters(false);
-    //     }
- 
-    //   //   setProviders(newData);
-    //   //   setProviderRating(providerRating)
-    // } else
-     if (text && zipCode) {
+    if (bikeService) {
+      const newData = mainData.filter((item) => {
+        // console.log(
+        //   item.services,
+        //   "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+        //   bikeService,
+        //   "==",
+        //   item.services.includes(bikeService)
+        // );
+        if (item.services.includes(bikeService)) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+      // console.log(newData, "-------------------");
+      setProviders(newData);
+      // // setProviderRating(providerRating);
+      setShowProviderSearchFilters(false);
+    } else if (providerRating) {
+      const newData = mainData.filter((x) => x.rating === providerRating);
+      // console.log(providerRating, "providerRating", newData, "RATING");
+      // console.log(newData, "==============================++++++++++++++++++");
+      // if (newData) {
+      //   setProviders(newData);
+      //   setProviderRating(providerRating);
+      //   setShowProviderSearchFilters(false);
+      // } else {
+      setProviders(newData);
+      setProviderRating(providerRating);
+      setShowProviderSearchFilters(false);
+    } else if (text && zipCode) {
       const newData = mainData.filter(function (item) {
         // Applying filter for the inserted text in search bar
         const itemData =
@@ -232,8 +246,13 @@ const Providers = ({ navigation }: Props) => {
   };
 
   const filteredProviders = async () => {
-    if (providerName.length > 0 || zipCode.length > 0 || providerRating) {
-      searchFilterFunction(providerName, zipCode, providerRating);
+    if (
+      providerName.length > 0 ||
+      zipCode.length > 0 ||
+      providerRating ||
+      bikeService.length > 0
+    ) {
+      searchFilterFunction(providerName, zipCode, providerRating, bikeService);
     }
 
     // const usersRef = collection(db, "users")
@@ -283,9 +302,12 @@ const Providers = ({ navigation }: Props) => {
         <>
           {showProviderSearchFilters && (
             <View
-              style={tailwind(
-                "px-5 py-2 mt-1 flex-col w-full border border-gray-200"
-              )}
+              style={[
+                tailwind(
+                  "px-5 py-2 mt-1 flex-col w-full border border-gray-200"
+                ),
+                {  zIndex: 9999, top: 0 },
+              ]}
             >
               <TextInput
                 placeholder="Search by name..."
@@ -342,7 +364,7 @@ const Providers = ({ navigation }: Props) => {
             </View>
           )}
           {!loading ? (
-            providers.length > 0 ? (
+            // providers.length > 0 ? (
               <FlatList
                 style={tailwind("w-full")}
                 data={providers}
@@ -362,10 +384,22 @@ const Providers = ({ navigation }: Props) => {
                   <View style={tailwind("w-full bg-gray-200 h-px")} />
                 )}
                 onScrollBeginDrag={() => setShowProviderSearchFilters(false)}
+                ListEmptyComponent={() => (
+                  <View style={{marginTop:!showProviderSearchFilters ? "75%" : 0,marginHorizontal:"5%"}}>
+                      <Text bold numberOfLines={2} xxl>
+                        Searching data is not found
+                      </Text>
+                      <Button
+                        buttonStyle={tailwind("mt-12")}
+                        title="Continue"
+                        onPress={resetFilter}
+                      />
+                  </View>
+                )}
               />
-            ) : (
-              <NoProviders />
-            )
+            // ) : (
+            //   <NoProviders />
+            // )
           ) : (
             <Loader />
           )}
